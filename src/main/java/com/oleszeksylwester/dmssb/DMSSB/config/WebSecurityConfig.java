@@ -40,9 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/public").permitAll()
                 .antMatchers("/viewer").access("hasRole('VIEWER')")
-                .antMatchers("/private").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR')")
+                .antMatchers("/dashboard").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR')")
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -50,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .and()
                 .logout()
-                .logoutSuccessUrl("/public")
+                .logoutSuccessUrl("/login")
                 .and()
                 .csrf()
                 .disable();
