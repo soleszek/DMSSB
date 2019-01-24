@@ -1,12 +1,11 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
+@Table(name = "users")
 public class User extends DMSObject{
 
     @Id
@@ -16,18 +15,17 @@ public class User extends DMSObject{
     private String lastName;
     private String username;
     private String password;
-    private String role;
+    /*private Set<Role> roles;*/
 
     public User() {
     }
 
-    public User(String name, String state, LocalDate creationDate, String comments, String firstName, String lastName, String username, String password, String role) {
+    public User(String name, String state, LocalDate creationDate, String comments, String firstName, String lastName, String username, String password) {
         super(name, state, creationDate, comments);
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public Long getId() {
@@ -50,10 +48,6 @@ public class User extends DMSObject{
         return password;
     }
 
-    public String getRole() {
-        return role;
-    }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -68,9 +62,5 @@ public class User extends DMSObject{
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 }
