@@ -30,9 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
         auth.jdbcAuthentication().dataSource(dataSource)
         .usersByUsernameQuery(
-                "select username, password, enabled from users where username=?")
+                "select username, password, enabled from dmsobject where username=?")
         .authoritiesByUsernameQuery(
-                "select username, role from user_roles where username=?")
+                "select username, role from user_role where username=?")
         .passwordEncoder(new BCryptPasswordEncoder());
     }
 
@@ -40,9 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/public").permitAll()
                 .antMatchers("/viewer").access("hasRole('VIEWER')")
-                .antMatchers("/private").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR')")
+                .antMatchers("/dashboard").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR')")
                 .and()
                 .formLogin()
                 .loginPage("/login")
