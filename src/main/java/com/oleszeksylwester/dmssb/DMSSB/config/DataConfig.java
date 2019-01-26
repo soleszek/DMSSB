@@ -14,21 +14,9 @@ public class DataConfig {
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        ds.setUrl("jdbc:mysql://localhost:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        ds.setUrl("jdbc:mysql://localhost:3306/test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         ds.setUsername("root");
         ds.setPassword("Rzeszów1983@");
         return ds;
     }
-
-    /*@Bean(name = "userDetailsService")
-    @Primary
-    public UserDetailsService userDetailsService(){
-        JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
-        jdbcImpl.setDataSource(dataSource());
-        jdbcImpl.setUsersByUsernameQuery(
-                "select username, password, enabled from users where username=?");
-        jdbcImpl.setAuthoritiesByUsernameQuery(
-                "select username, role from user_roles where username=?");
-        return jdbcImpl;
-    }*/
 }

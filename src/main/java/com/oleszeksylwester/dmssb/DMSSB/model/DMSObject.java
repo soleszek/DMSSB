@@ -1,28 +1,30 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="object_type",
+        discriminatorType = DiscriminatorType.STRING)
 public class DMSObject {
-
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String state;
     private LocalDate creationDate;
+    private LocalDate lastModification;
     private String comments;
 
     public DMSObject() {
     }
 
-    public DMSObject(String name, String state, LocalDate creationDate, String comments) {
+    public DMSObject(String name, String state, LocalDate creationDate, LocalDate lastModification, String comments) {
         this.name = name;
         this.state = state;
         this.creationDate = creationDate;
+        this.lastModification = lastModification;
         this.comments = comments;
     }
 
@@ -56,6 +58,14 @@ public class DMSObject {
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public LocalDate getLastModification() {
+        return lastModification;
+    }
+
+    public void setLastModification(LocalDate lastModification) {
+        this.lastModification = lastModification;
     }
 
     public String getComments() {
