@@ -23,10 +23,10 @@ public class UserService {
         userRepository.save(user);
     }
 
-    /*@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public User findById(Long id){
-        return userRepository.findOne(id);
-    }*/
+        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("There is no user with this id"));
+    }
 
     @Transactional(readOnly = true)
     public User findByUsername(String username){
