@@ -5,9 +5,12 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@DiscriminatorValue("user")
-public class User extends DMSObject{
+public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long user_id;
+    private String name;
     private String firstName;
     private String lastName;
     private String username;
@@ -17,8 +20,11 @@ public class User extends DMSObject{
     @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
-    public User(String name, String state, LocalDate creationDate, LocalDate lastModification, String comments, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
-        super(name, state, creationDate, lastModification, comments);
+    public User() {
+    }
+
+    public User(String name, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
+        this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -27,6 +33,21 @@ public class User extends DMSObject{
         this.roles = roles;
     }
 
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getFirstName() {
         return firstName;
