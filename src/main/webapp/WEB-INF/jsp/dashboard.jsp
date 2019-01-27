@@ -48,7 +48,7 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="LogoutServlet" method="get">
+                <form action="/logout" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>">
                     <input type="submit" name="menu" value="Sign out">
                 </form>
@@ -61,7 +61,7 @@
                 </form>
             </div>
             <div class="optionSO">
-                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -78,9 +78,9 @@
             <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
         </c:if>
 
-        <c:if test="${role eq 'admin'}">
-            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </c:if>
+        <%--<c:if test="${role.getRole eq 'ADMIN'}">--%>
+            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
+        <%--</c:if>--%>
 
         <div style="clear: both"></div>
     </div>

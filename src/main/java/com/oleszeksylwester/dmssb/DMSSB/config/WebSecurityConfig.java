@@ -45,7 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .and()
                 .logout()
-                .logoutSuccessUrl("/public")
+                .deleteCookies("remove")
+                .invalidateHttpSession(false)
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/dashboard")
                 .and()
                 .csrf()
                 .disable();
