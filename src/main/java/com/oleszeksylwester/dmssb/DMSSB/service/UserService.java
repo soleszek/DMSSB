@@ -1,6 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.service;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.repository.RoleRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,15 +12,23 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
 
-    @Autowired
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+
+    /*@Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }*/
+    @Autowired
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
     public void SaveOrUpdate(User user){
+
         userRepository.save(user);
     }
 

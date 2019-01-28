@@ -1,6 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
 import javax.persistence.*;
+import java.io.BufferedReader;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -23,7 +24,130 @@ public class User {
     public User() {
     }
 
-    public User(String name, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
+    public static class Builder{
+        private String name;
+        private String firstName;
+        private String lastName;
+        private String username;
+        private String password;
+        private String enabled;
+        private Set<Role> roles;
+
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder firstName(String firstName){
+            this.firstName = firstName;
+            return this;
+        }
+
+        public Builder lastName(String lastName){
+            this.lastName = lastName;
+            return this;
+        }
+
+        public Builder username(String username){
+            this.username = username;
+            return this;
+        }
+
+        public Builder password(String password){
+            this.password = password;
+            return this;
+        }
+
+        public Builder enabled(String enabled){
+            this.enabled = enabled;
+            return this;
+        }
+
+        public Builder roles(Set<Role> roles){
+            this.roles = roles;
+            return this;
+        }
+
+        public User build(){
+            return new User(this);
+        }
+    }
+
+    private User(Builder builder){
+        this.name = builder.name;
+        this.firstName = builder.firstName;
+        this.lastName = builder.lastName;
+        this.username = builder.username;
+        this.password = builder.password;
+        this.enabled = builder.enabled;
+        this.roles = builder.roles;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    /*public User(String name, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -95,5 +219,5 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
+    }*/
 }
