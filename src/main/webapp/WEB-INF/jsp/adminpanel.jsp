@@ -85,7 +85,7 @@
 
     <div id="content">
         <div class="square">
-            <div class="tile1"><H1><a href="registration.jsp" class="tilelink">Create new user</a> </H1></div>
+            <div class="tile1"><H1><a href="/registration" class="tilelink">Create new user</a> </H1></div>
             <div class="tile1"><H1><a href="AllUsers" class="tilelink">Show all users</a> </H1><</div>
             <div style="clear: both"></div>
 

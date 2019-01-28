@@ -1,17 +1,15 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class MainPageController {
-    @RequestMapping("/viewer")
-    private String showViewer(){
-        return "viewer";
-    }
+public class UserController {
 
     @RequestMapping(value = {"/dashboard"})
     private String showDashboard(){
+
         return "dashboard";
     }
 

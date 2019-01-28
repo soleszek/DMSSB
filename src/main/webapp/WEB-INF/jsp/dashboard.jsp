@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -73,85 +73,88 @@
 
     <div id="sidebar">
         <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <c:if test="${role ne 'viewer'}">
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
             <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
             <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </c:if>
+        </sec:authorize>
 
-        <%--<c:if test="${role.getRole eq 'ADMIN'}">--%>
+        <sec:authorize access="hasRole('ADMIN')">
             <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
-        <%--</c:if>--%>
+        </sec:authorize>
 
         <div style="clear: both"></div>
     </div>
 
     <div id="content">
-        <div class="square">
-            <div class="tile1"><H1><a href="AllDocuments" class="tilelink">
-                All documents<br><br>
-                <c:out value="${allDocuments}"/>
-            </a></H1></div>
-            <div class="tile1"><H1><a href="ShowAllRoutes" class="tilelink">
-                Active routes<br><br>
-                <c:out value="${activeRoutes.size()}"/>
-            </a></H1><</div>
-            <div style="clear: both"></div>
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+            <div class="square">
+                <div class="tile1"><H1><a href="AllDocuments" class="tilelink">
+                    All documents<br><br>
+                    <c:out value="${allDocuments}"/>
+                </a></H1></div>
+                <div class="tile1"><H1><a href="ShowAllRoutes" class="tilelink">
+                    Active routes<br><br>
+                    <c:out value="${activeRoutes.size()}"/>
+                </a></H1><
+                </div>
+                <div style="clear: both"></div>
 
-            <div class="tile2"><H1><a href="AllUserTasks" class="tilelink">
-                Your active tasks<br><br>
-                <c:out value="${assignedTasks.size()}"/>
-            </a></H1></div>
-            <div class="tile3">
+                <div class="tile2"><H1><a href="AllUserTasks" class="tilelink">
+                    Your active tasks<br><br>
+                    <c:out value="${assignedTasks.size()}"/>
+                </a></H1></div>
+                <div class="tile3">
 
-                <div class="calc">
+                    <div class="calc">
 
-                    <div class="display"><input type="text" id="wynik" readonly/></div>
+                        <div class="display"><input type="text" id="wynik" readonly/></div>
 
-                    <div class="tile"><input type="button" value="9" onclick="pobierz('9')"/></div>
-                    <div class="tile"><input type="button" value="8" onclick="pobierz('8')"/></div>
-                    <div class="tile"><input type="button" value="7" onclick="pobierz('7')"/></div>
-                    <div class="tile"><input type="button" value="+" onclick="pobierz('+')"/></div>
-                    <div style="clear:both;"></div>
+                        <div class="tile"><input type="button" value="9" onclick="pobierz('9')"/></div>
+                        <div class="tile"><input type="button" value="8" onclick="pobierz('8')"/></div>
+                        <div class="tile"><input type="button" value="7" onclick="pobierz('7')"/></div>
+                        <div class="tile"><input type="button" value="+" onclick="pobierz('+')"/></div>
+                        <div style="clear:both;"></div>
 
-                    <div class="tile"><input type="button" value="6" onclick="pobierz('6')"/></div>
-                    <div class="tile"><input type="button" value="5" onclick="pobierz('5')"/></div>
-                    <div class="tile"><input type="button" value="4" onclick="pobierz('4')"/></div>
-                    <div class="tile"><input type="button" value="-" onclick="pobierz('-')"/></div>
-                    <div style="clear:both;"></div>
+                        <div class="tile"><input type="button" value="6" onclick="pobierz('6')"/></div>
+                        <div class="tile"><input type="button" value="5" onclick="pobierz('5')"/></div>
+                        <div class="tile"><input type="button" value="4" onclick="pobierz('4')"/></div>
+                        <div class="tile"><input type="button" value="-" onclick="pobierz('-')"/></div>
+                        <div style="clear:both;"></div>
 
-                    <div class="tile"><input type="button" value="3" onclick="pobierz('3')"/></div>
-                    <div class="tile"><input type="button" value="2" onclick="pobierz('2')"/></div>
-                    <div class="tile"><input type="button" value="1" onclick="pobierz('1')"/></div>
-                    <div class="tile"><input type="button" value="x" onclick="pobierz('*')"/></div>
-                    <div style="clear:both;"></div>
+                        <div class="tile"><input type="button" value="3" onclick="pobierz('3')"/></div>
+                        <div class="tile"><input type="button" value="2" onclick="pobierz('2')"/></div>
+                        <div class="tile"><input type="button" value="1" onclick="pobierz('1')"/></div>
+                        <div class="tile"><input type="button" value="x" onclick="pobierz('*')"/></div>
+                        <div style="clear:both;"></div>
 
-                    <div class="tile"><input type="button" value="0" onclick="pobierz('0')"/></div>
-                    <div class="tile"><input type="button" value="C" onclick="czysc()"/></div>
-                    <div class="wynik"><input type="button" value="=" onclick="oblicz()" style="width:75px"/></div>
-                    <div style="clear:both;"></div>
+                        <div class="tile"><input type="button" value="0" onclick="pobierz('0')"/></div>
+                        <div class="tile"><input type="button" value="C" onclick="czysc()"/></div>
+                        <div class="wynik"><input type="button" value="=" onclick="oblicz()" style="width:75px"/></div>
+                        <div style="clear:both;"></div>
+
+                    </div>
+
+                </div>
+                <div style="clear: both"></div>
+
+                <div class="tile4">
+                    <div id="txt"></div>
+                </div>
+            </div>
+            <div class="square">
+                <div class="tile5">
+
 
                 </div>
 
+                <div class="tile6">You spend ... in the system</div>
+                <div class="tile7">7</div>
+                <div class="tile8">8</div>
+                <div class="tile9">9</div>
+                <div style="clear: both"></div>
             </div>
             <div style="clear: both"></div>
-
-            <div class="tile4">
-                <div id="txt"></div>
-            </div>
-        </div>
-        <div class="square">
-            <div class="tile5">
-
-
-            </div>
-
-            <div class="tile6">You spend ... in the system</div>
-            <div class="tile7">7</div>
-            <div class="tile8">8</div>
-            <div class="tile9">9</div>
-            <div style="clear: both"></div>
-        </div>
-        <div style="clear: both"></div>
+        </sec:authorize>
     </div>
 
     <div id="footer">
