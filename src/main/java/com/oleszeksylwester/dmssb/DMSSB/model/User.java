@@ -24,7 +24,7 @@ public class User {
     @Size(min = 3, max = 20)
     private String username;
     @NotEmpty
-    @Size(min = 6, max = 20)
+    @Size(min = 6)
     private String password;
     private String enabled;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

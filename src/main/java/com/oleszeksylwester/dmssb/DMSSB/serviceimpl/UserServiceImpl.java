@@ -23,26 +23,23 @@ public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private NameFactory nameFactory;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, NameFactory nameFactory) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, NameFactory nameFactory) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.nameFactory = nameFactory;
     }
 
-    /*@Autowired
-        public UserService(UserRepository userRepository) {
-            this.userRepository = userRepository;
-        }*/
-
-
     @Transactional
-    public void saveOrUpdate(User user){
+    public void saveOrUpdate(User user, String role){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         user.setPassword(encoder.encode(user.getPassword()));
-        Role userRole = new Role("VIEWER");
+        /*Role userRole = roleRepository.findByRole(role);*/
+        Role userRole = new Role(role);
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
@@ -55,60 +52,6 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
     }
-
-   /* @Transactional
-    public void saveOrUpdateContributor(User user){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        Role userRole = new Role("CONTRIBUTOR");
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        user.setRoles(roles);
-
-        userRepository.save(user);
-
-        Long userId = user.getUser_id();
-        nameFactory.createName(userId, ObjectTypes.USER.getObjectType());
-
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void saveOrUpdateManager(User user){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        Role userRole = new Role("MANAGER");
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        user.setRoles(roles);
-
-        userRepository.save(user);
-
-        Long userId = user.getUser_id();
-        nameFactory.createName(userId, ObjectTypes.USER.getObjectType());
-
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public void saveOrUpdateAdmin(User user){
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
-        user.setPassword(encoder.encode(user.getPassword()));
-        Role userRole = new Role("ADMIN");
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        user.setRoles(roles);
-
-        userRepository.save(user);
-
-        Long userId = user.getUser_id();
-        nameFactory.createName(userId, ObjectTypes.USER.getObjectType());
-
-        userRepository.save(user);
-    }*/
 
     @Transactional(readOnly = true)
     public User findById(Long id){

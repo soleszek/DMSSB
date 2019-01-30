@@ -54,7 +54,9 @@ public class UserController {
     }
 
     @PostMapping(value = "/registerUser")
-    private ModelAndView registerUser(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
+    private ModelAndView registerUser(@ModelAttribute("user") @Validated User user, BindingResult bindingResult, @RequestParam String role) {
+
+        /*String role = "VIEWER";*/
 
         ModelAndView mov = new ModelAndView();
 
@@ -73,7 +75,7 @@ public class UserController {
 
         } else {
 
-            userServiceImpl.saveOrUpdate(user);
+            userServiceImpl.saveOrUpdate(user, role);
 
             mov.addObject(user);
             mov.setViewName("user");

@@ -46,8 +46,8 @@
         </div>
 
         <div class="custom-select" style="width:280px;">
-            <select name="role">
-                <option value="select">Viewer</option>
+            <select name="role" required>
+                <option value="">Select</option>
                 <option value="VIEWER">Viewer</option>
                 <option value="CONTRIBUTOR">Contributor</option>
                 <option value="MANAGER">Manager</option>

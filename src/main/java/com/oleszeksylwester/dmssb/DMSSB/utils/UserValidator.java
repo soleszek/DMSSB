@@ -19,6 +19,8 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User u = (User) o;
+        /*String role = (String) o;*/
+
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", "required.firstName", "Field Name is required");
         if(u.getFirstName().length() < 4){
             errors.rejectValue("firstName", "error.firstName", "Field Name must have at least 3 signs");
@@ -43,5 +45,9 @@ public class UserValidator implements Validator {
         } else if(u.getPassword().length() > 20){
             errors.rejectValue("firstName", "error.firstName", "Field Password can't have more then 20 signs");
         }
+
+        /*if(role.equals("select")){
+            errors.rejectValue("role", "error.role", "Choose role");
+        }*/
     }
 }

@@ -18,6 +18,9 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
+    public Role findByRole(String role){
+        return roleRepository.findByRole(role);
+    }
 
     @Transactional
     public void SaveOrUpdate(Role role){
