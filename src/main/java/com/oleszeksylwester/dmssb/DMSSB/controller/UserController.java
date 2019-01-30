@@ -1,39 +1,55 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
+import com.oleszeksylwester.dmssb.DMSSB.model.Role;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
-import org.springframework.security.core.Authentication;
+import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class UserController {
 
-    @RequestMapping(value = {"/dashboard"})
+    @Autowired
+    UserServiceImpl userServiceImpl;
+
+    @GetMapping("/dashboard")
     private String showDashboard(){
         return "dashboard";
     }
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     private String showLogin(){
         return "login";
     }
 
-    @RequestMapping("/adminpanel")
+    @GetMapping("/adminpanel")
     private String showAdminPanel(){
         return "adminpanel";
     }
 
-    @RequestMapping("/registration")
-    private String showRegistration(){
+    @GetMapping("/registration")
+    private String showRegistration(Model model){
+        model.addAttribute("user", new User());
+
         return "registration";
     }
 
     @PostMapping(value = "/registerUser")
-    private String registerUser(User user, Model model){
+    private ModelAndView registerUser(@ModelAttribute User user, Model model){
 
-        return "user";
+        userServiceImpl.saveOrUpdate(user);
+
+        ModelAndView mov = new ModelAndView();
+        mov.addObject(user);
+        mov.setViewName("user");
+
+        return mov;
 
     }
 }

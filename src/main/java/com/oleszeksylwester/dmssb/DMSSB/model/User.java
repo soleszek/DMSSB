@@ -24,7 +24,7 @@ public class User {
     public User() {
     }
 
-    public static class Builder{
+    /*public static class Builder{
         private String name;
         private String firstName;
         private String lastName;
@@ -145,9 +145,9 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
+    }*/
 
-    /*public User(String name, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
+    public User(String name, String firstName, String lastName, String username, String password, String enabled, Set<Role> roles) {
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -219,5 +219,5 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }*/
+    }
 }

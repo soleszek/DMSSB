@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -71,14 +72,14 @@
 
     <div id="sidebar">
         <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <c:if test="${role ne 'viewer'}">
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
             <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
             <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </c:if>
+        </sec:authorize>
 
-        <c:if test="${role eq 'admin'}">
+        <sec:authorize access="hasRole('ADMIN')">
             <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
-        </c:if>
+        </sec:authorize>
 
         <div style="clear: both"></div>
     </div>

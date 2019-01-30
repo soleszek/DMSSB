@@ -1,7 +1,10 @@
 package com.oleszeksylwester.dmssb.DMSSB.factory;
 
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
 
+@Service
 public class NameFactory {
 
     public String createName(Long id, String type) {

@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<form action="/registerUser" method="post">
+<form action="/registerUser" method="post" modelAttribute="user">
     <div class="login-box">
         <h1>Fill in user data</h1>
         <div class="textbox">

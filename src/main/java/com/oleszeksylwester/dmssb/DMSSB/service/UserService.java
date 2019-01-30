@@ -1,59 +1,14 @@
 package com.oleszeksylwester.dmssb.DMSSB.service;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
-import com.oleszeksylwester.dmssb.DMSSB.repository.RoleRepository;
-import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-public class UserService {
-
-
-    private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-
-    /*@Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }*/
-    @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
-
-    @Transactional
-    public void SaveOrUpdate(User user){
-
-        userRepository.save(user);
-    }
-
-    @Transactional(readOnly = true)
-    public User findById(Long id){
-        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("There is no user with this id"));
-    }
-
-    @Transactional(readOnly = true)
-    public User findByUsername(String username){
-        return userRepository.findByUsername(username);
-    }
-
-    @Transactional(readOnly = true)
-    public List<User> findAll(){
-        return userRepository.findAll();
-    }
-
-    @Transactional
-    public void deleteById(Long id){
-        userRepository.deleteById(id);
-    }
-
-    @Transactional
-    public void delete(User user){
-        userRepository.delete(user);
-    }
+public interface UserService {
+    void saveOrUpdate(User user);
+    User findById(Long id);
+    User findByUsername(String username);
+    List<User> findAll();
+    void deleteById(Long id);
+    void delete(User user);
 }
