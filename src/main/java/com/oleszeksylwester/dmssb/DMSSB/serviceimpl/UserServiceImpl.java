@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
+        user.setEnabled("1");
 
         userRepository.save(user);
 

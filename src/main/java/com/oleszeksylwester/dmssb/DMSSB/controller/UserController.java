@@ -3,14 +3,18 @@ package com.oleszeksylwester.dmssb.DMSSB.controller;
 import com.oleszeksylwester.dmssb.DMSSB.model.Role;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
+import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -18,38 +22,64 @@ public class UserController {
     @Autowired
     UserServiceImpl userServiceImpl;
 
+    @Autowired
+    @Qualifier("userValidator")
+    private UserValidator userValidator;
+
+    @InitBinder
+    private void initBinder(WebDataBinder binder) {
+        binder.setValidator(userValidator);
+    }
+
     @GetMapping("/dashboard")
-    private String showDashboard(){
+    private String showDashboard() {
         return "dashboard";
     }
 
     @GetMapping("/login")
-    private String showLogin(){
+    private String showLogin() {
         return "login";
     }
 
     @GetMapping("/adminpanel")
-    private String showAdminPanel(){
+    private String showAdminPanel() {
         return "adminpanel";
     }
 
     @GetMapping("/registration")
-    private String showRegistration(Model model){
+    private String showRegistration(Model model) {
         model.addAttribute("user", new User());
 
         return "registration";
     }
 
     @PostMapping(value = "/registerUser")
-    private ModelAndView registerUser(@ModelAttribute User user, Model model){
-
-        userServiceImpl.saveOrUpdate(user);
+    private ModelAndView registerUser(@ModelAttribute("user") @Validated User user, BindingResult bindingResult) {
 
         ModelAndView mov = new ModelAndView();
-        mov.addObject(user);
-        mov.setViewName("user");
 
-        return mov;
+        User existUser = userServiceImpl.findByUsername(user.getUsername());
+
+        if (existUser != null) {
+            bindingResult.rejectValue("username", "error.user", "User with this login already exist");
+
+            return mov;
+        }
+
+        if (bindingResult.hasErrors()) {
+            mov.setViewName("registration");
+
+            return mov;
+
+        } else {
+
+            userServiceImpl.saveOrUpdate(user);
+
+            mov.addObject(user);
+            mov.setViewName("user");
+
+            return mov;
+        }
 
     }
 }

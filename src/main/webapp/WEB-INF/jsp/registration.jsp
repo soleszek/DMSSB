@@ -1,3 +1,6 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -6,35 +9,49 @@
     <title>User registration</title>
     <link rel="stylesheet" href="style/style.css" type="text/css">
 
+    <style>
+        .error {
+            color: #ff0000;
+        }
+
+        .errorblock {
+            color: #000;
+            background-color: #ffEEEE;
+            border: 3px solid #ff0000;
+            padding: 8px;
+            margin: 16px;
+        }
+    </style>
+
 </head>
 <body>
-
-<form action="/registerUser" method="post" modelAttribute="user">
+<form:form action="/registerUser" method="post" modelAttribute="user">
+    <%--<form:errors path = "*" cssClass = "errorblock" element = "div" />--%>
     <div class="login-box">
         <h1>Fill in user data</h1>
         <div class="textbox">
-            <input type="text" placeholder="Name" name="userName" value="" required>
+            <form:input type="text" placeholder="Name" path="firstName" ></form:input>
         </div>
 
         <div class="textbox">
-            <input type="text" placeholder="Last name" name="lastName" value="" required>
+            <form:input type="text" placeholder="Last name" path="lastName" value=""></form:input>
         </div>
 
         <div class="textbox">
-            <input type="text" placeholder="Login" name="login" value="" required>
+            <form:input type="text" placeholder="Login" path="username" value="" ></form:input>
         </div>
 
         <div class="textbox">
-            <input type="password" placeholder="Password" name="password" value="" required>
+            <form:input type="password" placeholder="Password" path="password" value=""></form:input>
         </div>
 
         <div class="custom-select" style="width:280px;">
             <select name="role">
-                <option value="viewer">Viewer</option>
-                <option value="viewer">Viewer</option>
-                <option value="contributor">Contributor</option>
-                <option value="manager">Manager</option>
-                <option value="admin">Admin</option>
+                <option value="select">Viewer</option>
+                <option value="VIEWER">Viewer</option>
+                <option value="CONTRIBUTOR">Contributor</option>
+                <option value="MANAGER">Manager</option>
+                <option value="ADMIN">Admin</option>
             </select>
         </div>
 
@@ -45,7 +62,12 @@
         <input class="btn" type="button" value="Return" onclick="location.href='adminpanel.jsp'">
 
     </div>
-</form>
+
+    <form:errors path="firstName" cssStyle="color: red"/><br>
+    <form:errors path="lastName" cssStyle="color: red"/><br>
+    <form:errors path="username" cssStyle="color: red"/><br>
+    <form:errors path="password" cssStyle="color: red"/><br>
+</form:form>
 
 <script src="jsscripts/dropdownmenu.js"></script>
 
