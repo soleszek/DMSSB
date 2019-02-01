@@ -59,7 +59,7 @@
 
         <br>
         <br>
-        <input class="btn" type="button" value="Return" onclick="location.href='adminpanel.jsp'">
+        <input class="btn" type="button" value="Return" onclick="location.href='/adminpanel'">
 
     </div>
 

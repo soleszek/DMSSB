@@ -1,11 +1,13 @@
+<%@ page import="com.sylwesteroleszek.entity.Document" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Information about user</title>
     <link rel="stylesheet" href="style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -15,11 +17,23 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
+    <title>Documents</title>
+
     <style>
         * {
             margin: 0;
             padding: 0;
             font-family: Helvetica, Arial, sans-serif;
+        }
+
+        .modal-text {
+            width: 90%;
+            padding: 12px 20px;
+            margin: 8px 26px;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            font-size: 16px;
         }
 
         /* Set a style for all buttons */
@@ -190,10 +204,6 @@
         <span style="color:#c34f4f">Data</span> Management System
     </div>
 
-    <div id="search">
-
-    </div>
-
     <div class="menu">
 
         <div class="topmenu">
@@ -222,20 +232,19 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="/logout" method="get">
+                <form action="LogoutServlet" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
                 <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out
-                            value="${sessionScope.userName}"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -247,108 +256,163 @@
 
     <div id="sidebar">
         <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+        <c:if test="${role ne 'viewer'}">
             <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
             <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </sec:authorize>
+        </c:if>
 
-        <sec:authorize access="hasRole('ADMIN')">
-            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
-        </sec:authorize>
+        <c:if test="${role eq 'admin'}">
+            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
+        </c:if>
 
         <div style="clear: both"></div>
     </div>
 
     <div id="content">
-
         <div id="navbar">
-            <ul>
+            <ul class="sliding-icons">
                 <li>
-                    <sec:authorize access="hasRole('ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-minus-square fa-2x"></i>
-                                <i class="fas fa-minus-square fa-2x" title="Delete user"
-                                   onclick="document.getElementById('modal-wrapper-deleteuser').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
-                        <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
+                    <%
+                        if (!role.equals("viewer")) {
+                    %>
+                    <a href="#">
+                        <div class="icon">
+                            <i class="fas fa-plus-square fa-2x"></i>
+                            <i class="fas fa-plus-square fa-2x" title="Create new document"
+                               onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
+                        </div>
+                    </a>
+                    <%
+                    } else {
+                    %>
+
+                    <a href="#">
+                        <div class="icon-disabled">
+                            <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
+                        </div>
+                    </a>
+                    <%
+                        }
+                    %>
+
                 </li>
             </ul>
+            <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <form id="edit-form" action="UpdateUser" method="post">
+        <table id="example" class="display" style="width:100%">
+            <col width="60">
 
-            <table id="example" class="display" style="width:100%">
-                <col width="220">
+            <%
+                List<Document> documents = (List<Document>) request.getAttribute("documents");
+                List<Document> approvedDocuments = new ArrayList<>();
 
-                <tr>
-                    <td>Name</td>
-                    <td><input type="text" class="noedit-text" name="name" value="<c:out value="${user.getName()}"/>" readonly
-                               disabled>
-                    </td>
-                </tr>
-                <tr>
-                    <td>First Name</td>
-                    <td><input type="text" class="edit-text" name="userName" value="<c:out value="${user.getFirstName()}"/>"
-                               readonly required size="35"></td>
-                </tr>
-                <tr>
-                    <td>Last Name</td>
-                    <td><input type="text" class="edit-text" name="lastName" value="<c:out value="${user.getLastName()}"/>"
-                               readonly required size="35"></td>
-                </tr>
-                <tr>
-                    <td>Role</td>
-                    <td><input type="text" class="noedit-text" id="role" name="role" value="<c:out value="${user.getRoles()}"/>"
-                               readonly required>
-                        <select name="role" id="select-role" style="visibility: hidden;" onchange="replaceValue(event)">
-                            <option value="">SELECT</option>
-                            <option value="VIEWER">Viewer</option>
-                            <option value="CONTRIBUTOR">Contributor</option>
-                            <option value="MANAGER">Manager</option>
-                            <option value="ADMIN">Admin</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Login</td>
-                    <td><input type="text" class="edit-text" name="login" value="<c:out value="${user.getUsername()}"/>" readonly
-                               required>
-                    </td>
-                </tr>
-                <input type="hidden" name="userId" value="<c:out value="${user.getUser_id()}"/>">
+                for (Document d : documents) {
+                    if (d.getState().equals("released")) {
+                        approvedDocuments.add(d);
+                    }
+                }
 
-            </table>
+            %>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Title</th>
+                <th><i class="far fa-window-restore"></i></th>
+                <th>Type</th>
+                <th>State</th>
+                <th>Revision</th>
+                <th>Owner</th>
+                <th>Creation date</th>
+                <th>Last modified</th>
+                <th>Attachement</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <%
+                if (role.equals("viewer")) {
+            %>
+            <tbody>
+            <%
+                for (Document d : approvedDocuments) {
+            %>
+            <tr>
+                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
+                </a></td>
+                <td><%=d.getTitle()%>
+                </td>
+                <td>
+                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
+                            class="far fa-window-restore"></i></div>
+                </td>
+                <td><%=d.getType()%>
+                </td>
+                <td><%=d.getState()%>
+                </td>
+                <td><%=d.getRevision()%>
+                </td>
+                <td><%=d.getOwner()%>
+                </td>
+                <td><%=d.getCreationDate()%>
+                </td>
+                <td><%=d.getLastModification()%>
+                </td>
+                <td><%=d.getLink()%>
+                </td>
+                <td><%=d.getDescription()%>
+                </td>
+            </tr>
+            <%
+                }
+            %>
+            </tbody>
 
-            <sec:authorize access="hasRole('ADMIN')">
+            <%
+            } else {
+            %>
 
-                <br><br>
+            <tbody>
+            <%
+                for (Document d : documents) {
+            %>
 
-                <button type="button" id="editButton" class="button-edit" style="visibility:visible" onclick="edit()">
-                    Edit
-                </button>
-                <button type="button" id="saveButton" class="button-edit" style="visibility:hidden" onclick="save()">
-                    Save
-                </button>
-                <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden"
-                        onclick="cancel()">
-                    Cancel
-                </button>
+            <tr>
+                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
+                </a></td>
+                <td><%=d.getTitle()%>
+                </td>
+                <td>
+                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
+                            class="far fa-window-restore"></i></div>
+                </td>
+                <td><%=d.getType()%>
+                </td>
+                <td><%=d.getState()%>
+                </td>
+                <td><%=d.getRevision()%>
+                </td>
+                <td><%=d.getOwner()%>
+                </td>
+                <td><%=d.getCreationDate()%>
+                </td>
+                <td><%=d.getLastModification()%>
+                </td>
+                <td><%=d.getLink()%>
+                </td>
+                <td><%=d.getDescription()%>
+                </td>
+            </tr>
 
-                <script src="jsscripts/editform-user.js"></script>
-                <script src="jsscripts/dropdownToInput.js"></script>
+            <%
+                }
+            %>
+            </tbody>
 
-            </sec:authorize>
+            <%
+                }
+            %>
 
-        </form>
+        </table>
 
     </div>
 
@@ -356,40 +420,52 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper-deleteuser" class="modal">
+    <div id="modal-wrapper" class="modal">
 
-        <%--<form class="modal-content animate" action="DeleteUser" method="get">
+        <form class="modal-content animate" action="CreateDocument" method="post" enctype="multipart/form-data">
 
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-deleteuser').style.display='none'" class="close"
+                <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/delete-user.png" alt="Document" class="avatar">
-                <h1 style="text-align:center">Delete user</h1>
+                <img src="style/document.jpg" alt="Document" class="avatar">
+                <h1 style="text-align:center">Create new document</h1>
             </div>
 
-            <div class="container"><h3
-                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                delete <%=userObject.getLogin()%>
-            </h3>
-
-                <input type="hidden" name="userId" value="<%=userObject.getId()%>">
-
-                <button type="submit">Complete</button>
+            <div class="container">
+                <div class="custom-select">
+                    <select name="doctype">
+                        <option value="drawing">Drawing (pdf)</option>
+                        <option value="drawing">Drawing (pdf)</option>
+                        <option value="document">Document (doc, docx)</option>
+                        <option value="image">Image (jpg, png)</option>
+                    </select>
+                </div>
+                <input type="text" class="modal-text" placeholder="Enter title" name="title" required>
+                <input type="text" class="modal-text" readonly name="owner" value="<%=login%>">
+                <c:set var="now" value="<%=new java.util.Date()%>"/>
+                <input type="text" class="modal-text" readonly name="creation date"
+                       value="<fmt:formatDate type = "date" value = "${now}"/>">
+                <input type="file" class="modal-text" name="file" class="file" required>
+                <input type="text" class="modal-text" placeholder="Enter description" name="description" required>
+                <button type="submit">Create</button>
             </div>
-        </form>--%>
+        </form>
 
     </div>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close
 
-        var modal = document.getElementById('modal-wrapper-deleteuser');
+        var modal = document.getElementById('modal-wrapper');
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
             }
         }
     </script>
+
+    <script src="jsscripts/dropdownmenu.js"></script>
+    <script src="jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -404,7 +480,6 @@
             var table = $('#example').DataTable({
                 "lengthMenu": [[10, 20], [10, 20]]
             });
-
         });
     </script>
 
@@ -426,4 +501,5 @@
 </div>
 
 </body>
+
 </html>

@@ -1,9 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Role {
@@ -12,11 +10,15 @@ public class Role {
     private int role_id;
     private String role;
 
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
     public Role() {
     }
 
-    public Role(String role) {
+    public Role(String role, Set<User> users) {
         this.role = role;
+        this.users = users;
     }
 
     public int getRole_id() {
@@ -33,5 +35,13 @@ public class Role {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
     }
 }

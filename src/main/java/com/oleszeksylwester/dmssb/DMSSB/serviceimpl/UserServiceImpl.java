@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         user.setPassword(encoder.encode(user.getPassword()));
-        /*Role userRole = roleRepository.findByRole(role);*/
-        Role userRole = new Role(role);
+        Role userRole = roleRepository.findByRole(role);
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
@@ -48,7 +47,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         Long userId = user.getUser_id();
-        nameFactory.createName(userId, ObjectTypes.USER.getObjectType());
+        String name = nameFactory.createName(userId, ObjectTypes.USER.getObjectType());
+        user.setName(name);
 
         userRepository.save(user);
     }
