@@ -1,6 +1,3 @@
-<%@ page import="com.sylwesteroleszek.entity.Document" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
@@ -272,9 +269,6 @@
         <div id="navbar">
             <ul class="sliding-icons">
                 <li>
-                    <%
-                        if (!role.equals("viewer")) {
-                    %>
                     <a href="#">
                         <div class="icon">
                             <i class="fas fa-plus-square fa-2x"></i>
@@ -282,38 +276,20 @@
                                onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
                         </div>
                     </a>
-                    <%
-                    } else {
-                    %>
 
                     <a href="#">
                         <div class="icon-disabled">
                             <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
                         </div>
                     </a>
-                    <%
-                        }
-                    %>
 
                 </li>
             </ul>
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <table id="example" class="display" style="width:100%">
+        <%--<table id="example" class="display" style="width:100%">
             <col width="60">
-
-            <%
-                List<Document> documents = (List<Document>) request.getAttribute("documents");
-                List<Document> approvedDocuments = new ArrayList<>();
-
-                for (Document d : documents) {
-                    if (d.getState().equals("released")) {
-                        approvedDocuments.add(d);
-                    }
-                }
-
-            %>
             <thead>
             <tr>
                 <th>Name</th>
@@ -329,52 +305,8 @@
                 <th>Description</th>
             </tr>
             </thead>
-            <%
-                if (role.equals("viewer")) {
-            %>
-            <tbody>
-            <%
-                for (Document d : approvedDocuments) {
-            %>
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
-                </a></td>
-                <td><%=d.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=d.getType()%>
-                </td>
-                <td><%=d.getState()%>
-                </td>
-                <td><%=d.getRevision()%>
-                </td>
-                <td><%=d.getOwner()%>
-                </td>
-                <td><%=d.getCreationDate()%>
-                </td>
-                <td><%=d.getLastModification()%>
-                </td>
-                <td><%=d.getLink()%>
-                </td>
-                <td><%=d.getDescription()%>
-                </td>
-            </tr>
-            <%
-                }
-            %>
-            </tbody>
-
-            <%
-            } else {
-            %>
 
             <tbody>
-            <%
-                for (Document d : documents) {
-            %>
 
             <tr>
                 <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
@@ -402,17 +334,40 @@
                 <td><%=d.getDescription()%>
                 </td>
             </tr>
-
-            <%
-                }
-            %>
             </tbody>
 
-            <%
-                }
-            %>
+            <tbody>
 
-        </table>
+            <tr>
+                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
+                </a></td>
+                <td><%=d.getTitle()%>
+                </td>
+                <td>
+                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
+                            class="far fa-window-restore"></i></div>
+                </td>
+                <td><%=d.getType()%>
+                </td>
+                <td><%=d.getState()%>
+                </td>
+                <td><%=d.getRevision()%>
+                </td>
+                <td><%=d.getOwner()%>
+                </td>
+                <td><%=d.getCreationDate()%>
+                </td>
+                <td><%=d.getLastModification()%>
+                </td>
+                <td><%=d.getLink()%>
+                </td>
+                <td><%=d.getDescription()%>
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>--%>
 
     </div>
 
@@ -441,7 +396,7 @@
                     </select>
                 </div>
                 <input type="text" class="modal-text" placeholder="Enter title" name="title" required>
-                <input type="text" class="modal-text" readonly name="owner" value="<%=login%>">
+                <input type="text" class="modal-text" readonly name="owner" value="<%--<%=login%>--%>">
                 <c:set var="now" value="<%=new java.util.Date()%>"/>
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
