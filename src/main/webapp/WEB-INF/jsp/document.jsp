@@ -264,7 +264,7 @@
             <ul>
                 <li>
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <c:if test="${isViewer && document.getState() ne 'frozen' && document.getState('released') or isAdmin}">
+                        <c:if test="${document.getState() eq 'in work'}">
                             <a href="#">
                                 <div class="icon">
                                     <i class="fas fa-minus-square fa-2x"></i>
@@ -275,13 +275,15 @@
                         </c:if>
                     </sec:authorize>
 
-                    <c:if test="${document.getState() ne 'frozen' or document.getState('released')}">
+                    <sec:authorize access="hasAnyRole('VIEWER','CONTRIBUTOR')">
+                    <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
                         <a href="#">
                             <div class="icon-disabled">
                                 <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
                             </div>
                         </a>
                     </c:if>
+                    </sec:authorize>
                 </li>
             </ul>
         </div>
