@@ -13,10 +13,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @SpringBootTest
 public class DmssbApplicationTests {
 
-	@Test
+	/*@Test
 	public void contextLoads() {
 
-	}
+	}*/
 
 }
 
