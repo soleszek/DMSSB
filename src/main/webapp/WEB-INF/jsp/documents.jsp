@@ -1,5 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -209,7 +212,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -229,19 +232,20 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="LogoutServlet" method="get">
+                <form action="/logout" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
                 <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -252,15 +256,15 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <c:if test="${role ne 'viewer'}">
-            <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
-            <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </c:if>
+        <div class="optionL"><a href="/documents">Documents</a></div>
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+            <div class="optionL"><a href="/routeslist">Routes</a></div>
+            <div class="optionL"><a href="/tasks">Tasks</a></div>
+        </sec:authorize>
 
-        <c:if test="${role eq 'admin'}">
+        <sec:authorize access="hasRole('ADMIN')">
             <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </c:if>
+        </sec:authorize>
 
         <div style="clear: both"></div>
     </div>
@@ -269,20 +273,22 @@
         <div id="navbar">
             <ul class="sliding-icons">
                 <li>
-                    <a href="#">
-                        <div class="icon">
-                            <i class="fas fa-plus-square fa-2x"></i>
-                            <i class="fas fa-plus-square fa-2x" title="Create new document"
-                               onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
-                        </div>
-                    </a>
-
-                    <a href="#">
-                        <div class="icon-disabled">
-                            <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
-                        </div>
-                    </a>
-
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                        <a href="#">
+                            <div class="icon">
+                                <i class="fas fa-plus-square fa-2x"></i>
+                                <i class="fas fa-plus-square fa-2x" title="Create new document"
+                                   onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole('VIEWER')">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
                 </li>
             </ul>
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
@@ -377,7 +383,7 @@
 
     <div id="modal-wrapper" class="modal">
 
-        <form class="modal-content animate" action="CreateDocument" method="post" enctype="multipart/form-data">
+        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document" enctype="multipart/form-data">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"
@@ -395,16 +401,17 @@
                         <option value="image">Image (jpg, png)</option>
                     </select>
                 </div>
-                <input type="text" class="modal-text" placeholder="Enter title" name="title" required>
-                <input type="text" class="modal-text" readonly name="owner" value="<%--<%=login%>--%>">
-                <c:set var="now" value="<%=new java.util.Date()%>"/>
+                <form:input type="text" class="modal-text" placeholder="Enter title" path="title" required="required"></form:input>
+                <sec:authentication var="principal" property="principal" />
+                <form:input type="text" class="modal-text" readonly="readonly" path="${principal.username.toString()}"></form:input>
+                <jsp:useBean id="now" class="java.util.Date" />
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
-                <input type="file" class="modal-text" name="file" class="file" required>
-                <input type="text" class="modal-text" placeholder="Enter description" name="description" required>
+                <input type="file" class="modal-text" name="file" class="file" required="required"></input>
+                <form:input type="text" class="modal-text" placeholder="Enter description" path="description" required="required"></form:input>
                 <button type="submit">Create</button>
             </div>
-        </form>
+        </form:form>
 
     </div>
 

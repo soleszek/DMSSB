@@ -1,8 +1,6 @@
-<%@ page import="com.sylwesteroleszek.entity.Document" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -68,7 +66,7 @@
             </div>
             <div class="option">
                 <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -102,11 +100,11 @@
         <select id="object">
             <option selected>Select type of object</option>
             <option value="div1">Documents</option>
-            <% if (!role.equals("viewer")) { %>
+            <%--<% if (!role.equals("viewer")) { %>--%>
             <option value="div2">Routes</option>
             <option value="div3">Tasks</option>
             <option value="div4">Users</option>
-            <% } %>
+            <%--<% } %>--%>
         </select>
         <div class="form-div1" id="div1">
             <form class="edit-form" action="AdvancedSearchDocument" method="post">

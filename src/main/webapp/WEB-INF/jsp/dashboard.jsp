@@ -28,7 +28,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
