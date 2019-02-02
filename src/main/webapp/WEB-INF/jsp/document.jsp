@@ -276,102 +276,104 @@
                     </sec:authorize>
 
                     <sec:authorize access="hasAnyRole('VIEWER','CONTRIBUTOR')">
-                    <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
-                        <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
-                            </div>
-                        </a>
-                    </c:if>
+                        <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
+                            <a href="#">
+                                <div class="icon-disabled">
+                                    <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
+                                </div>
+                            </a>
+                        </c:if>
                     </sec:authorize>
                 </li>
             </ul>
         </div>
-        <%--<col width="220">--%>
 
-        <%--<form id="edit-form" action="UpdateDocument" method="post">
+        <form id="edit-form" action="UpdateDocument" method="post">
 
             <table class="document-table">
                 <col width="220">
 
                 <tr>
                     <td>Name</td>
-                    <td><%=document.getName()%>
+                    <td><c:out value="${document.getName()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Title</td>
-                    <td><input type="text" class="edit-text" name="title" value="<%=document.getTitle()%>" readonly
+                    <td><input type="text" class="edit-text" name="title"
+                               value="<c:out value="${document.getTitle()}"/>" readonly
                                required size="35">
                     </td>
                 </tr>
                 <tr>
                     <td>Type</td>
-                    <td><%=document.getType()%>
+                    <td><c:out value="${document.getType()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Revision</td>
-                    <td><%=document.getRevision()%>
+                    <td><c:out value="${document.getRevision()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>State</td>
-                    <td><%=document.getState()%>
+                    <td><c:out value="${document.getState()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Owner</td>
-                    <td><%=document.getOwner()%>
+                    <td><c:out value="${document.getOwner().getUsername()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Creation date</td>
-                    <td><%=document.getCreationDate()%>
+                    <td><c:out value="${document.getCreationDate()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Last modified</td>
-                    <td><%=document.getLastModification()%>
+                    <td><c:out value="${document.getLastModification()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Attachement</td>
-                    <td><%=document.getLink()%>
+                    <td><c:out value="${document.getLink()}"/>
                     </td>
                 </tr>
                 <tr>
                     <td>Description</td>
-                    <td><input type="text" class="edit-text" name="description" value="<%=document.getDescription()%>"
+                    <td><input type="text" class="edit-text" name="description"
+                               value="<c:out value="${document.getDescription()}"/>"
                                readonly required size="35">
                     </td>
                 </tr>
 
-                <input type="hidden" name="documentId" value="<%=document.getId()%>">
+                <input type="hidden" name="documentId" value="<c:out value="${document.getId()}"/>">
 
             </table>
 
-            <%
-                if (!role.equals("viewer") && !document.getState().equals("frozen") && !document.getState().equals("released") || role.equals("admin")) {
-            %>
+            <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                <c:if test="${document.getState() eq 'in work'}">
 
-            <br><br>
+                    <br><br>
 
-            <button type="button" id="editButton" class="button-edit" style="visibility:visible" onclick="edit()">Edit
-            </button>
-            <button type="button" id="saveButton" class="button-edit" style="visibility:hidden" onclick="save()">Save
-            </button>
-            <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden" onclick="cancel()">
-                Cancel
-            </button>
+                    <button type="button" id="editButton" class="button-edit" style="visibility:visible"
+                            onclick="edit()">Edit
+                    </button>
+                    <button type="button" id="saveButton" class="button-edit" style="visibility:hidden"
+                            onclick="save()">Save
+                    </button>
+                    <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden"
+                            onclick="cancel()">
+                        Cancel
+                    </button>
 
-            <script src="jsscripts/editform.js"></script>
+                    <script src="jsscripts/editform.js"></script>
 
-            <%
-                }
-            %>
+                </c:if>
+            </sec:authorize>
 
-        </form>--%>
+        </form>
 
 
     </div>

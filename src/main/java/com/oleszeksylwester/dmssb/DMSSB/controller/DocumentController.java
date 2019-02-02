@@ -2,6 +2,7 @@ package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,6 +61,15 @@ public class DocumentController {
     private ModelAndView displayDocument(@ModelAttribute("document") Document document){
         ModelAndView mov = new ModelAndView();
         mov.addObject("document", document);
+        mov.setViewName("document");
+
+        return mov;
+    }
+
+    @PostMapping("/updateDocument")
+    private ModelAndView updateDocument(@ModelAttribute Document document){
+        ModelAndView mov = new ModelAndView();
+        mov.addObject(document);
         mov.setViewName("document");
 
         return mov;
