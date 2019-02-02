@@ -1,13 +1,13 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
-import com.oleszeksylwester.dmssb.DMSSB.model.Role;
+
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.validation.Valid;
 
 @Controller
 public class UserController {
@@ -84,5 +82,24 @@ public class UserController {
             return mov;
         }
 
+    }
+
+    @GetMapping(value = "/displayUserDetails")
+    private ModelAndView displayUserDetails(){
+        ModelAndView mov = new ModelAndView();
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        User user = userServiceImpl.findByUsername(username);
+
+        mov.addObject(user);
+        mov.setViewName("user");
+
+        return mov;
     }
 }

@@ -13,9 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(value = UserController.class, secure = false)
 public class UserControllerTest {
 
-    @Autowired
+    /*@Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private UserService userService;
+    private UserService userService;*/
 }

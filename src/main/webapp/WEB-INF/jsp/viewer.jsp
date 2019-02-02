@@ -52,7 +52,7 @@
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="UserShow" method="get">
+                <form id="usershow" action="/displayUserDetails" method="get">
                     <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
                     </a>
                 </form>

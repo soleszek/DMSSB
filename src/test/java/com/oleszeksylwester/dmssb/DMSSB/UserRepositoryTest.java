@@ -18,7 +18,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataJpaTest
 public class UserRepositoryTest {
 
-    @Autowired
+    /*@Autowired
     private TestEntityManager entityManager;
 
     @Autowired
@@ -41,5 +41,5 @@ public class UserRepositoryTest {
         //then
         assertThat(found.getUsername())
                 .isEqualTo(user.getUsername());
-    }
+    }*/
 }
