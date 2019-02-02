@@ -2,10 +2,7 @@ package com.oleszeksylwester.dmssb.DMSSB.model;
 
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -19,6 +16,8 @@ public class Document {
     private String title;
     private String description;
     private String state;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id")
     private User owner;
     private LocalDate creationDate;
     private LocalDate lastModification;

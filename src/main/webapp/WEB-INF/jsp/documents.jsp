@@ -403,10 +403,9 @@
                 </div>
                 <form:input type="text" class="modal-text" placeholder="Enter title" path="title" required="required"></form:input>
                 <sec:authentication var="principal" property="principal" />
-                <form:input type="text" class="modal-text" readonly="readonly" path="${principal.username.toString()}"></form:input>
+                <input type="text" class="modal-text" readonly="readonly" value="${principal.username}">
                 <jsp:useBean id="now" class="java.util.Date" />
-                <input type="text" class="modal-text" readonly name="creation date"
-                       value="<fmt:formatDate type = "date" value = "${now}"/>">
+                <input type="text" class="modal-text" readonly value="<fmt:formatDate type = "date" value = "${now}"/>">
                 <input type="file" class="modal-text" name="file" class="file" required="required"></input>
                 <form:input type="text" class="modal-text" placeholder="Enter description" path="description" required="required"></form:input>
                 <button type="submit">Create</button>
