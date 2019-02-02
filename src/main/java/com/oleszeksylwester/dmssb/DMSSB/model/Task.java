@@ -7,36 +7,111 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-public class Task extends DMSObject{
-
+public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
     private String owner;
     private String assignedTo;
     private String documentBeingApprovedId;
     private String documentBeingApprovedName;
+    private String state; //Active, Completed
     private LocalDate dueDate;
     private LocalDate completionDate;
+    private String comments;
     private String parentId;
 
     public Task(){
 
     }
 
-    public Task(String name, String state, LocalDate creationDate, String comments, String owner, String assignedTo, String documentBeingApprovedId, String documentBeingApprovedName, LocalDate dueDate, LocalDate completionDate, String parentId) {
-        super(name, state, creationDate, comments);
-        this.owner = owner;
-        this.assignedTo = assignedTo;
-        this.documentBeingApprovedId = documentBeingApprovedId;
-        this.documentBeingApprovedName = documentBeingApprovedName;
-        this.dueDate = dueDate;
-        this.completionDate = completionDate;
-        this.parentId = parentId;
+    public static class Builder {
+        private String name;
+        private String owner;
+        private String assignedTo;
+        private String documentBeingApprovedId;
+        private String documentBeingApprovedName;
+        private String state;
+        private LocalDate dueDate;
+        private LocalDate completionDate;
+        private String comments;
+        private String parentId;
+
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder owner (String owner){
+            this.owner = owner;
+            return this;
+        }
+
+        public Builder assignedTo (String assignedTo){
+            this.assignedTo = assignedTo;
+            return this;
+        }
+
+        public Builder documentBeingApprovedId(String documentBeingApprovedId){
+            this.documentBeingApprovedId = documentBeingApprovedId;
+            return this;
+        }
+
+        public Builder documentBeingApprovedName(String documentBeingApprovedName){
+            this.documentBeingApprovedName = documentBeingApprovedName;
+            return this;
+        }
+
+        public Builder state (String state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder dueDate (LocalDate dueDate) {
+            this.dueDate = dueDate;
+            return this;
+        }
+
+        public Builder completionDate (LocalDate completionDate) {
+            this.completionDate = completionDate;
+            return this;
+        }
+
+        public Builder comments(String comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Builder parentId(String parentId) {
+            this.parentId = parentId;
+            return this;
+        }
+
+        public Task build() {
+            return new Task(this);
+        }
+    }
+
+    private Task (Builder builder){
+        this.name = builder.name;
+        this.owner = builder.owner;
+        this.assignedTo = builder.assignedTo;
+        this.documentBeingApprovedId = builder.documentBeingApprovedId;
+        this.documentBeingApprovedName = builder.documentBeingApprovedName;
+        this.state = builder.state;
+        this.dueDate = builder.dueDate;
+        this.completionDate = builder.completionDate;
+        this.comments = builder.comments;
+        this.parentId = builder.parentId;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getOwner() {
@@ -55,6 +130,10 @@ public class Task extends DMSObject{
         return documentBeingApprovedName;
     }
 
+    public String getState() {
+        return state;
+    }
+
     public LocalDate getDueDate() {
         return dueDate;
     }
@@ -63,8 +142,16 @@ public class Task extends DMSObject{
         return completionDate;
     }
 
+    public String getComments() {
+        return comments;
+    }
+
     public String getParentId() {
         return parentId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setOwner(String owner) {
@@ -83,12 +170,20 @@ public class Task extends DMSObject{
         this.documentBeingApprovedName = documentBeingApprovedName;
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public void setDueDate(LocalDate dueDate) {
         this.dueDate = dueDate;
     }
 
     public void setCompletionDate(LocalDate completionDate) {
         this.completionDate = completionDate;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public void setParentId(String parentId) {

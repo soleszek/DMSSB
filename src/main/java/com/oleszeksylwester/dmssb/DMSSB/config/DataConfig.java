@@ -19,16 +19,4 @@ public class DataConfig {
         ds.setPassword("Rzeszów1983@");
         return ds;
     }
-
-    /*@Bean(name = "userDetailsService")
-    @Primary
-    public UserDetailsService userDetailsService(){
-        JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
-        jdbcImpl.setDataSource(dataSource());
-        jdbcImpl.setUsersByUsernameQuery(
-                "select username, password, enabled from users where username=?");
-        jdbcImpl.setAuthoritiesByUsernameQuery(
-                "select username, role from user_roles where username=?");
-        return jdbcImpl;
-    }*/
 }

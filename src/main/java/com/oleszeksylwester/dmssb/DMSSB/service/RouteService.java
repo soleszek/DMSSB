@@ -10,7 +10,6 @@ import java.util.List;
 
 @Service
 public class RouteService {
-
     private final RouteRepository routeRepository;
 
     @Autowired
@@ -23,10 +22,10 @@ public class RouteService {
         routeRepository.save(route);
     }
 
-    /*@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public Route findById(Long id){
-        return routeRepository.findOne(id);
-    }*/
+        return routeRepository.findById(id).orElseThrow(()-> new RuntimeException("There is no route with this id"));
+    }
 
     @Transactional(readOnly = true)
     public List<Route> findAll(){
@@ -42,5 +41,4 @@ public class RouteService {
     public void delete(Route route){
         routeRepository.delete(route);
     }
-
 }

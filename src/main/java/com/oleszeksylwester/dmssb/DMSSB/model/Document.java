@@ -1,40 +1,50 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Document extends DMSObject{
+public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String name;
     private int revision;
     private String type;
     private String title;
     private String description;
-    private String owner;
+    private String state;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id")
+    private User owner;
+    private LocalDate creationDate;
     private LocalDate lastModification;
     private String link;
 
     public Document() {
     }
 
-    public Document(String name, String state, LocalDate creadtionDate, String comments, int revision, String type, String title, String description, String owner, LocalDate creationDate, LocalDate lastModification, String link) {
-        super(name, state, creationDate, comments);
+    public Document(String name, int revision, String type, String title, String description, String state, User owner, LocalDate creationDate, LocalDate lastModification, String link) {
+        this.name = name;
         this.revision = revision;
         this.type = type;
         this.title = title;
         this.description = description;
+        this.state = state;
         this.owner = owner;
+        this.creationDate = creationDate;
         this.lastModification = lastModification;
         this.link = link;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getRevision() {
@@ -53,8 +63,16 @@ public class Document extends DMSObject{
         return description;
     }
 
-    public String getOwner() {
+    public String getState() {
+        return state;
+    }
+
+    public User getOwner() {
         return owner;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
     public LocalDate getLastModification() {
@@ -63,6 +81,10 @@ public class Document extends DMSObject{
 
     public String getLink() {
         return link;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setRevision(int revision) {
@@ -81,8 +103,16 @@ public class Document extends DMSObject{
         this.description = description;
     }
 
-    public void setOwner(String owner) {
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setLastModification(LocalDate lastModification) {
