@@ -55,4 +55,13 @@ public class DocumentController {
 
         return mov;
     }
+
+    @GetMapping("/document")
+    private ModelAndView displayDocument(@ModelAttribute("document") Document document){
+        ModelAndView mov = new ModelAndView();
+        mov.addObject("document", document);
+        mov.setViewName("document");
+
+        return mov;
+    }
 }

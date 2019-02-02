@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -13,8 +14,8 @@
 
     <style>
         * {
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
             font-family: Helvetica, Arial, sans-serif;
         }
 
@@ -194,7 +195,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -214,19 +215,20 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="LogoutServlet" method="get">
+                <form action="/logout" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
                 <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -246,38 +248,40 @@
 
         <div class="optionL"><a href="Lifecycle?documentId=${document.getId()}">Lifecycle</a></div>
         <c:if test="${document.getType() eq 'drawing'}">
-            <div class="optionL"><a href="viewer.jsp">Viewer</a></div>
+            <div class="optionL"><a href="/viewer">Viewer</a></div>
         </c:if>
 
         <div style="clear: both"></div>
     </div>
 
     <div id="content">
+        <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
+        <sec:authorize access="hasRole('VIEWER')" var="isViewer"/>
+        <sec:authorize access="hasRole('CONTRIBUTOR')" var="isViewer"/>
+        <sec:authorize access="hasRole('MANAGER')" var="isViewer"/>
 
         <div id="navbar">
             <ul>
                 <li>
-                    <%--<%
-                        if (!role.equals("viewer") && !document.getState().equals("frozen") && !document.getState().equals("released") || role.equals("admin")) {
-                    %>--%>
-                    <a href="#">
-                        <div class="icon">
-                            <i class="fas fa-minus-square fa-2x"></i>
-                            <i class="fas fa-minus-square fa-2x" title="Delete document"
-                               onclick="document.getElementById('modal-wrapper-deletedocument').style.display='block'"></i>
-                        </div>
-                    </a>
-                    <%--<%
-                    } else {
-                    %>--%>
-                    <a href="#">
-                        <div class="icon-disabled">
-                            <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
-                        </div>
-                    </a>
-                    <%--<%
-                        }
-                    %>--%>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                        <c:if test="${isViewer && document.getState() ne 'frozen' && document.getState('released') or isAdmin}">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-minus-square fa-2x"></i>
+                                    <i class="fas fa-minus-square fa-2x" title="Delete document"
+                                       onclick="document.getElementById('modal-wrapper-deletedocument').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </c:if>
+                    </sec:authorize>
+
+                    <c:if test="${document.getState() ne 'frozen' or document.getState('released')}">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
+                            </div>
+                        </a>
+                    </c:if>
                 </li>
             </ul>
         </div>

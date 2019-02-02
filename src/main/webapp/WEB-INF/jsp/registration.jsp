@@ -26,7 +26,6 @@
 </head>
 <body>
 <form:form action="/registerUser" method="post" modelAttribute="user">
-    <%--<form:errors path = "*" cssClass = "errorblock" element = "div" />--%>
     <div class="login-box">
         <h1>Fill in user data</h1>
         <div class="textbox">
