@@ -38,6 +38,7 @@ public class DocumentService {
         document.setRevision(1);
         document.setState(DocumentStates.INWORK.getState());
         document.setType(type);
+        document.setCreationDate(LocalDate.now());
         document.setLastModification(LocalDate.now());
         document.setLink(path);
 
