@@ -239,7 +239,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -293,7 +294,7 @@
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
             <thead>
             <tr>
@@ -310,69 +311,73 @@
                 <th>Description</th>
             </tr>
             </thead>
+            <sec:authorize access="hasRole('VIEWER')">
+                <tbody>
+                <c:forEach items="${approvedDocuments}" var="item">
+                    <tr>
+                        <td><a href="OpenDocument?documentId=${item.getId()}" id="doc-link">${item.getName()}
+                        </a></td>
+                        <td>${item.getTitle()}
+                        </td>
+                        <td>
+                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                                    class="far fa-window-restore"></i></div>
+                        </td>
+                        <td>${item.getType()}
+                        </td>
+                        <td>${item.getState()}
+                        </td>
+                        <td>${item.getRevision()}
+                        </td>
+                        <td>${item.getOwner().getUsername()}
+                        </td>
+                        <td>${item.getCreationDate()}
+                        </td>
+                        <td>${item.getLastModification()}
+                        </td>
+                        <td>${item.getLink()}
+                        </td>
+                        <td>${item.getDescription()}
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </sec:authorize>
 
-            <tbody>
+            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
+                <tbody>
+                <c:forEach items="${documents}" var="item">
+                    <tr>
+                        <td><a href="OpenDocument?documentId=${item.getId()}" id="doc-link">${item.getName()}
+                        </a></td>
+                        <td>${item.getTitle()}
+                        </td>
+                        <td>
+                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                                    class="far fa-window-restore"></i></div>
+                        </td>
+                        <td>${item.getType()}
+                        </td>
+                        <td>${item.getState()}
+                        </td>
+                        <td>${item.getRevision()}
+                        </td>
+                        <td>${item.getOwner().getUsername()}
+                        </td>
+                        <td>${item.getCreationDate()}
+                        </td>
+                        <td>${item.getLastModification()}
+                        </td>
+                        <td>${item.getLink()}
+                        </td>
+                        <td>${item.getDescription()}
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </sec:authorize>
 
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
-                </a></td>
-                <td><%=d.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=d.getType()%>
-                </td>
-                <td><%=d.getState()%>
-                </td>
-                <td><%=d.getRevision()%>
-                </td>
-                <td><%=d.getOwner()%>
-                </td>
-                <td><%=d.getCreationDate()%>
-                </td>
-                <td><%=d.getLastModification()%>
-                </td>
-                <td><%=d.getLink()%>
-                </td>
-                <td><%=d.getDescription()%>
-                </td>
-            </tr>
-            </tbody>
-
-            <tbody>
-
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
-                </a></td>
-                <td><%=d.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=d.getType()%>
-                </td>
-                <td><%=d.getState()%>
-                </td>
-                <td><%=d.getRevision()%>
-                </td>
-                <td><%=d.getOwner()%>
-                </td>
-                <td><%=d.getCreationDate()%>
-                </td>
-                <td><%=d.getLastModification()%>
-                </td>
-                <td><%=d.getLink()%>
-                </td>
-                <td><%=d.getDescription()%>
-                </td>
-            </tr>
-
-            </tbody>
-
-        </table>--%>
+        </table>
 
     </div>
 
@@ -382,7 +387,8 @@
 
     <div id="modal-wrapper" class="modal">
 
-        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document" enctype="multipart/form-data">
+        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document"
+                   enctype="multipart/form-data">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"
@@ -400,13 +406,15 @@
                         <option value="image">Image (jpg, png)</option>
                     </select>
                 </div>
-                <form:input type="text" class="modal-text" placeholder="Enter title" path="title" required="required"></form:input>
-                <sec:authentication var="principal" property="principal" />
+                <form:input type="text" class="modal-text" placeholder="Enter title" path="title"
+                            required="required"></form:input>
+                <sec:authentication var="principal" property="principal"/>
                 <input type="text" class="modal-text" readonly="readonly" value="${principal.username}">
-                <jsp:useBean id="now" class="java.util.Date" />
+                <jsp:useBean id="now" class="java.util.Date"/>
                 <input type="text" class="modal-text" readonly value="<fmt:formatDate type = "date" value = "${now}"/>">
                 <input type="file" class="modal-text" name="file" class="file" required="required"></input>
-                <form:input type="text" class="modal-text" placeholder="Enter description" path="description" required="required"></form:input>
+                <form:input type="text" class="modal-text" placeholder="Enter description" path="description"
+                            required="required"></form:input>
                 <button type="submit">Create</button>
             </div>
         </form:form>

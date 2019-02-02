@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,11 +30,16 @@ public class DocumentController {
     DocumentService documentService;
 
     @GetMapping("/documents")
-    private String displayAllDocuments(Model model) {
+    private ModelAndView displayAllDocuments(){
+        ModelAndView mov = new ModelAndView();
+        List<Document> documents = documentService.findAll();
+        List<Document> approvedDocuments = documentService.findAllApproved();
 
-        model.addAttribute("document", new Document());
+        mov.addObject("documents", documents);
+        mov.addObject("approvedDocuments", approvedDocuments);
+        mov.setViewName("documents");
 
-        return "documents";
+        return mov;
     }
 
     @PostMapping("/createDocument")
