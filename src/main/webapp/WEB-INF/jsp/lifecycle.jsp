@@ -70,75 +70,68 @@
     </div>
     <div style="clear:both;"></div>
 
-</div>
-<div style="clear:both"></div>
+    <div id="sidebar">
+        <div class="optionL"><a href="/document/${document.getId()}">Properties</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}/revisions">Revisions</a></div>
 
-<div id="sidebar">
-    <div class="optionL"><a href="/document/${document.getId()}">Properties</a></div>
-    <div class="optionL"><a href="/document/${document.getId()}/revisions">Revisions</a></div>
+        <c:if test="${role ne 'viewer'}">
+            <div class="optionL"><a href="/document/${document.getId()}/routes">Routes</a></div>
+        </c:if>
 
-    <c:if test="${role ne 'viewer'}">
-        <div class="optionL"><a href="/document/${document.getId()}/routes">Routes</a></div>
-    </c:if>
+        <div class="optionL"><a href="/document/${document.getId()}/lifecycle">Lifecycle</a></div>
+        <c:if test="${document.getType() eq 'drawing'}">
+            <div class="optionL"><a href="/document/${document.getId()}/viewer">Viewer</a></div>
+        </c:if>
 
-    <div class="optionL"><a href="/document/${document.getId()}/lifecycle">Lifecycle</a></div>
-    <c:if test="${document.getType() eq 'drawing'}">
-        <div class="optionL"><a href="/document/${document.getId()}/viewer">Viewer</a></div>
-    </c:if>
+        <div style="clear: both"></div>
+    </div>
 
-    <div style="clear: both"></div>
-</div>
+    <div id="content">
 
-<div id="content">
+        <ul class="lifecycle">
 
-    <%--<ul class="lifecycle">
+            <c:choose>
+                <c:when test="${document.getState() eq 'in work'}">
+                    <li class="active">In work</li>
+                </c:when>
+                <c:when test="${document.getState() ne 'in work'}">
+                    <li>In work</li>
+                </c:when>
+            </c:choose>
 
-        <%
-            if (document.getState().equals("in work")) {
-        %>
-        <li class="active">In work</li>
-        <%
-        } else {
-        %>
-        <li>In work</li>
-        <% } %>
+            <c:choose>
+                <c:when test="${document.getState() eq 'frozen'}">
+                    <li class="active">Frozen</li>
+                </c:when>
+                <c:when test="${document.getState() ne 'frozen'}">
+                    <li>Frozen</li>
+                </c:when>
+            </c:choose>
 
-        <%
-            if (document.getState().equals("frozen")){
-        %>
-        <li class="active">Frozen</li>
-        <%
-            } else {
-        %>
-        <li>Frozen</li>
-        <% } %>
+            <c:choose>
+                <c:when test="${document.getState() eq 'released'}">
+                    <li class="active">Released</li>
+                </c:when>
+                <c:when test="${document.getState() ne 'released'}">
+                    <li>Released</li>
+                </c:when>
+            </c:choose>
 
-        <%
-            if (document.getState().equals("released")){
-        %>
-        <li class="active">Released</li>
-        <%
-            } else {
-        %>
-        <li>Released</li>
-        <% } %>
+            <c:choose>
+                <c:when test="${document.getState() eq 'cancelled'}">
+                    <li class="active">Canceled</li>
+                </c:when>
+                <c:when test="${document.getState() ne 'cancelled'}">
+                    <li>Canceled</li>
+                </c:when>
+            </c:choose>
+        </ul>
 
-        <%
-            if (document.getState().equals("canceled")){
-        %>
-        <li class="active">Canceled</li>
-        <%
-            } else {
-        %>
-        <li>Canceled</li>
-        <% } %>
-    </ul>--%>
+    </div>
 
-</div>
-
-<div id="footer">
-    Sylwester Oleszek 2018 &copy;
-</div>
+    <div id="footer">
+        Sylwester Oleszek 2018 &copy;
+    </div>
 
 </div>
 
