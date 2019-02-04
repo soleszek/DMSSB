@@ -84,6 +84,15 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<Document> findAllRevisions(String name){
+        List<Document> allDocuments = documentRepository.findAll();
+
+        return allDocuments.stream()
+                .filter(u -> u.getName().equals(name))
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public void deleteById(Long id){
         documentRepository.deleteById(id);

@@ -26,18 +26,6 @@ public class DocumentController {
     @Autowired
     DocumentService documentService;
 
-/*    @GetMapping("/documents")
-    private String displayAllDocuments(Model model){
-        List<Document> documents = documentService.findAll();
-        List<Document> approvedDocuments = documentService.findAllApproved();
-
-        model.addAttribute("document", new Document());
-        model.addAttribute("approvedDocuments", approvedDocuments);
-        model.addAttribute("documents", documents);
-
-        return "documents";
-    }*/
-
     @GetMapping("/documents")
     private ModelAndView displayAllDocuments(){
         ModelAndView mov = new ModelAndView();
@@ -107,8 +95,11 @@ public class DocumentController {
     private ModelAndView displayDocumentRevisions(@PathVariable("documentId") Long documentId){
         ModelAndView mov = new ModelAndView();
         Document document = documentService.findById(documentId);
+        String name = document.getName();
+        List<Document> revisions = documentService.findAllRevisions(name);
 
-        mov.addObject("document", document);
+        mov.addObject(document);
+        mov.addObject("revisions", revisions);
         mov.setViewName("revisions");
 
         return mov;
@@ -146,5 +137,4 @@ public class DocumentController {
 
         return mov;
     }
-
 }

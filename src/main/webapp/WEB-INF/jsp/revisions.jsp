@@ -1,6 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -60,7 +59,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -129,9 +129,6 @@
         <table id="example" class="display" style="width:100%">
             <col width="60">
 
-            <%--<%
-                List<Document> documentRevisions = (List<Document>) request.getAttribute("documentRevisions");
-            %>
             <thead>
             <tr>
                 <th>Name</th>
@@ -148,38 +145,35 @@
             </tr>
             </thead>
             <tbody>
-            <% for (Document dR : documentRevisions) {
-            %>
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=dR.getId()%>" id="doc-link"><%=dR.getName()%>
-                </a></td>
-                <td><%=dR.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=dR.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=dR.getType()%>
-                </td>
-                <td><%=dR.getState()%>
-                </td>
-                <td><%=dR.getRevision()%>
-                </td>
-                <td><%=dR.getOwner()%>
-                </td>
-                <td><%=dR.getCreationDate()%>
-                </td>
-                <td><%=dR.getLastModification()%>
-                </td>
-                <td><%=dR.getLink()%>
-                </td>
-                <td><%=dR.getDescription()%>
-                </td>
-            </tr>
-            <%
-                }
-            %>
-            </tbody>--%>
+            <c:forEach items="${revisions}" var="item">
+                <tr>
+                    <td><a href="/document/${item.getId()}" id="doc-link">${item.getName()}
+                    </a></td>
+                    <td>${item.getTitle()}
+                    </td>
+                    <td>
+                        <div id="popup" onclick="openPopup('/document/${item.getId()}')"><i
+                                class="far fa-window-restore"></i></div>
+                    </td>
+                    <td>${item.getType()}
+                    </td>
+                    <td>${item.getState()}
+                    </td>
+                    <td>${item.getRevision()}
+                    </td>
+                    <td>${item.getOwner().getUsername()}
+                    </td>
+                    <td>${item.getCreationDate()}
+                    </td>
+                    <td>${item.getLastModification()}
+                    </td>
+                    <td>${item.getLink()}
+                    </td>
+                    <td>${item.getDescription()}
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
 
         </table>
 
@@ -189,7 +183,7 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
