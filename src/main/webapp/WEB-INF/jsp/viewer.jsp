@@ -85,13 +85,13 @@
         <div style="clear: both"></div>
     </div>
 
-    <%--<div id="content">
+    <div id="content">
 
-        <object data="DocumentViewer?documentId=<%=document.getId()%>" type="application/pdf" width="100%" height="650">
+        <object data="/document/${document.getId()}" type="application/pdf" width="100%" height="650">
             <p>There is a problem with opening this file.</p>
         </object>
 
-    </div>--%>
+    </div>
 
     <div id="footer">
         Sylwester Oleszek 2018 &copy;
