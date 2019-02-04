@@ -207,7 +207,7 @@
     <div class="menu">
 
         <div class="topmenu">
-            <label>Name</label>
+            <label></label>
         </div>
         <div id="search">
             <ul class="sliding-icons">
@@ -233,14 +233,13 @@
         <div class="topmenu">
             <div class="optionSO">
                 <form action="/logout" method="get">
-                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
+                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>">
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
-                            property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -263,7 +262,7 @@
         </sec:authorize>
 
         <sec:authorize access="hasRole('ADMIN')">
-            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
+            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
         </sec:authorize>
 
         <div style="clear: both"></div>

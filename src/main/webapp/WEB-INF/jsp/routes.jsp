@@ -1,5 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -220,7 +221,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -240,19 +241,19 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="LogoutServlet" method="get">
-                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
+                <form action="/logout" method="get">
+                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>">
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
+                <form id="usershow" action="/displayUserDetails" method="get">
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -263,19 +264,19 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <%--<div class="optionL"><a href="OpenDocument?documentId=<%=document.getId()%>">Properties</a></div>
-        <div class="optionL"><a href="DocumentRevisions?documentId=<%=document.getId()%>">Revisions</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}">Properties</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}/revisions">Revisions</a></div>
 
         <c:if test="${role ne 'viewer'}">
-            <div class="optionL"><a href="DocumentRoutes?documentId=<%=document.getId()%>">Routes</a></div>
+            <div class="optionL"><a href="/document/${document.getId()}/routes">Routes</a></div>
         </c:if>
 
-        <div class="optionL"><a href="Lifecycle?documentId=<%=document.getId()%>">Lifecycle</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}/lifecycle">Lifecycle</a></div>
         <c:if test="${document.getType() eq 'drawing'}">
-            <div class="optionL"><a href="viewer.jsp">Viewer</a></div>
+            <div class="optionL"><a href="/document/${document.getId()}/viewer">Viewer</a></div>
         </c:if>
 
-        <div style="clear: both"></div>--%>
+        <div style="clear: both"></div>
     </div>
 
     <div id="content">

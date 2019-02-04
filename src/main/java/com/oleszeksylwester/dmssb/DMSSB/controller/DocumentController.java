@@ -105,7 +105,7 @@ public class DocumentController {
         Document document = documentService.findById(documentId);
 
         mov.addObject("document", document);
-        mov.setViewName("route");
+        mov.setViewName("routes");
 
         return mov;
     }

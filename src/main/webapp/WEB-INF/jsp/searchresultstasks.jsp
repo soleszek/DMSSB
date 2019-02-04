@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -28,12 +29,12 @@
     <div class="menu">
 
         <div class="topmenu">
-            <label>Name</label>
+            <label></label>
         </div>
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -53,19 +54,19 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="LogoutServlet" method="get">
-                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
+                <form action="/logout" method="get">
+                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>">
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="UserShow" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
+                <form id="usershow" action="/displayUserDetails" method="get">
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -76,15 +77,15 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <c:if test="${role ne 'viewer'}">
-            <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
-            <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </c:if>
+        <div class="optionL"><a href="/documents">Documents</a></div>
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+            <div class="optionL"><a href="/routeslist">Routes</a></div>
+            <div class="optionL"><a href="/tasks">Tasks</a></div>
+        </sec:authorize>
 
-        <c:if test="${role eq 'admin'}">
-            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </c:if>
+        <sec:authorize access="hasRole('ADMIN')">
+            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
+        </sec:authorize>
 
         <div style="clear: both"></div>
     </div>
