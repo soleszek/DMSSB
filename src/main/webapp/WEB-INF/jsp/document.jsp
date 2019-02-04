@@ -215,14 +215,13 @@
         <div class="topmenu">
             <div class="optionSO">
                 <form action="/logout" method="get">
-                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
+                    <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>">
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
-                            property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
                     </a>
                 </form>
             </div>
