@@ -1,14 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -17,23 +14,13 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
-    <title>Documents</title>
+    <title>Task view</title>
 
     <style>
         * {
             margin: 0;
             padding: 0;
             font-family: Helvetica, Arial, sans-serif;
-        }
-
-        .modal-text {
-            width: 90%;
-            padding: 12px 20px;
-            margin: 8px 26px;
-            display: inline-block;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            font-size: 16px;
         }
 
         /* Set a style for all buttons */
@@ -204,6 +191,10 @@
         <span style="color:#c34f4f">Data</span> Management System
     </div>
 
+    <div id="search">
+
+    </div>
+
     <div class="menu">
 
         <div class="topmenu">
@@ -212,7 +203,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="/advancedsearch">
+                    <a href="advancedsearch.jsp">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -232,20 +223,19 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="/logout" method="get">
+                <form action="LogoutServlet" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
-                            property="principal.username"/>
+                <form id="usershow" action="UserShow" method="get">
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -256,128 +246,86 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/documents">Documents</a></div>
-        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-            <div class="optionL"><a href="/routeslist">Routes</a></div>
-            <div class="optionL"><a href="/tasks">Tasks</a></div>
-        </sec:authorize>
+        <div class="optionL"><a href="AllDocuments">Documents</a></div>
+        <c:if test="${role ne 'viewer'}">
+            <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
+            <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
+        </c:if>
 
-        <sec:authorize access="hasRole('ADMIN')">
+        <c:if test="${role eq 'admin'}">
             <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </sec:authorize>
+        </c:if>
 
         <div style="clear: both"></div>
     </div>
 
     <div id="content">
+
         <div id="navbar">
-            <ul class="sliding-icons">
+            <ul>
                 <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-plus-square fa-2x"></i>
-                                <i class="fas fa-plus-square fa-2x" title="Create new document"
-                                   onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                    <sec:authorize access="hasAnyRole('VIEWER')">
-                        <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
+                    <a href="#">
+                        <div class="icon">
+                            <i class="fas fa-check-square fa-2x"></i>
+                            <i class="fas fa-check-square fa-2x" title="Complete"
+                               onclick="document.getElementById('modal-content-complete-task').style.display='block'"></i>
+                        </div>
+                    </a>
                 </li>
             </ul>
-            <input id="txtSearch" placeholder="Filter table" class="form-control"/>
+
         </div>
 
-        <table id="example" class="display" style="width:100%">
-            <col width="60">
-            <thead>
+        <%--<table id="example" class="display" style="width:100%">
+            <col width="300">
+
+            <%
+                Task task = (Task) request.getAttribute("task");
+            %>
+
             <tr>
-                <th>Name</th>
-                <th>Title</th>
-                <th><i class="far fa-window-restore"></i></th>
-                <th>Type</th>
-                <th>State</th>
-                <th>Revision</th>
-                <th>Owner</th>
-                <th>Creation date</th>
-                <th>Last modified</th>
-                <th>Attachement</th>
-                <th>Description</th>
+                <td>Task name</td>
+                <td><%=task.getName()%>
+                </td>
             </tr>
-            </thead>
-            <sec:authorize access="hasRole('VIEWER')">
-                <tbody>
-                <c:forEach items="${approvedDocuments}" var="item">
-                    <tr>
-                        <td><a href="/document/${item.getId()}" id="doc-link">${item.getName()}
-                        </a></td>
-                        <td>${item.getTitle()}
-                        </td>
-                        <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
-                                    class="far fa-window-restore"></i></div>
-                        </td>
-                        <td>${item.getType()}
-                        </td>
-                        <td>${item.getState()}
-                        </td>
-                        <td>${item.getRevision()}
-                        </td>
-                        <td>${item.getOwner().getUsername()}
-                        </td>
-                        <td>${item.getCreationDate()}
-                        </td>
-                        <td>${item.getLastModification()}
-                        </td>
-                        <td>${item.getLink()}
-                        </td>
-                        <td>${item.getDescription()}
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </sec:authorize>
+            <tr>
+                <td>Owner</td>
+                <td><%=task.getOwner()%>
+                </td>
+            </tr>
+            <tr>
+                <td>Promoted document</td>
+                <td><span class="link"><a href="#"
+                                          onclick="openPopup('OpenDocument?documentId=<%=task.getDocumentBeingApprovedId()%>')"><%=task.getDocumentBeingApprovedName()%></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td><%=task.getState()%>
+                </td>
+            </tr>
+            <tr>
+                <td>Due date</td>
+                <td><%=task.getDueDate()%>
+                </td>
+            </tr>
+            <tr>
+                <td>Task comment</td>
+                <td><%=task.getComments()%>
+                </td>
+            </tr>
+            <tr>
+                <td>Completion date</td>
+                <td><%=task.getCompletionDate()%>
+                </td>
+            </tr>
+            <tr>
+                <td>Your comment</td>
+                <td><input type="text" name="doer comment" value="" placeholder="Put your comments here">
+                </td>
+            </tr>
 
-            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
-                <tbody>
-                <c:forEach items="${documents}" var="item">
-                    <tr>
-                        <td><a href="/document/${item.getId()}" id="doc-link">${item.getName()}
-                        </a></td>
-                        <td>${item.getTitle()}
-                        </td>
-                        <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
-                                    class="far fa-window-restore"></i></div>
-                        </td>
-                        <td>${item.getType()}
-                        </td>
-                        <td>${item.getState()}
-                        </td>
-                        <td>${item.getRevision()}
-                        </td>
-                        <td>${item.getOwner().getUsername()}
-                        </td>
-                        <td>${item.getCreationDate()}
-                        </td>
-                        <td>${item.getLastModification()}
-                        </td>
-                        <td>${item.getLink()}
-                        </td>
-                        <td>${item.getDescription()}
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </sec:authorize>
-
-        </table>
+        </table>--%>
 
     </div>
 
@@ -385,45 +333,34 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper" class="modal">
+    <%--<div id="modal-content-complete-task" class="modal">
 
-        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document" enctype="multipart/form-data">
+        <form class="modal-content animate" action="CompleteTask" method="get">
 
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"
-                      title="Close PopUp">&times;</span>
-                <img src="style/document.jpg" alt="Document" class="avatar">
-                <h1 style="text-align:center">Create new document</h1>
+                <span onclick="document.getElementById('modal-content-complete-task').style.display='none'"
+                      class="close" title="Close PopUp">&times;</span>
+                <img src="style/complete-task.png" alt="Document" class="avatar">
+                <h1 style="text-align:center">Complete task</h1>
             </div>
 
-            <div class="container">
-                <div class="custom-select">
-                    <select name="doctype">
-                        <option value="drawing">Drawing (pdf)</option>
-                        <option value="drawing">Drawing (pdf)</option>
-                        <option value="document">Document (doc, docx)</option>
-                        <option value="image">Image (jpg, png)</option>
-                    </select>
-                </div>
-                <form:input type="text" class="modal-text" placeholder="Enter title" path="title"
-                            required="required"></form:input>
-                <sec:authentication var="principal" property="principal"/>
-                <input type="text" class="modal-text" readonly="readonly" value="${principal.username}">
-                <jsp:useBean id="now" class="java.util.Date"/>
-                <input type="text" class="modal-text" readonly value="<fmt:formatDate type = "date" value = "${now}"/>">
-                <input type="file" class="modal-text" name="file" class="file" required="required"/>
-                <form:input type="text" class="modal-text" placeholder="Enter description" path="description"
-                            required="required"></form:input>
-                <button type="submit">Create</button>
-            </div>
-        </form:form>
+            <div class="container"><h3
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are
+                completing task <%=task.getId()%>, <%=task.getComments()%>
+            </h3>
 
-    </div>
+                <input type="hidden" name="taskId" value="<%=task.getId()%>">
+
+                <button type="submit">Complete</button>
+            </div>
+        </form>
+
+    </div>--%>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close
 
-        var modal = document.getElementById('modal-wrapper');
+        var modal = document.getElementById('modal-content-complete-task');
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -431,7 +368,6 @@
         }
     </script>
 
-    <script src="jsscripts/dropdownmenu.js"></script>
     <script src="jsscripts/popup.js"></script>
 
     <script type="text/javascript">
@@ -468,5 +404,4 @@
 </div>
 
 </body>
-
 </html>

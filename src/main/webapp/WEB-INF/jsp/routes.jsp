@@ -1,23 +1,31 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <title>Routes</title>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
-    <title>Documents</title>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script>
+        $(function () {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        });
+    </script>
 
     <style>
         * {
@@ -26,7 +34,7 @@
             font-family: Helvetica, Arial, sans-serif;
         }
 
-        .modal-text {
+        .modal-text, .datepicker {
             width: 90%;
             padding: 12px 20px;
             margin: 8px 26px;
@@ -207,12 +215,12 @@
     <div class="menu">
 
         <div class="topmenu">
-            <label>Name</label>
+            <label><c:out value="${document.getName()}"/></label>
         </div>
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="/advancedsearch">
+                    <a href="advancedsearch.jsp">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -232,20 +240,19 @@
 
         <div class="topmenu">
             <div class="optionSO">
-                <form action="/logout" method="get">
+                <form action="LogoutServlet" method="get">
                     <input type="hidden" name="login" value="<c:out value="${sessionScope.login}"/>"/>
                     <input type="submit" name="menu" value="Sign out">
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
-                            property="principal.username"/>
+                <form id="usershow" action="UserShow" method="get">
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
                     </a>
                 </form>
             </div>
             <div class="optionSO">
-                <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+                <a href="Dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div style="clear: both"></div>
 
@@ -256,39 +263,33 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/documents">Documents</a></div>
-        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-            <div class="optionL"><a href="/routeslist">Routes</a></div>
-            <div class="optionL"><a href="/tasks">Tasks</a></div>
-        </sec:authorize>
+        <%--<div class="optionL"><a href="OpenDocument?documentId=<%=document.getId()%>">Properties</a></div>
+        <div class="optionL"><a href="DocumentRevisions?documentId=<%=document.getId()%>">Revisions</a></div>
 
-        <sec:authorize access="hasRole('ADMIN')">
-            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </sec:authorize>
+        <c:if test="${role ne 'viewer'}">
+            <div class="optionL"><a href="DocumentRoutes?documentId=<%=document.getId()%>">Routes</a></div>
+        </c:if>
 
-        <div style="clear: both"></div>
+        <div class="optionL"><a href="Lifecycle?documentId=<%=document.getId()%>">Lifecycle</a></div>
+        <c:if test="${document.getType() eq 'drawing'}">
+            <div class="optionL"><a href="viewer.jsp">Viewer</a></div>
+        </c:if>
+
+        <div style="clear: both"></div>--%>
     </div>
 
     <div id="content">
+
         <div id="navbar">
-            <ul class="sliding-icons">
+            <ul>
                 <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-plus-square fa-2x"></i>
-                                <i class="fas fa-plus-square fa-2x" title="Create new document"
-                                   onclick="document.getElementById('modal-wrapper').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                    <sec:authorize access="hasAnyRole('VIEWER')">
-                        <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-plus-square fa-2x" title="You don't have privileges"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
+                    <a href="#">
+                        <div class="icon">
+                            <i class="fas fa-angle-double-right fa-2x"></i>
+                            <i class="fas fa-angle-double-right fa-2x" title="Create new route"
+                               onclick="document.getElementById('modal-wrapper-routes').style.display='block'"></i>
+                        </div>
+                    </a>
                 </li>
             </ul>
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
@@ -296,86 +297,71 @@
 
         <table id="example" class="display" style="width:100%">
             <col width="60">
+
+            <%--<%
+                List<Route> existingRoutes = (List<Route>) request.getAttribute("existingRoutes");
+            %>
             <thead>
             <tr>
-                <th>Name</th>
-                <th>Title</th>
-                <th><i class="far fa-window-restore"></i></th>
-                <th>Type</th>
-                <th>State</th>
-                <th>Revision</th>
+                <th>Promotion request name</th>
                 <th>Owner</th>
+                <th><i class="far fa-window-restore"></i></th>
+                <th>Promoted document</th>
+                <th>State</th>
+                <th>Check due date</th>
+                <th>Person assigned to check</th>
+                <th>Approve due date</th>
+                <th>Responsible for approving</th>
+                <th>Comments</th>
                 <th>Creation date</th>
-                <th>Last modified</th>
-                <th>Attachement</th>
-                <th>Description</th>
+                <th>Finish date</th>
             </tr>
             </thead>
-            <sec:authorize access="hasRole('VIEWER')">
-                <tbody>
-                <c:forEach items="${approvedDocuments}" var="item">
-                    <tr>
-                        <td><a href="/document/${item.getId()}" id="doc-link">${item.getName()}
-                        </a></td>
-                        <td>${item.getTitle()}
-                        </td>
-                        <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
-                                    class="far fa-window-restore"></i></div>
-                        </td>
-                        <td>${item.getType()}
-                        </td>
-                        <td>${item.getState()}
-                        </td>
-                        <td>${item.getRevision()}
-                        </td>
-                        <td>${item.getOwner().getUsername()}
-                        </td>
-                        <td>${item.getCreationDate()}
-                        </td>
-                        <td>${item.getLastModification()}
-                        </td>
-                        <td>${item.getLink()}
-                        </td>
-                        <td>${item.getDescription()}
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </sec:authorize>
+            <%
+                if (existingRoutes != null) {
+            %>
+            <tbody>
+            <%
+                for (Route r : existingRoutes) {
+            %>
+            <tr>
+                <td><a href="OpenRoute?routeId=<%=r.getId()%>" id="doc-link"><%=r.getName()%>
+                </a>
+                </td>
+                <td><%=r.getOwner()%>
+                </td>
+                <td>
+                    <div id="popup" onclick="openPopup('OpenRoute?routeId=<%=r.getId()%>')"><i
+                            class="far fa-window-restore"></i></div>
+                </td>
+                <td><span class="doc-link"
+                          onclick="openPopup('OpenDocument?documentId=<%=r.getDocumentBeingApprovedId()%>')"><%=document.getName()%></span>
+                </td>
+                <td><%=r.getState()%>
+                </td>
+                <td><%=r.getCheckingDueDate()%>
+                </td>
+                <td><%=r.getResponsibleForChecking()%>
+                </td>
+                <td><%=r.getDeadline()%>
+                </td>
+                <td><%=r.getResponsibleForApproving()%>
+                </td>
+                <td><%=r.getComments()%>
+                </td>
+                <td><%=r.getCreationDate()%>
+                </td>
+                <td><%=r.getFinishDate()%>
+                </td>
+            </tr>
+            <%
 
-            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
-                <tbody>
-                <c:forEach items="${documents}" var="item">
-                    <tr>
-                        <td><a href="/document/${item.getId()}" id="doc-link">${item.getName()}
-                        </a></td>
-                        <td>${item.getTitle()}
-                        </td>
-                        <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
-                                    class="far fa-window-restore"></i></div>
-                        </td>
-                        <td>${item.getType()}
-                        </td>
-                        <td>${item.getState()}
-                        </td>
-                        <td>${item.getRevision()}
-                        </td>
-                        <td>${item.getOwner().getUsername()}
-                        </td>
-                        <td>${item.getCreationDate()}
-                        </td>
-                        <td>${item.getLastModification()}
-                        </td>
-                        <td>${item.getLink()}
-                        </td>
-                        <td>${item.getDescription()}
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </sec:authorize>
+                }
+            %>
+            </tbody>
+            <%
+                }
+            %>--%>
 
         </table>
 
@@ -385,45 +371,73 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper" class="modal">
+    <div id="modal-wrapper-routes" class="modal">
 
-        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document" enctype="multipart/form-data">
-
+        <%--<form class="modal-content animate" action="CreateRoute" method="post">
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"
+                <span onclick="document.getElementById('modal-wrapper-routes').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/document.jpg" alt="Document" class="avatar">
-                <h1 style="text-align:center">Create new document</h1>
+                <img src="style/route.png" alt="Document" class="avatar">
+                <h1 style="text-align:center">New promotion request</h1>
             </div>
-
             <div class="container">
+                <input type="text" class="modal-text" disabled name="name" value="<%=document.getName()%>">
+                <input type="hidden" readonly name="documentId" value="<%=document.getId()%>">
+                <c:set var="now" value="<%=new java.util.Date()%>"/>
+                <input type="text" class="modal-text" readonly name="creation date"
+                       value="<fmt:formatDate type = "date" value = "${now}"/>">
+                <input type="text" class="modal-text" disabled name="documentTitle" value="<%=document.getTitle()%>">
+                <input type="text" class="modal-text" readonly name="owner" value="<%=login%>">
+
+                <div><input type="text" placeholder="Must be checked before" class="datepicker"
+                            name="checkingDueDate" required></div>
+
                 <div class="custom-select">
-                    <select name="doctype">
-                        <option value="drawing">Drawing (pdf)</option>
-                        <option value="drawing">Drawing (pdf)</option>
-                        <option value="document">Document (doc, docx)</option>
-                        <option value="image">Image (jpg, png)</option>
+
+                    <select name="responsibleForChecking">
+                        <option value="soleszek">Sylwester Oleszek, admin</option>
+                        <%
+                            for (User c : checkers) {
+                        %>
+                        <option value="<%=c.getLogin()%>"><%=c.getUserName()%> <%=c.getLastName()%>, <%=c.getRole()%>
+                        </option>
+                        <%
+                            }
+                        %>
                     </select>
+
                 </div>
-                <form:input type="text" class="modal-text" placeholder="Enter title" path="title"
-                            required="required"></form:input>
-                <sec:authentication var="principal" property="principal"/>
-                <input type="text" class="modal-text" readonly="readonly" value="${principal.username}">
-                <jsp:useBean id="now" class="java.util.Date"/>
-                <input type="text" class="modal-text" readonly value="<fmt:formatDate type = "date" value = "${now}"/>">
-                <input type="file" class="modal-text" name="file" class="file" required="required"/>
-                <form:input type="text" class="modal-text" placeholder="Enter description" path="description"
-                            required="required"></form:input>
+
+                <br>
+                <div><input type="text" placeholder="Must be approved before" class="datepicker"
+                            name="deadline" required></div>
+
+                <div class="custom-select">
+
+                    <select name="responsibleForApproving">
+                        <option value="soleszek">Sylwester Oleszek, admin</option>
+                        <%
+                            for (User u : approvers) {
+                        %>
+                        <option value="<%=u.getLogin()%>"><%=u.getUserName()%> <%=u.getLastName()%>, <%=u.getRole()%>
+                        </option>
+                        <%
+                            }
+                        %>
+                    </select>
+
+                </div>
+                <input type="text" class="modal-text" placeholder="Enter comment" name="description" required>
                 <button type="submit">Create</button>
             </div>
-        </form:form>
+        </form>--%>
 
     </div>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close
 
-        var modal = document.getElementById('modal-wrapper');
+        var modal = document.getElementById('modal-wrapper-routes');
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
@@ -431,8 +445,8 @@
         }
     </script>
 
-    <script src="jsscripts/dropdownmenu.js"></script>
     <script src="jsscripts/popup.js"></script>
+    <script src="jsscripts/dropdownmenu.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -468,5 +482,4 @@
 </div>
 
 </body>
-
 </html>
