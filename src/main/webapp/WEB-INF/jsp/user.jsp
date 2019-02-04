@@ -306,8 +306,10 @@
                 </tr>
                 <tr>
                     <td>Role</td>
-                    <td><input type="text" class="noedit-text" id="role" name="role" value="<c:out value="${user.getRoles()}"/>"
+                    <td><c:forEach var="role" items="${user.getRoles()}">
+                        <input type="text" class="noedit-text" id="role" name="role" value="<c:out value="${role.getRole()}"/>"
                                readonly required>
+                    </c:forEach>
                         <select name="role" id="select-role" style="visibility: hidden;" onchange="replaceValue(event)">
                             <option value="">SELECT</option>
                             <option value="VIEWER">Viewer</option>

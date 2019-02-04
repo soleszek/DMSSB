@@ -26,7 +26,7 @@ public class DocumentController {
     @Autowired
     DocumentService documentService;
 
-    @GetMapping("/documents")
+/*    @GetMapping("/documents")
     private String displayAllDocuments(Model model){
         List<Document> documents = documentService.findAll();
         List<Document> approvedDocuments = documentService.findAllApproved();
@@ -36,6 +36,21 @@ public class DocumentController {
         model.addAttribute("documents", documents);
 
         return "documents";
+    }*/
+
+    @GetMapping("/documents")
+    private ModelAndView displayAllDocuments(){
+        ModelAndView mov = new ModelAndView();
+
+        List<Document> documents = documentService.findAll();
+        List<Document> approvedDocuments = documentService.findAllApproved();
+
+        mov.addObject("document", new Document());
+        mov.addObject("approvedDocuments", approvedDocuments);
+        mov.addObject("documents", documents);
+        mov.setViewName("documents");
+
+        return mov;
     }
 
     @PostMapping("/createDocument")

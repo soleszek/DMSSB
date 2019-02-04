@@ -23,7 +23,7 @@
     <div class="menu">
 
         <div class="topmenu">
-            <label>Name</label>
+            <label></label>
         </div>
         <div id="search">
             <ul class="sliding-icons">

@@ -1,6 +1,5 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
-
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
@@ -15,6 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -99,6 +100,20 @@ public class UserController {
 
         mov.addObject(user);
         mov.setViewName("user");
+
+        return mov;
+    }
+
+    @GetMapping(value = "/all/users")
+    private ModelAndView displayAllUsers(){
+        ModelAndView mov = new ModelAndView();
+
+        List<User> users;
+
+        users = userServiceImpl.findAll();
+
+        mov.addObject("users", users);
+        mov.setViewName("allusers");
 
         return mov;
     }

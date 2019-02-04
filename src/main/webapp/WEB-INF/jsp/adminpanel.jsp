@@ -87,11 +87,11 @@
     <div id="content">
         <div class="square">
             <div class="tile1"><H1><a href="/registration" class="tilelink">Create new user</a> </H1></div>
-            <div class="tile1"><H1><a href="AllUsers" class="tilelink">Show all users</a> </H1><</div>
+            <div class="tile1"><H1><a href="/all/users" class="tilelink">Show all users</a> </H1><</div>
             <div style="clear: both"></div>
 
-            <div class="tile2"><H1><a href="registration.jsp" class="tilelink">Delete user</a></H1></div>
-            <div class="tile3"><H1><a href="registration.jsp" class="tilelink">Create workspace</a></H1></div>
+            <div class="tile2"><H1><a href="#" class="tilelink">Delete user</a></H1></div>
+            <div class="tile3"><H1><a href="#" class="tilelink">Create workspace</a></H1></div>
             <div style="clear: both"></div>
 
             <div class="tile4">4</div>
