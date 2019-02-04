@@ -1,11 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <title>Document</title>
 
     <script src="jsscripts/editform.js" type="text/javascript"></script>
@@ -190,7 +189,7 @@
     <div class="menu">
 
         <div class="topmenu">
-            <label>Name</label>
+            <label><c:out value="${document.getName()}"/></label>
         </div>
         <div id="search">
             <ul class="sliding-icons">
@@ -239,32 +238,28 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="OpenDocument?documentId=${document.getId()}">Properties</a></div>
-        <div class="optionL"><a href="DocumentRevisions?documentId=${document.getId()}">Revisions</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}">Properties</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}/revisions">Revisions</a></div>
 
         <c:if test="${role ne 'viewer'}">
-            <div class="optionL"><a href="DocumentRoutes?documentId=${document.getId()}">Routes</a></div>
+            <div class="optionL"><a href="/document/${document.getId()}/routes">Routes</a></div>
         </c:if>
 
-        <div class="optionL"><a href="Lifecycle?documentId=${document.getId()}">Lifecycle</a></div>
+        <div class="optionL"><a href="/document/${document.getId()}/lifecycle">Lifecycle</a></div>
         <c:if test="${document.getType() eq 'drawing'}">
-            <div class="optionL"><a href="/viewer">Viewer</a></div>
+            <div class="optionL"><a href="/document/${document.getId()}/viewer">Viewer</a></div>
         </c:if>
 
         <div style="clear: both"></div>
     </div>
 
     <div id="content">
-        <sec:authorize access="hasRole('ADMIN')" var="isAdmin"/>
-        <sec:authorize access="hasRole('VIEWER')" var="isViewer"/>
-        <sec:authorize access="hasRole('CONTRIBUTOR')" var="isViewer"/>
-        <sec:authorize access="hasRole('MANAGER')" var="isViewer"/>
 
         <div id="navbar">
             <ul>
                 <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <c:if test="${document.getState() eq 'in work'}">
+                    <c:if test="${document.getState() eq 'in work'}">
+                        <sec:authorize access="!hasRole('VIEWER')">
                             <a href="#">
                                 <div class="icon">
                                     <i class="fas fa-minus-square fa-2x"></i>
@@ -272,18 +267,30 @@
                                        onclick="document.getElementById('modal-wrapper-deletedocument').style.display='block'"></i>
                                 </div>
                             </a>
-                        </c:if>
-                    </sec:authorize>
+                        </sec:authorize>
+                    </c:if>
 
-                    <sec:authorize access="hasAnyRole('VIEWER','CONTRIBUTOR')">
-                        <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
+                    <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
+                        <sec:authorize access="hasRole('ADMIN')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-minus-square fa-2x"></i>
+                                    <i class="fas fa-minus-square fa-2x" title="Delete document"
+                                       onclick="document.getElementById('modal-wrapper-deletedocument').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </c:if>
+
+                    <c:if test="${document.getState() eq 'frozen' or document.getState() eq 'released'}">
+                        <sec:authorize access="hasAnyRole('VIEWER','CONTRIBUTOR','MANAGER')">
                             <a href="#">
                                 <div class="icon-disabled">
                                     <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
                                 </div>
                             </a>
-                        </c:if>
-                    </sec:authorize>
+                        </sec:authorize>
+                    </c:if>
                 </li>
             </ul>
         </div>
@@ -368,7 +375,7 @@
                         Cancel
                     </button>
 
-                    <script src="jsscripts/editform.js"></script>
+                    <script src="/jsscripts/editform.js"></script>
 
                 </c:if>
             </sec:authorize>
@@ -382,7 +389,7 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <%--<div id="modal-wrapper-deletedocument" class="modal">
+    <div id="modal-wrapper-deletedocument" class="modal">
 
         <form class="modal-content animate" action="DeleteDocument" method="get">
 
@@ -390,22 +397,22 @@
                 <span onclick="document.getElementById('modal-wrapper-deletedocument').style.display='none'"
                       class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/delete-document.jpeg" alt="Document" class="avatar">
+                <img src="/style/delete-document.jpeg" alt="Document" class="avatar">
                 <h1 style="text-align:center">Delete document</h1>
             </div>
 
             <div class="container"><h3
                     style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                delete <%=document.getName()%>
+                delete <c:out value="${document.getName()}"/>
             </h3>
 
-                <input type="hidden" name="documentId" value="<%=document.getId()%>">
+                <input type="hidden" name="documentId" value="${document.getId()}">
 
                 <button type="submit">Complete</button>
             </div>
         </form>
 
-    </div>--%>
+    </div>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close

@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
@@ -24,7 +26,6 @@ public class DocumentService {
     private final DocumentRepository documentRepository;
     private NameFactory nameFactory;
     private final UserRepository userRepository;
-    /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();*/
 
     @Autowired
     public DocumentService(DocumentRepository documentRepository, NameFactory nameFactory, UserRepository userRepository){
@@ -72,6 +73,15 @@ public class DocumentService {
     @Transactional(readOnly = true)
     public List<Document> findAll(){
         return documentRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Document> findAllApproved(){
+        List<Document> allDocuments = documentRepository.findAll();
+
+        return allDocuments.stream()
+                .filter(u -> u.getState().equals(DocumentStates.RELEASED.getState()))
+                .collect(Collectors.toList());
     }
 
     @Transactional

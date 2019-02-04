@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
-    <title>Document viewer</title>
+    <title>Lifecycle</title>
 </head>
 <body>
 
@@ -52,7 +52,7 @@
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
+                <form id="usershow" action="UserShow" method="get">
                     <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <c:out value="${sessionScope.userName}"/>
                     </a>
                 </form>
@@ -68,8 +68,8 @@
     </div>
     <div style="clear:both"></div>
 
-    <%--<div id="sidebar">
-        <div class="optionL"><a href="OpenDocument?documentId=<%=document.getId()%>">Properties</a></div>
+    <div id="sidebar">
+       <%-- <div class="optionL"><a href="OpenDocument?documentId=<%=document.getId()%>">Properties</a></div>
         <div class="optionL"><a href="DocumentRevisions?documentId=<%=document.getId()%>">Revisions</a></div>
 
         <c:if test="${role ne 'viewer'}">
@@ -81,16 +81,55 @@
             <div class="optionL"><a href="viewer.jsp">Viewer</a></div>
         </c:if>
 
-        <div style="clear: both"></div>
+        <div style="clear: both"></div>--%>
     </div>
 
     <div id="content">
 
-        <object data="DocumentViewer?documentId=<%=document.getId()%>" type="application/pdf" width="100%" height="650">
-            <p>There is a problem with opening this file.</p>
-        </object>
+        <%--<ul class="lifecycle">
 
-    </div>--%>
+            <%
+                if (document.getState().equals("in work")) {
+            %>
+            <li class="active">In work</li>
+            <%
+            } else {
+            %>
+            <li>In work</li>
+            <% } %>
+
+            <%
+                if (document.getState().equals("frozen")){
+            %>
+            <li class="active">Frozen</li>
+            <%
+                } else {
+            %>
+            <li>Frozen</li>
+            <% } %>
+
+            <%
+                if (document.getState().equals("released")){
+            %>
+            <li class="active">Released</li>
+            <%
+                } else {
+            %>
+            <li>Released</li>
+            <% } %>
+
+            <%
+                if (document.getState().equals("canceled")){
+            %>
+            <li class="active">Canceled</li>
+            <%
+                } else {
+            %>
+            <li>Canceled</li>
+            <% } %>
+        </ul>--%>
+
+    </div>
 
     <div id="footer">
         Sylwester Oleszek 2018 &copy;
