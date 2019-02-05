@@ -7,6 +7,8 @@ import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 import com.oleszeksylwester.dmssb.DMSSB.utils.DataOperations;
+import org.apache.commons.io.IOUtils;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,14 +16,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
 public class DocumentService {
+
+    private static final Logger LOGGER = Logger.getLogger(DocumentService.class.getName());
 
     private final DocumentRepository documentRepository;
     private NameFactory nameFactory;
@@ -101,5 +110,23 @@ public class DocumentService {
     @Transactional
     public void delete(Document document){
         documentRepository.delete(document);
+    }
+
+    public String readPdfDocument(String filename){
+        InputStream is = null;
+        try {
+            is = new FileInputStream(filename);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Can't read file from the source " + filename);
+        }
+        byte[] pdfBytes = new byte[0];
+        try {
+            pdfBytes = IOUtils.toByteArray(is);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new String(Base64.encodeBase64(pdfBytes));
     }
 }
