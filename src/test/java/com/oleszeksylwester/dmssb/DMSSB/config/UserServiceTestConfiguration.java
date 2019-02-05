@@ -1,7 +1,6 @@
 package com.oleszeksylwester.dmssb.DMSSB.config;
 
 import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
-import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 public class UserServiceTestConfiguration {
     @Bean
     @Primary
-    public UserServiceImpl userService() {
-        return Mockito.mock(UserServiceImpl.class);
+    public UserService userService() {
+        return Mockito.mock(UserService.class);
     }
 }

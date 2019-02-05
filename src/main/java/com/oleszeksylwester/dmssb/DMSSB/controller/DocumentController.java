@@ -38,7 +38,7 @@ public class DocumentController {
         return mov;
     }
 
-    @PostMapping("/createDocument")
+    @PostMapping("/new/document")
     private ModelAndView createDocument(@ModelAttribute("document") Document document, @RequestParam("file") MultipartFile file, @RequestParam("doctype") String type, ModelMap modelMap) {
 
         String path = Paths.get(file.getOriginalFilename()).getFileName().toString();

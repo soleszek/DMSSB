@@ -1,7 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
-import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
+import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +21,7 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserService userService;
 
     @Autowired
     @Qualifier("userValidator")
@@ -59,7 +59,7 @@ public class UserController {
 
         ModelAndView mov = new ModelAndView();
 
-        User existUser = userServiceImpl.findByUsername(user.getUsername());
+        User existUser = userService.findByUsername(user.getUsername());
 
         if (existUser != null) {
             bindingResult.rejectValue("username", "error.user", "User with this login already exist");
@@ -75,7 +75,7 @@ public class UserController {
 
         } else {
 
-            userServiceImpl.saveOrUpdate(user, role);
+            userService.saveOrUpdate(user, role);
 
             mov.addObject("user", user);
             mov.setViewName("user");
@@ -96,7 +96,7 @@ public class UserController {
         } else {
             username = principal.toString();
         }
-        User user = userServiceImpl.findByUsername(username);
+        User user = userService.findByUsername(username);
 
         mov.addObject(user);
         mov.setViewName("user");
@@ -110,7 +110,7 @@ public class UserController {
 
         List<User> users;
 
-        users = userServiceImpl.findAll();
+        users = userService.findAll();
 
         mov.addObject("users", users);
         mov.setViewName("allusers");

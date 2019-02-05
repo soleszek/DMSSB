@@ -3,7 +3,7 @@ package com.oleszeksylwester.dmssb.DMSSB;
 import com.oleszeksylwester.dmssb.DMSSB.model.Role;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
-import com.oleszeksylwester.dmssb.DMSSB.serviceimpl.UserServiceImpl;
+import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +23,7 @@ import java.util.Set;
 public class UserServiceTest {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Mock
     private UserRepository userRepository;
@@ -53,7 +53,7 @@ public class UserServiceTest {
     @Test
     public void whenUserLoginIsProvided_thenRetrieveUserObject() {
         Mockito.when(userRepository.findByUsername("test")).thenReturn(test);
-        userService = new UserServiceImpl(userRepository, null, null);
+        userService = new UserService(userRepository, null, null);
         User user = userService.findByUsername("test");
         Assert.assertEquals("Test", user.getFirstName());
     }
@@ -61,7 +61,7 @@ public class UserServiceTest {
     @Test
     public void testFindAll(){
         Mockito.when(userRepository.findAll()).thenReturn(users);
-        userService = new UserServiceImpl(userRepository, null, null);
+        userService = new UserService(userRepository, null, null);
         List<User> allUsers = userService.findAll();
         Assert.assertEquals("test", allUsers.get(0).getUsername());
     }

@@ -4,11 +4,9 @@ import com.oleszeksylwester.dmssb.DMSSB.config.StandaloneMvcTestViewResolver;
 import com.oleszeksylwester.dmssb.DMSSB.controller.UserController;
 import com.oleszeksylwester.dmssb.DMSSB.model.Role;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
-import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,14 +27,10 @@ public class UserControllerTest {
 
     private MockMvc mockMvc;
 
-    @MockBean
-    private UserService userService;
-
     @Before
     public void setup() {
         final UserController controller = new UserController();
 
-         /*mockMvc = MockMvcBuilders.standaloneSetup(new UserController()).build();*/
         mockMvc =
                 MockMvcBuilders.standaloneSetup(controller)
                         .setViewResolvers(new StandaloneMvcTestViewResolver())

@@ -1,6 +1,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -374,24 +375,26 @@
 
     <div id="modal-wrapper-routes" class="modal">
 
-        <%--<form class="modal-content animate" action="CreateRoute" method="post">
+        <form:form class="modal-content animate" action="/new/route" method="post" modelAttribute="route">
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-routes').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/route.png" alt="Document" class="avatar">
+                <img src="/style/route.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">New promotion request</h1>
             </div>
             <div class="container">
-                <input type="text" class="modal-text" disabled name="name" value="<%=document.getName()%>">
-                <input type="hidden" readonly name="documentId" value="<%=document.getId()%>">
+                <input type="text" class="modal-text" disabled name="name" value="${document.getName()}">
+                <%--<input type="hidden" readonly name="documentId" value="<%=document.getId()%>">--%>
                 <c:set var="now" value="<%=new java.util.Date()%>"/>
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
-                <input type="text" class="modal-text" disabled name="documentTitle" value="<%=document.getTitle()%>">
-                <input type="text" class="modal-text" readonly name="owner" value="<%=login%>">
+                <input type="text" class="modal-text" disabled name="documentTitle" value="${document.getTitle()}">
+                <sec:authentication var="principal" property="principal"/>
+                <input type="text" class="modal-text" readonly name="owner" value="${principal.username}">
 
-                <div><input type="text" placeholder="Must be checked before" class="datepicker"
-                            name="checkingDueDate" required></div>
+                <div><form:input type="text" placeholder="Must be checked before" class="datepicker"
+                                 path="checkingDueDate" required="required"></form:input>
+                </div>
 
                 <div class="custom-select">
 
@@ -410,8 +413,9 @@
                 </div>
 
                 <br>
-                <div><input type="text" placeholder="Must be approved before" class="datepicker"
-                            name="deadline" required></div>
+                <div><form:input type="text" placeholder="Must be approved before" class="datepicker"
+                                 path="deadline" required="required"></form:input>
+                </div>
 
                 <div class="custom-select">
 
@@ -431,7 +435,7 @@
                 <input type="text" class="modal-text" placeholder="Enter comment" name="description" required>
                 <button type="submit">Create</button>
             </div>
-        </form>--%>
+        </form:form>
 
     </div>
 
