@@ -7,7 +7,9 @@ import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -30,29 +32,17 @@ public class RouteController {
         return "routeslist";
     }
 
-/*    @GetMapping("/routes")
-    private ModelAndView documentRoutes(){
-        ModelAndView mov = new ModelAndView();
-
-        List<User> checkers = userService.findCheckers();
-        List<User> approvers = userService.findApprovers();
-
-        mov.addObject(checkers);
-        mov.addObject(approvers);
-        mov.addObject("route", new Route());
-        mov.setViewName("routes");
-
-        return mov;
-    }*/
-
     @PostMapping("/new/route")
-    private ModelAndView createNewRoute(){
+    private ModelAndView createNewRoute(@ModelAttribute("route") Route route,
+                                        @RequestParam("checkingDueDateString") String checkingDueDate,
+                                        @RequestParam("deadlineString") String deadline,
+                                        @RequestParam("documentId") Long id){
+
         ModelAndView mov = new ModelAndView();
 
+        Route savedRoute = routeService.SaveOrUpdate(route, checkingDueDate, deadline, id);
 
-
-
-
+        mov.addObject("route", savedRoute);
         mov.setViewName("route");
 
         return mov;

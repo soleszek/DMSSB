@@ -385,16 +385,16 @@
             </div>
             <div class="container">
                 <input type="text" class="modal-text" disabled name="name" value="${document.getName()}">
-                    <%--<input type="hidden" readonly name="documentId" value="<%=document.getId()%>">--%>
-                <c:set var="now" value="<%=new java.util.Date()%>"/>
+                <input type="hidden" readonly name="documentId" value="${document.getId()}">
+                <jsp:useBean id="now" class="java.util.Date"/>
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
                 <input type="text" class="modal-text" disabled name="documentTitle" value="${document.getTitle()}">
                 <sec:authentication var="principal" property="principal"/>
-                <input type="text" class="modal-text" readonly name="owner" value="${principal.username}">
+                <input type="text" class="modal-text" readonly name="" value="${principal.username}">
 
-                <div><form:input type="text" placeholder="Must be checked before" class="datepicker"
-                                 path="checkingDueDate" required="required"></form:input>
+                <div>
+                    <input type="text" placeholder="Must be checked before" class="datepicker" name="checkingDueDateString" required>
                 </div>
 
                 <div class="custom-select">
@@ -405,8 +405,7 @@
                 </div>
 
                 <br>
-                <div><form:input type="text" placeholder="Must be approved before" class="datepicker"
-                                 path="deadline" required="required"></form:input>
+                <div><input type="text" placeholder="Must be approved before" class="datepicker" name="deadlineString" required>
                 </div>
 
                 <div class="custom-select">
@@ -416,7 +415,7 @@
                     </form:select>
                 </div>
 
-                <input type="text" class="modal-text" placeholder="Enter comment" name="description" required>
+                <form:input type="text" class="modal-text" placeholder="Enter comment" path="comments" required="required"/>
                 <button type="submit">Create</button>
             </div>
         </form:form>
