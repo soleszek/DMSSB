@@ -249,7 +249,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -384,7 +385,7 @@
             </div>
             <div class="container">
                 <input type="text" class="modal-text" disabled name="name" value="${document.getName()}">
-                <%--<input type="hidden" readonly name="documentId" value="<%=document.getId()%>">--%>
+                    <%--<input type="hidden" readonly name="documentId" value="<%=document.getId()%>">--%>
                 <c:set var="now" value="<%=new java.util.Date()%>"/>
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
@@ -397,19 +398,10 @@
                 </div>
 
                 <div class="custom-select">
-
-                    <select name="responsibleForChecking">
-                        <option value="soleszek">Sylwester Oleszek, admin</option>
-                        <%
-                            for (User c : checkers) {
-                        %>
-                        <option value="<%=c.getLogin()%>"><%=c.getUserName()%> <%=c.getLastName()%>, <%=c.getRole()%>
-                        </option>
-                        <%
-                            }
-                        %>
-                    </select>
-
+                    <form:select path="responsibleForChecking" required="required">
+                        <option value="">SELECT</option>
+                        <form:options items="${checkers}" itemValue="user_id" itemLabel="username"></form:options>
+                    </form:select>
                 </div>
 
                 <br>
@@ -418,20 +410,12 @@
                 </div>
 
                 <div class="custom-select">
-
-                    <select name="responsibleForApproving">
-                        <option value="soleszek">Sylwester Oleszek, admin</option>
-                        <%
-                            for (User u : approvers) {
-                        %>
-                        <option value="<%=u.getLogin()%>"><%=u.getUserName()%> <%=u.getLastName()%>, <%=u.getRole()%>
-                        </option>
-                        <%
-                            }
-                        %>
-                    </select>
-
+                    <form:select path="responsibleForApproving" required="required">
+                        <option value="">SELECT</option>
+                        <form:options items="${approvers}" itemValue="user_id" itemLabel="username"></form:options>
+                    </form:select>
                 </div>
+
                 <input type="text" class="modal-text" placeholder="Enter comment" name="description" required>
                 <button type="submit">Create</button>
             </div>
@@ -450,8 +434,8 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
-    <script src="jsscripts/dropdownmenu.js"></script>
+    <script src="/jsscripts/popup.js"></script>
+    <script src="/jsscripts/dropdownmenu.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

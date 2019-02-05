@@ -1,7 +1,10 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
+import com.oleszeksylwester.dmssb.DMSSB.model.Route;
+import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
+import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.DataOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +25,9 @@ public class DocumentController {
 
     @Autowired
     DocumentService documentService;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/documents")
     private ModelAndView displayAllDocuments(){
@@ -107,6 +113,12 @@ public class DocumentController {
         ModelAndView mov = new ModelAndView();
         Document document = documentService.findById(documentId);
 
+        List<User> checkers = userService.findCheckers();
+        List<User> approvers = userService.findApprovers();
+
+        mov.addObject("checkers", checkers);
+        mov.addObject("approvers", approvers);
+        mov.addObject("route", new Route());
         mov.addObject("document", document);
         mov.setViewName("routes");
 

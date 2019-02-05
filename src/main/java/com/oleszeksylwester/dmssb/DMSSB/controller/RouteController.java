@@ -30,21 +30,28 @@ public class RouteController {
         return "routeslist";
     }
 
-    @GetMapping("/routes")
+/*    @GetMapping("/routes")
     private ModelAndView documentRoutes(){
         ModelAndView mov = new ModelAndView();
 
+        List<User> checkers = userService.findCheckers();
+        List<User> approvers = userService.findApprovers();
+
+        mov.addObject(checkers);
+        mov.addObject(approvers);
         mov.addObject("route", new Route());
         mov.setViewName("routes");
 
         return mov;
-    }
+    }*/
 
     @PostMapping("/new/route")
     private ModelAndView createNewRoute(){
         ModelAndView mov = new ModelAndView();
 
-        List<User> checkers = userService.
+
+
+
 
         mov.setViewName("route");
 

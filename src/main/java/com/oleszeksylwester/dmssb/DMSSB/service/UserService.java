@@ -11,10 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,21 +65,25 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public List<User> findCheckers(){
+
+        List<User> users = userRepository.findAll();
+
+        return users
+                .stream()
+                .filter( e -> e.getRoles().stream().anyMatch(r -> r.getRole().equals("CONTRIBUTOR")))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
     public List<User> findApprovers(){
 
         List<User> users = userRepository.findAll();
 
-        List<User> checkers = new ArrayList<>();
-
-        for(User u : users){
-            for(Role r : u.getRoles()){
-                if(r.getRole().equals("CONTRIBUTOR")){
-                    checkers.add(u);
-                }
-            }
-        }
-
-        return checkers;
+        return users
+                .stream()
+                .filter( e -> e.getRoles().stream().anyMatch(r -> r.getRole().equals("MANAGER")))
+                .collect(Collectors.toList());
     }
 
     @Transactional
