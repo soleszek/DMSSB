@@ -98,7 +98,7 @@ public class UserController {
         }
         User user = userService.findByUsername(username);
 
-        mov.addObject(user);
+        mov.addObject("user", user);
         mov.setViewName("user");
 
         return mov;
@@ -114,6 +114,18 @@ public class UserController {
 
         mov.addObject("users", users);
         mov.setViewName("allusers");
+
+        return mov;
+    }
+
+    @GetMapping(value = "/userdetails/{userId}")
+    private ModelAndView displayUserDetailsById(@PathVariable("userId") Long userId){
+        ModelAndView mov = new ModelAndView();
+
+        User user = userService.findById(userId);
+
+        mov.addObject("user", user);
+        mov.setViewName("user");
 
         return mov;
     }

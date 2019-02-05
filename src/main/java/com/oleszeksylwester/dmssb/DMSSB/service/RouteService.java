@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @Service
 public class RouteService {
@@ -84,6 +85,15 @@ public class RouteService {
     @Transactional(readOnly = true)
     public List<Route> findAll(){
         return routeRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Route> findRoutesOfDocument(Long documentId){
+        List<Route> allRoutes = routeRepository.findAll();
+
+        return allRoutes.stream()
+                .filter(r -> r.getDocumentBeingApprovedId().getId().equals(documentId))
+                .collect(Collectors.toList());
     }
 
     @Transactional

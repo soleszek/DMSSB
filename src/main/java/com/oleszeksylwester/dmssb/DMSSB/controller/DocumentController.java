@@ -23,11 +23,12 @@ public class DocumentController {
 
     private static final Logger LOGGER = Logger.getLogger(DocumentController.class.getName());
 
-    @Autowired
-    DocumentService documentService;
+    private DocumentService documentService;
 
     @Autowired
-    UserService userService;
+    public DocumentController(DocumentService documentService) {
+        this.documentService = documentService;
+    }
 
     @GetMapping("/documents")
     private ModelAndView displayAllDocuments(){
@@ -104,23 +105,6 @@ public class DocumentController {
         mov.addObject(document);
         mov.addObject("revisions", revisions);
         mov.setViewName("revisions");
-
-        return mov;
-    }
-
-    @GetMapping("/document/{documentId}/routes")
-    private ModelAndView displayDocumentRoutes(@PathVariable("documentId") Long documentId){
-        ModelAndView mov = new ModelAndView();
-        Document document = documentService.findById(documentId);
-
-        List<User> checkers = userService.findCheckers();
-        List<User> approvers = userService.findApprovers();
-
-        mov.addObject("checkers", checkers);
-        mov.addObject("approvers", approvers);
-        mov.addObject("route", new Route());
-        mov.addObject("document", document);
-        mov.setViewName("routes");
 
         return mov;
     }

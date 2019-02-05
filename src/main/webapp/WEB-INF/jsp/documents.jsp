@@ -319,7 +319,7 @@
                         <td>${item.getTitle()}
                         </td>
                         <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                            <div id="popup" onclick="openPopup('/document/${item.getId()}')"><i
                                     class="far fa-window-restore"></i></div>
                         </td>
                         <td>${item.getType()}
@@ -352,7 +352,7 @@
                         <td>${item.getTitle()}
                         </td>
                         <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                            <div id="popup" onclick="openPopup('/document/${item.getId()}')"><i
                                     class="far fa-window-restore"></i></div>
                         </td>
                         <td>${item.getType()}
@@ -430,8 +430,8 @@
         }
     </script>
 
-    <script src="jsscripts/dropdownmenu.js"></script>
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/dropdownmenu.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
