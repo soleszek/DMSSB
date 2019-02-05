@@ -54,7 +54,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -85,13 +86,13 @@
         <div style="clear: both"></div>
     </div>
 
-    <%--<div id="content">
+    <div id="content">
 
-        <object data="DocumentViewer?documentId=<%=document.getId()%>" type="application/pdf" width="100%" height="650">
+        <object data="data:application/pdf;base64,${pdf}" width="100%" height="650" type='application/pdf'>
             <p>There is a problem with opening this file.</p>
         </object>
 
-    </div>--%>
+    </div>
 
     <div id="footer">
         Sylwester Oleszek 2018 &copy;

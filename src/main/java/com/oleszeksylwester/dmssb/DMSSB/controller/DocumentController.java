@@ -2,17 +2,14 @@ package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
+import com.oleszeksylwester.dmssb.DMSSB.utils.DataOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
@@ -132,9 +129,15 @@ public class DocumentController {
         ModelAndView mov = new ModelAndView();
         Document document = documentService.findById(documentId);
 
+        String fileName = DataOperations.drawingsPath + String.valueOf(documentId);
+
+        String pdf = documentService.readPdfDocument(fileName);
+
+        mov.addObject("pdf", pdf);
         mov.addObject("document", document);
         mov.setViewName("viewer");
 
         return mov;
     }
+
 }
