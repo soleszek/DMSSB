@@ -321,7 +321,7 @@
 
             <c:if test="${fn:length(routes) > 0}">
                 <tbody>
-                <c:forEach var="item" items="routes">
+                <c:forEach var="item" items="${routes}">
                     <tr>
                         <td><a href="/route/${item.getId()}" id="doc-link">${item.getName()}
                         </a>
