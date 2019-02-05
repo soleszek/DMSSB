@@ -386,7 +386,7 @@
 
     <div id="modal-wrapper" class="modal">
 
-        <form:form class="modal-content animate" action="/createDocument" method="post" modelAttribute="document" enctype="multipart/form-data">
+        <form:form class="modal-content animate" action="/new/document" method="post" modelAttribute="document" enctype="multipart/form-data">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper').style.display='none'" class="close"

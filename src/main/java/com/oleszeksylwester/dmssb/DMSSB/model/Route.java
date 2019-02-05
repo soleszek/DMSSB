@@ -3,221 +3,137 @@ package com.oleszeksylwester.dmssb.DMSSB.model;
 import com.oleszeksylwester.dmssb.DMSSB.factory.TaskFactory;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class Route extends TaskFactory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long route_id;
     private String name;
-    private String owner;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="owner_id")
+    private User owner;
     private String state;
     private LocalDate creationDate;
     private LocalDate finishDate;
     private LocalDate deadline;
-    private String documentBeingApprovedId;
-    private String documentBeingApprovedName;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="document_id")
+    private Document documentBeingApprovedId;
     private LocalDate checkingDueDate;
-    private String responsibleForChecking;
-    private String responsibleForApproving;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="checker_id")
+    private User responsibleForChecking;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="approver_id")
+    private User responsibleForApproving;
     private String comments;
 
     public Route() {
     }
 
-    public static class Builder {
-        private String name;
-        private String owner;
-        private String state;
-        private LocalDate creationDate;
-        private LocalDate finishDate;
-        private LocalDate deadline;
-        private String documentBeingApprovedId;
-        private String documentBeingApprovedName;
-        private LocalDate checkingDueDate;
-        private String responsibleForChecking;
-        private String responsibleForApproving;
-        private String comments;
-
-        public Builder name(String name){
-            this.name = name;
-            return this;
-        }
-
-        public Builder owner(String owner){
-            this.owner = owner;
-            return this;
-        }
-
-        public Builder state(String state){
-            this.state = state;
-            return this;
-        }
-
-        public Builder creationDate(LocalDate creationDate){
-            this.creationDate = creationDate;
-            return this;
-        }
-
-        public Builder finishDate(LocalDate finishDate){
-            this.finishDate = finishDate;
-            return this;
-        }
-
-        public Builder deadline(LocalDate deadline){
-            this.deadline = deadline;
-            return this;
-        }
-
-        public Builder documentBeingApprovedId(String documentBeingApprovedId){
-            this.documentBeingApprovedId = documentBeingApprovedId;
-            return this;
-        }
-
-        public Builder documentBeingApprovedName(String documentBeingApprovedName){
-            this.documentBeingApprovedName = documentBeingApprovedName;
-            return this;
-        }
-
-        public Builder checkingDueDate(LocalDate checkingDueDate){
-            this.checkingDueDate = checkingDueDate;
-            return this;
-        }
-
-        public Builder responsibleForChecking (String responsibleForChecking){
-            this.responsibleForChecking = responsibleForChecking;
-            return this;
-        }
-
-        public Builder responsibleForApproving(String responsibleForApproving){
-            this.responsibleForApproving = responsibleForApproving;
-            return this;
-        }
-
-        public Builder comments(String comments){
-            this.comments = comments;
-            return this;
-        }
-
-        public Route build(){
-            return new Route(this);
-        }
-    }
-
-    private Route(Builder builder){
-        this.name = builder.name;
-        this.owner = builder.owner;
-        this.state = builder.state;
-        this.creationDate = builder.creationDate;
-        this.finishDate = builder.finishDate;
-        this.deadline = builder.deadline;
-        this.documentBeingApprovedId = builder.documentBeingApprovedId;
-        this.documentBeingApprovedName = builder.documentBeingApprovedName;
-        this.checkingDueDate = builder.checkingDueDate;
-        this.responsibleForChecking = builder.responsibleForChecking;
-        this.responsibleForApproving = builder.responsibleForApproving;
-        this.comments = builder.comments;
+    public Route(String name, User owner, String state, LocalDate creationDate, LocalDate finishDate, LocalDate deadline, Document documentBeingApprovedId, LocalDate checkingDueDate, User responsibleForChecking, User responsibleForApproving, String comments) {
+        this.name = name;
+        this.owner = owner;
+        this.state = state;
+        this.creationDate = creationDate;
+        this.finishDate = finishDate;
+        this.deadline = deadline;
+        this.documentBeingApprovedId = documentBeingApprovedId;
+        this.checkingDueDate = checkingDueDate;
+        this.responsibleForChecking = responsibleForChecking;
+        this.responsibleForApproving = responsibleForApproving;
+        this.comments = comments;
     }
 
     public Long getId() {
-        return id;
+        return route_id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getOwner(){
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getOwner() {
         return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public String getState() {
         return state;
     }
 
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    public LocalDate getFinishDate() {
-        return finishDate;
-    }
-
-    public LocalDate getDeadline() {
-        return deadline;
-    }
-
-    public String getDocumentBeingApprovedId() {
-        return documentBeingApprovedId;
-    }
-
-    public String getDocumentBeingApprovedName() {
-        return documentBeingApprovedName;
-    }
-
-    public LocalDate getCheckingDueDate(){
-        return checkingDueDate;
-    }
-
-    public String getResponsibleForChecking() {
-        return responsibleForChecking;
-    }
-
-    public String getResponsibleForApproving() {
-        return responsibleForApproving;
-    }
-
-    public String getComments() {
-        return comments;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
     public void setState(String state) {
         this.state = state;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
+    public LocalDate getFinishDate() {
+        return finishDate;
+    }
+
     public void setFinishDate(LocalDate finishDate) {
         this.finishDate = finishDate;
+    }
+
+    public LocalDate getDeadline() {
+        return deadline;
     }
 
     public void setDeadline(LocalDate deadline) {
         this.deadline = deadline;
     }
 
-    public void setDocumentBeingApprovedId(String documentBeingApprovedId) {
+    public Document getDocumentBeingApprovedId() {
+        return documentBeingApprovedId;
+    }
+
+    public void setDocumentBeingApprovedId(Document documentBeingApprovedId) {
         this.documentBeingApprovedId = documentBeingApprovedId;
     }
 
-    public void setDocumentBeingApprovedName(String documentBeingApprovedName) {
-        this.documentBeingApprovedName = documentBeingApprovedName;
+    public LocalDate getCheckingDueDate() {
+        return checkingDueDate;
     }
 
     public void setCheckingDueDate(LocalDate checkingDueDate) {
         this.checkingDueDate = checkingDueDate;
     }
 
-    public void setResponsibleForChecking(String responsibleForChecking) {
+    public User getResponsibleForChecking() {
+        return responsibleForChecking;
+    }
+
+    public void setResponsibleForChecking(User responsibleForChecking) {
         this.responsibleForChecking = responsibleForChecking;
     }
 
-    public void setResponsibleForApproving(String responsibleForApproving) {
+    public User getResponsibleForApproving() {
+        return responsibleForApproving;
+    }
+
+    public void setResponsibleForApproving(User responsibleForApproving) {
         this.responsibleForApproving = responsibleForApproving;
+    }
+
+    public String getComments() {
+        return comments;
     }
 
     public void setComments(String comments) {

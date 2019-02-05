@@ -1,6 +1,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -248,7 +249,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -374,64 +376,49 @@
 
     <div id="modal-wrapper-routes" class="modal">
 
-        <%--<form class="modal-content animate" action="CreateRoute" method="post">
+        <form:form class="modal-content animate" action="/new/route" method="post" modelAttribute="route">
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-routes').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/route.png" alt="Document" class="avatar">
+                <img src="/style/route.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">New promotion request</h1>
             </div>
             <div class="container">
-                <input type="text" class="modal-text" disabled name="name" value="<%=document.getName()%>">
-                <input type="hidden" readonly name="documentId" value="<%=document.getId()%>">
-                <c:set var="now" value="<%=new java.util.Date()%>"/>
+                <input type="text" class="modal-text" disabled name="name" value="${document.getName()}">
+                <input type="hidden" readonly name="documentId" value="${document.getId()}">
+                <jsp:useBean id="now" class="java.util.Date"/>
                 <input type="text" class="modal-text" readonly name="creation date"
                        value="<fmt:formatDate type = "date" value = "${now}"/>">
-                <input type="text" class="modal-text" disabled name="documentTitle" value="<%=document.getTitle()%>">
-                <input type="text" class="modal-text" readonly name="owner" value="<%=login%>">
+                <input type="text" class="modal-text" disabled name="documentTitle" value="${document.getTitle()}">
+                <sec:authentication var="principal" property="principal"/>
+                <input type="text" class="modal-text" readonly name="" value="${principal.username}">
 
-                <div><input type="text" placeholder="Must be checked before" class="datepicker"
-                            name="checkingDueDate" required></div>
+                <div>
+                    <input type="text" placeholder="Must be checked before" class="datepicker" name="checkingDueDateString" required>
+                </div>
 
                 <div class="custom-select">
-
-                    <select name="responsibleForChecking">
-                        <option value="soleszek">Sylwester Oleszek, admin</option>
-                        <%
-                            for (User c : checkers) {
-                        %>
-                        <option value="<%=c.getLogin()%>"><%=c.getUserName()%> <%=c.getLastName()%>, <%=c.getRole()%>
-                        </option>
-                        <%
-                            }
-                        %>
-                    </select>
-
+                    <form:select path="responsibleForChecking" required="required">
+                        <option value="">SELECT</option>
+                        <form:options items="${checkers}" itemValue="user_id" itemLabel="username"></form:options>
+                    </form:select>
                 </div>
 
                 <br>
-                <div><input type="text" placeholder="Must be approved before" class="datepicker"
-                            name="deadline" required></div>
+                <div><input type="text" placeholder="Must be approved before" class="datepicker" name="deadlineString" required>
+                </div>
 
                 <div class="custom-select">
-
-                    <select name="responsibleForApproving">
-                        <option value="soleszek">Sylwester Oleszek, admin</option>
-                        <%
-                            for (User u : approvers) {
-                        %>
-                        <option value="<%=u.getLogin()%>"><%=u.getUserName()%> <%=u.getLastName()%>, <%=u.getRole()%>
-                        </option>
-                        <%
-                            }
-                        %>
-                    </select>
-
+                    <form:select path="responsibleForApproving" required="required">
+                        <option value="">SELECT</option>
+                        <form:options items="${approvers}" itemValue="user_id" itemLabel="username"></form:options>
+                    </form:select>
                 </div>
-                <input type="text" class="modal-text" placeholder="Enter comment" name="description" required>
+
+                <form:input type="text" class="modal-text" placeholder="Enter comment" path="comments" required="required"/>
                 <button type="submit">Create</button>
             </div>
-        </form>--%>
+        </form:form>
 
     </div>
 
@@ -446,8 +433,8 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
-    <script src="jsscripts/dropdownmenu.js"></script>
+    <script src="/jsscripts/popup.js"></script>
+    <script src="/jsscripts/dropdownmenu.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
