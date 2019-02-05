@@ -2,7 +2,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -319,7 +318,7 @@
                         <td>${item.getTitle()}
                         </td>
                         <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                            <div id="popup" onclick="openPopup('/document/${item.getId()}')"><i
                                     class="far fa-window-restore"></i></div>
                         </td>
                         <td>${item.getType()}
@@ -352,7 +351,7 @@
                         <td>${item.getTitle()}
                         </td>
                         <td>
-                            <div id="popup" onclick="openPopup('OpenDocument?documentId=${item.getId()}')"><i
+                            <div id="popup" onclick="openPopup('/document/${item.getId()}')"><i
                                     class="far fa-window-restore"></i></div>
                         </td>
                         <td>${item.getType()}
@@ -430,8 +429,8 @@
         }
     </script>
 
-    <script src="jsscripts/dropdownmenu.js"></script>
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/dropdownmenu.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

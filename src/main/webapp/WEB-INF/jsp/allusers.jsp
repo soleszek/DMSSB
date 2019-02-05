@@ -110,10 +110,10 @@
             <tbody>
             <c:forEach var="user" items="${users}">
                 <tr>
-                    <td><a href="AnyUserShow?userId=${user.getUser_id()}" id="doc-link">${user.getName()}
+                    <td><a href="/userdetails/${user.getUser_id()}" id="doc-link">${user.getName()}
                     </a></td>
                     <td><span class="doc-link"
-                              onclick="openPopup('AnyUserShow?userId=${user.getUser_id()}')">${user.getUsername()}</span></td>
+                              onclick="openPopup('/userdetails/${user.getUser_id()}')">${user.getUsername()}</span></td>
                     <td>${user.getFirstName()}
                     </td>
                     <td>${user.getLastName()}
@@ -134,7 +134,7 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

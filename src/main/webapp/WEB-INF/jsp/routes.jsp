@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -301,9 +302,6 @@
         <table id="example" class="display" style="width:100%">
             <col width="60">
 
-            <%--<%
-                List<Route> existingRoutes = (List<Route>) request.getAttribute("existingRoutes");
-            %>
             <thead>
             <tr>
                 <th>Promotion request name</th>
@@ -320,51 +318,43 @@
                 <th>Finish date</th>
             </tr>
             </thead>
-            <%
-                if (existingRoutes != null) {
-            %>
-            <tbody>
-            <%
-                for (Route r : existingRoutes) {
-            %>
-            <tr>
-                <td><a href="OpenRoute?routeId=<%=r.getId()%>" id="doc-link"><%=r.getName()%>
-                </a>
-                </td>
-                <td><%=r.getOwner()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenRoute?routeId=<%=r.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=r.getDocumentBeingApprovedId()%>')"><%=document.getName()%></span>
-                </td>
-                <td><%=r.getState()%>
-                </td>
-                <td><%=r.getCheckingDueDate()%>
-                </td>
-                <td><%=r.getResponsibleForChecking()%>
-                </td>
-                <td><%=r.getDeadline()%>
-                </td>
-                <td><%=r.getResponsibleForApproving()%>
-                </td>
-                <td><%=r.getComments()%>
-                </td>
-                <td><%=r.getCreationDate()%>
-                </td>
-                <td><%=r.getFinishDate()%>
-                </td>
-            </tr>
-            <%
 
-                }
-            %>
-            </tbody>
-            <%
-                }
-            %>--%>
+            <c:if test="${fn:length(routes) > 0}">
+                <tbody>
+                <c:forEach var="item" items="${routes}">
+                    <tr>
+                        <td><a href="/route/${item.getId()}" id="doc-link">${item.getName()}
+                        </a>
+                        </td>
+                        <td>${item.getOwner().getUsername()}
+                        </td>
+                        <td>
+                            <div id="popup" onclick="openPopup('/route/${item.getId()}')"><i
+                                    class="far fa-window-restore"></i></div>
+                        </td>
+                        <td><span class="doc-link"
+                                  onclick="openPopup('/document/${item.getDocumentBeingApprovedId().getId()}')">${item.getDocumentBeingApprovedId().getName()}</span>
+                        </td>
+                        <td>${item.getState()}
+                        </td>
+                        <td>${item.getCheckingDueDate()}
+                        </td>
+                        <td>${item.getResponsibleForChecking().getUsername()}
+                        </td>
+                        <td>${item.getDeadline()}
+                        </td>
+                        <td>${item.getResponsibleForApproving().getUsername()}
+                        </td>
+                        <td>${item.getComments()}
+                        </td>
+                        <td>${item.getCreationDate()}
+                        </td>
+                        <td>${item.getFinishDate()}
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
 
         </table>
 
@@ -394,7 +384,8 @@
                 <input type="text" class="modal-text" readonly name="" value="${principal.username}">
 
                 <div>
-                    <input type="text" placeholder="Must be checked before" class="datepicker" name="checkingDueDateString" required>
+                    <input type="text" placeholder="Must be checked before" class="datepicker"
+                           name="checkingDueDateString" required>
                 </div>
 
                 <div class="custom-select">
@@ -405,7 +396,8 @@
                 </div>
 
                 <br>
-                <div><input type="text" placeholder="Must be approved before" class="datepicker" name="deadlineString" required>
+                <div><input type="text" placeholder="Must be approved before" class="datepicker" name="deadlineString"
+                            required>
                 </div>
 
                 <div class="custom-select">
@@ -415,7 +407,8 @@
                     </form:select>
                 </div>
 
-                <form:input type="text" class="modal-text" placeholder="Enter comment" path="comments" required="required"/>
+                <form:input type="text" class="modal-text" placeholder="Enter comment" path="comments"
+                            required="required"/>
                 <button type="submit">Create</button>
             </div>
         </form:form>
