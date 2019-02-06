@@ -4,7 +4,6 @@ import com.oleszeksylwester.dmssb.DMSSB.enums.DocumentStates;
 import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
 import com.oleszeksylwester.dmssb.DMSSB.enums.RouteStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
-import com.oleszeksylwester.dmssb.DMSSB.factory.TaskFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
@@ -128,6 +127,7 @@ public class RouteService {
             documentRepository.save(document);
 
             route.setState(RouteStates.COMPLETED.getState());
+            route.setFinishDate(LocalDate.now());
             routeRepository.save(route);
         }
 

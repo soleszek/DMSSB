@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -61,7 +61,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -98,7 +99,7 @@
 
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
 
             <thead>
@@ -119,40 +120,41 @@
             </thead>
 
             <tbody>
-
-            <tr>
-                <td><a href="OpenRoute?routeId=<%=r.getId()%>" id="doc-link"><%=r.getName()%>
-                </a>
-                </td>
-                <td><%=r.getOwner()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenRoute?routeId=<%=r.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=r.getDocumentBeingApproved()%>')"><%=r.getDocumentBeingApprovedName()%></span>
-                </td>
-                <td><%=r.getState()%>
-                </td>
-                <td><%=r.getCheckingDueDate()%>
-                </td>
-                <td><%=r.getResponsibleForChecking()%>
-                </td>
-                <td><%=r.getDeadline()%>
-                </td>
-                <td><%=r.getResponsibleForApproving()%>
-                </td>
-                <td><%=r.getComments()%>
-                </td>
-                <td><%=r.getCreationDate()%>
-                </td>
-                <td><%=r.getFinishDate()%>
-                </td>
-            </tr>
+            <c:forEach items="${allRoutes}" var="route">
+                <tr>
+                    <td><a href="/route/${route.getId()}" id="doc-link">${route.getName()}
+                    </a>
+                    </td>
+                    <td>${route.getOwner().getUsername()}
+                    </td>
+                    <td>
+                        <div id="popup" onclick="openPopup('/route/${route.getId()}')"><i
+                                class="far fa-window-restore"></i></div>
+                    </td>
+                    <td><span class="doc-link"
+                              onclick="openPopup('/document/${route.getDocumentBeingApproved().getId()}')">${route.getDocumentBeingApproved().getName()}</span>
+                    </td>
+                    <td>${route.getState()}
+                    </td>
+                    <td>${route.getCheckingDueDate()}
+                    </td>
+                    <td>${route.getResponsibleForChecking().getUsername()}
+                    </td>
+                    <td>${route.getDeadline()}
+                    </td>
+                    <td>${route.getResponsibleForApproving().getUsername()}
+                    </td>
+                    <td>${route.getComments()}
+                    </td>
+                    <td>${route.getCreationDate()}
+                    </td>
+                    <td>${route.getFinishDate()}
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
 
-        </table>--%>
+        </table>
 
     </div>
 
@@ -160,7 +162,7 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

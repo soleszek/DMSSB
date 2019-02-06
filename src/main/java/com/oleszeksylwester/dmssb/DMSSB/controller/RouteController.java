@@ -31,9 +31,14 @@ public class RouteController {
     }
 
     @GetMapping("/routeslist")
-    private String displayAllRoutes(){
+    private ModelAndView displayAllRoutes(){
+        ModelAndView mov = new ModelAndView();
+        List<Route> allRoutes = routeService.findAll();
 
-        return "routeslist";
+        mov.addObject("allRoutes", allRoutes);
+        mov.setViewName("routeslist");
+
+        return mov;
     }
 
     @GetMapping("/document/{documentId}/routes")

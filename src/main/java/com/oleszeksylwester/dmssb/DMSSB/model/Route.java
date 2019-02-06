@@ -1,7 +1,5 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
-import com.oleszeksylwester.dmssb.DMSSB.factory.TaskFactory;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
