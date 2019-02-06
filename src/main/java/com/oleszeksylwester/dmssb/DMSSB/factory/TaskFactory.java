@@ -1,5 +1,12 @@
 package com.oleszeksylwester.dmssb.DMSSB.factory;
 
+import com.oleszeksylwester.dmssb.DMSSB.enums.RouteStates;
+import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
+import com.oleszeksylwester.dmssb.DMSSB.model.Route;
+import com.oleszeksylwester.dmssb.DMSSB.model.Task;
+import org.springframework.stereotype.Service;
+
+@Service
 public class TaskFactory {
 
     /*private TaskDao taskDao = DaoProvider.getInstance().getTaskDao();
@@ -13,7 +20,7 @@ public class TaskFactory {
             Task task = new Task.Builder()
                     .owner(route.getOwner())
                     .assignedTo(route.getResponsibleForChecking())
-                    .documentBeingApprovedId(route.getDocumentBeingApprovedId())
+                    .documentBeingApprovedId(route.getDocumentBeingApproved())
                     .documentBeingApprovedName(route.getDocumentBeingApprovedName())
                     .state(TaskStates.ACTIVE.getState())
                     .dueDate(route.getCheckingDueDate())
@@ -39,7 +46,7 @@ public class TaskFactory {
             Task task = new Task.Builder()
                     .owner(route.getOwner())
                     .assignedTo(route.getResponsibleForApproving())
-                    .documentBeingApprovedId(route.getDocumentBeingApprovedId())
+                    .documentBeingApprovedId(route.getDocumentBeingApproved())
                     .documentBeingApprovedName(route.getDocumentBeingApprovedName())
                     .state(TaskStates.ACTIVE.getState())
                     .dueDate(route.getCheckingDueDate())
@@ -64,7 +71,6 @@ public class TaskFactory {
         task.setName(name);
 
         taskDao.SaveOrUpdate(task);
-    }
-*/
+    }*/
 
 }

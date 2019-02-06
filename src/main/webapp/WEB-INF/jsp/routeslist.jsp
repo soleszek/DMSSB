@@ -131,7 +131,7 @@
                             class="far fa-window-restore"></i></div>
                 </td>
                 <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=r.getDocumentBeingApprovedId()%>')"><%=r.getDocumentBeingApprovedName()%></span>
+                          onclick="openPopup('OpenDocument?documentId=<%=r.getDocumentBeingApproved()%>')"><%=r.getDocumentBeingApprovedName()%></span>
                 </td>
                 <td><%=r.getState()%>
                 </td>

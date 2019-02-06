@@ -333,7 +333,7 @@
                     <tr>
                         <td>Promoted document</td>
                         <td><span class="link"><a href="#"
-                                                  onclick="openPopup('/document/${item.getId()}${route.getDocumentBeingApprovedId().getId()}')">${oute.getDocumentBeingApprovedId().getName()}</a></span>
+                                                  onclick="openPopup('/document/${item.getId()}${route.getDocumentBeingApproved().getId()}')">${route.getDocumentBeingApproved().getName()}</a></span>
                         </td>
                     </tr>
                     <tr>
@@ -464,62 +464,61 @@
 
     <div id="modal-content-start-route" class="modal">
 
-        <%--<form class="modal-content animate" action="StartRoute" method="get">
+        <form class="modal-content animate" action="/route/start/${route.getId()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-content-start-route').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/start-route.png" alt="Document" class="avatar">
+                <img src="/style/start-route.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">Starting promotion request</h1>
             </div>
 
-            <div class="container"><h3
-                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">Choose state to
-                promote:</h3></div>
-
+            <div class="container">
+                <h3 style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">
+                    Choose state to promote:
+                </h3>
+            </div>
             <div class="container">
                 <div class="custom-select">
-                    <select name="state">
-                        <option value="release">Release</option>
+                    <select name="state" required>
+                        <option value="">SELECT</option>
                         <option value="release">Release</option>
                         <option value="cancel">Cancel</option>
                     </select>
                 </div>
 
-                <input type="hidden" name="routeId" value="<%=route.getId()%>">
-
                 <div class="container"><h2
                         style="text-align:center; margin-left: 24px; padding-top: 35px; padding-bottom: 20px">New task
-                    will be sent to <%=route.getResponsibleForChecking()%>
+                    will be sent to ${route.getResponsibleForChecking().getUsername()}
                 </h2></div>
 
                 <button type="submit">Submit</button>
             </div>
-        </form>--%>
+        </form>
 
     </div>
 
     <div id="modal-wrapper-deleteroute" class="modal">
 
-        <%--<form class="modal-content animate" action="DeleteRoute" method="get">
+        <form class="modal-content animate" action="/route/delete" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-deleteroute').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/delete-route.jpeg" alt="Document" class="avatar">
+                <img src="/style/delete-route.jpeg" alt="Document" class="avatar">
                 <h1 style="text-align:center">Delete route</h1>
             </div>
 
             <div class="container"><h3
                     style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                delete route nr <%=route.getName()%>
+                delete route nr ${route.getName()}
             </h3>
 
-                <input type="hidden" name="routeId" value="<%=route.getId()%>">
+                <input type="hidden" name="routeId" value="${route.getId()}">
 
                 <button type="submit">Complete</button>
             </div>
-        </form>--%>
+        </form>
 
     </div>
 
@@ -545,8 +544,8 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
-    <script src="jsscripts/dropdownmenu.js"></script>
+    <script src="/jsscripts/popup.js"></script>
+    <script src="/jsscripts/dropdownmenu.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

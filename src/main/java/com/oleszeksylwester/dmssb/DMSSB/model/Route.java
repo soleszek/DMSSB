@@ -1,13 +1,12 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
 import com.oleszeksylwester.dmssb.DMSSB.factory.TaskFactory;
-import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Route extends TaskFactory {
+public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long route_id;
@@ -21,7 +20,7 @@ public class Route extends TaskFactory {
     private LocalDate deadline;
     @ManyToOne(optional = false)
     @JoinColumn(name="document_id")
-    private Document documentBeingApprovedId;
+    private Document documentBeingApproved;
     private LocalDate checkingDueDate;
     @ManyToOne(optional = false)
     @JoinColumn(name="checker_id")
@@ -34,14 +33,14 @@ public class Route extends TaskFactory {
     public Route() {
     }
 
-    public Route(String name, User owner, String state, LocalDate creationDate, LocalDate finishDate, LocalDate deadline, Document documentBeingApprovedId, LocalDate checkingDueDate, User responsibleForChecking, User responsibleForApproving, String comments) {
+    public Route(String name, User owner, String state, LocalDate creationDate, LocalDate finishDate, LocalDate deadline, Document documentBeingApproved, LocalDate checkingDueDate, User responsibleForChecking, User responsibleForApproving, String comments) {
         this.name = name;
         this.owner = owner;
         this.state = state;
         this.creationDate = creationDate;
         this.finishDate = finishDate;
         this.deadline = deadline;
-        this.documentBeingApprovedId = documentBeingApprovedId;
+        this.documentBeingApproved = documentBeingApproved;
         this.checkingDueDate = checkingDueDate;
         this.responsibleForChecking = responsibleForChecking;
         this.responsibleForApproving = responsibleForApproving;
@@ -100,12 +99,12 @@ public class Route extends TaskFactory {
         this.deadline = deadline;
     }
 
-    public Document getDocumentBeingApprovedId() {
-        return documentBeingApprovedId;
+    public Document getDocumentBeingApproved() {
+        return documentBeingApproved;
     }
 
-    public void setDocumentBeingApprovedId(Document documentBeingApprovedId) {
-        this.documentBeingApprovedId = documentBeingApprovedId;
+    public void setDocumentBeingApproved(Document documentBeingApproved) {
+        this.documentBeingApproved = documentBeingApproved;
     }
 
     public LocalDate getCheckingDueDate() {

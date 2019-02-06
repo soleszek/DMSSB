@@ -124,7 +124,7 @@
                 <td><%=t.getOwner()%>
                 </td>
                 <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=t.getDocumentBeingApprovedId()%>')"><%=t.getDocumentBeingApprovedName()%></span>
+                          onclick="openPopup('OpenDocument?documentId=<%=t.getDocumentBeingApproved()%>')"><%=t.getDocumentBeingApprovedName()%></span>
                 </td>
                 <td><%=t.getState()%>
                 </td>

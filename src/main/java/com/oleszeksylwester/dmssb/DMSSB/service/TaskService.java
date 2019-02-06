@@ -1,5 +1,9 @@
 package com.oleszeksylwester.dmssb.DMSSB.service;
 
+import com.oleszeksylwester.dmssb.DMSSB.enums.RouteStates;
+import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
+import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
+import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +16,69 @@ import java.util.List;
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final NameFactory nameFactory;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, NameFactory nameFactory) {
         this.taskRepository = taskRepository;
+        this.nameFactory = nameFactory;
+    }
+
+    public Task createTask(Route route){
+
+        String routeState = route.getState();
+
+        if(routeState.equals(RouteStates.NOT_STARTED.getState())){
+
+            Task task = new Task.Builder()
+                    .owner(route.getOwner())
+                    .assignedTo(route.getResponsibleForChecking())
+                    .processedDocument(route.getDocumentBeingApproved())
+                    .state(TaskStates.ACTIVE.getState())
+                    .dueDate(route.getCheckingDueDate())
+                    .completionDate(null)
+                    .comments("Please check")
+                    .parentRoute(route)
+                    .build();
+
+            taskRepository.save(task);
+
+            Long taskId = task.getId();
+            String name = nameFactory.createName(taskId, "task");
+            task.setName(name);
+            taskRepository.save(task);
+
+            return task;
+
+        } else if(routeState.equals(RouteStates.CHECKING.getState())){
+
+            Task task = new Task.Builder()
+                    .owner(route.getOwner())
+                    .assignedTo(route.getResponsibleForApproving())
+                    .processedDocument(route.getDocumentBeingApproved())
+                    .state(TaskStates.ACTIVE.getState())
+                    .dueDate(route.getCheckingDueDate())
+                    .completionDate(null)
+                    .comments("Please approve")
+                    .parentRoute(route)
+                    .build();
+
+            taskRepository.save(task);
+
+            Long taskId = task.getId();
+            String name = nameFactory.createName(taskId, "task");
+            task.setName(name);
+            taskRepository.save(task);
+
+            return task;
+        }
+
+        return null;
     }
 
     @Transactional
-    public void SaveOrUpdate(Task user){
-        taskRepository.save(user);
+    public void SaveOrUpdate(Task task){
+        taskRepository.save(task);
     }
 
     @Transactional(readOnly = true)

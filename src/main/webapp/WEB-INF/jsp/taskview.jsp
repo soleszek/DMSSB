@@ -297,7 +297,7 @@
             <tr>
                 <td>Promoted document</td>
                 <td><span class="link"><a href="#"
-                                          onclick="openPopup('OpenDocument?documentId=<%=task.getDocumentBeingApprovedId()%>')"><%=task.getDocumentBeingApprovedName()%></a></span>
+                                          onclick="openPopup('OpenDocument?documentId=<%=task.getDocumentBeingApproved()%>')"><%=task.getDocumentBeingApprovedName()%></a></span>
                 </td>
             </tr>
             <tr>

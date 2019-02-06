@@ -83,4 +83,27 @@ public class RouteController {
 
         return mov;
     }
+
+    @GetMapping("/route/start/{routeId}")
+    private ModelAndView startRoute(@PathVariable("routeId") Long routeId){
+        ModelAndView mov = new ModelAndView();
+
+        Route route = routeService.promote(routeId);
+
+        mov.addObject("route", route);
+        mov.setViewName("route");
+
+        return mov;
+    }
+
+    @GetMapping("/route/delete")
+    private ModelAndView deleteRoute(@PathVariable("routeId") Long routeId){
+        ModelAndView mov = new ModelAndView();
+
+        mov.setViewName("route");
+
+        return mov;
+    }
+
+
 }

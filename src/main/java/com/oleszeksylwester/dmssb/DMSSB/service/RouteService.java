@@ -1,8 +1,10 @@
 package com.oleszeksylwester.dmssb.DMSSB.service;
 
+import com.oleszeksylwester.dmssb.DMSSB.enums.DocumentStates;
 import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
 import com.oleszeksylwester.dmssb.DMSSB.enums.RouteStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
+import com.oleszeksylwester.dmssb.DMSSB.factory.TaskFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
@@ -31,19 +33,21 @@ public class RouteService {
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
     private final NameFactory nameFactory;
+    private final TaskService taskService;
 
     @Autowired
-    public RouteService(RouteRepository routeRepository, UserRepository userRepository, DocumentRepository documentRepository, NameFactory nameFactory) {
+    public RouteService(RouteRepository routeRepository, UserRepository userRepository, DocumentRepository documentRepository, NameFactory nameFactory, TaskService taskService) {
         this.routeRepository = routeRepository;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.nameFactory = nameFactory;
+        this.taskService = taskService;
     }
 
     @Transactional
     public Route SaveOrUpdate(Route route, String checkingDueDateString, String deadlineString, Long id){
 
-        String username = null;
+        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             username = ((UserDetails)principal).getUsername();
@@ -63,7 +67,7 @@ public class RouteService {
         route.setCreationDate(LocalDate.now());
         route.setCheckingDueDate(checkingDueDate);
         route.setDeadline(deadline);
-        route.setDocumentBeingApprovedId(document);
+        route.setDocumentBeingApproved(document);
 
         routeRepository.save(route);
 
@@ -92,8 +96,42 @@ public class RouteService {
         List<Route> allRoutes = routeRepository.findAll();
 
         return allRoutes.stream()
-                .filter(r -> r.getDocumentBeingApprovedId().getId().equals(documentId))
+                .filter(r -> r.getDocumentBeingApproved().getId().equals(documentId))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Route promote(Long id){
+
+        Route route = routeRepository.getOne(id);
+
+        if(route.getState().equals(RouteStates.NOT_STARTED.getState())){
+            taskService.createTask(route);
+            route.setState(RouteStates.CHECKING.getState());
+            routeRepository.save(route);
+
+        } else if (route.getState().equals(RouteStates.CHECKING.getState())){
+            Long promotedDocumentId = route.getDocumentBeingApproved().getId();
+            Document document = documentRepository.getOne(promotedDocumentId);
+            document.setState(DocumentStates.FROZEN.getState());
+            documentRepository.save(document);
+
+            taskService.createTask(route);
+
+            route.setState(RouteStates.APPROVING.getState());
+            routeRepository.save(route);
+
+        } else if (route.getState().equals(RouteStates.APPROVING.getState())){
+            Long promotedDocumentId = route.getDocumentBeingApproved().getId();
+            Document document = documentRepository.getOne(promotedDocumentId);
+            document.setState(DocumentStates.RELEASED.getState());
+            documentRepository.save(document);
+
+            route.setState(RouteStates.COMPLETED.getState());
+            routeRepository.save(route);
+        }
+
+        return route;
     }
 
     @Transactional
