@@ -5,6 +5,7 @@ import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
+import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,16 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final NameFactory nameFactory;
+    private final RouteService routeService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, NameFactory nameFactory) {
+    public TaskService(TaskRepository taskRepository, NameFactory nameFactory, RouteService routeService) {
         this.taskRepository = taskRepository;
         this.nameFactory = nameFactory;
+        this.routeService = routeService;
     }
 
-    public Task createTask(Route route){
+    public void createTask(Route route){
 
         String routeState = route.getState();
 
@@ -48,8 +51,6 @@ public class TaskService {
             task.setName(name);
             taskRepository.save(task);
 
-            return task;
-
         } else if(routeState.equals(RouteStates.CHECKING.getState())){
 
             Task task = new Task.Builder()
@@ -69,11 +70,19 @@ public class TaskService {
             String name = nameFactory.createName(taskId, "task");
             task.setName(name);
             taskRepository.save(task);
-
-            return task;
         }
+    }
 
-        return null;
+    @Transactional
+    public Task completeTask(Long taskId){
+        Task task = taskRepository.getOne(taskId);
+        Long routeId = task.getParentRoute().getId();
+        routeService.promote(routeId);
+
+        task.setState(TaskStates.COMPLETED.getState());
+        taskRepository.save(task);
+
+        return task;
     }
 
     @Transactional

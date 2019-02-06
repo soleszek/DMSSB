@@ -32,13 +32,25 @@ public class TaskController {
         return mov;
     }
 
-    @GetMapping("/taks/{taskId}")
-    private ModelAndView displayTask(@PathVariable("taskId") Long taksId){
+    @GetMapping("/task/{taskId}")
+    private ModelAndView displayTask(@PathVariable("taskId") Long taskId){
         ModelAndView mov = new ModelAndView();
 
-        Task task = taskService.findById(taksId);
+        Task task = taskService.findById(taskId);
 
-        mov.addObject(task);
+        mov.addObject("task", task);
+        mov.setViewName("task");
+
+        return mov;
+    }
+
+    @GetMapping("/task/completed/{taskId}")
+    private ModelAndView completeTask(@PathVariable("taskId") Long taskId){
+        ModelAndView mov = new ModelAndView();
+
+        Task task = taskService.findById(taskId);
+
+        mov.addObject("task", task);
         mov.setViewName("task");
 
         return mov;
