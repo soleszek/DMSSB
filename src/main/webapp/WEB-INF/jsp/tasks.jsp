@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -60,7 +60,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -95,7 +96,7 @@
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
 
             <thead>
@@ -104,38 +105,43 @@
                 <th>Owner</th>
                 <th>Submitted document</th>
                 <th>State</th>
+                <th>Assigned to</th>
                 <th>Due date</th>
                 <th>Comments</th>
                 <th>Completion date</th>
+                <th>Context route</th>
             </tr>
             </thead>
 
             <tbody>
-            <% for (Task t : userTasks) {
-            %>
-            <tr>
-                <td><a href="OpenTask?taskId=<%=t.getId()%>" id="doc-link"><%=t.getName()%>
-                </a></td>
-                <td><%=t.getOwner()%>
-                </td>
-                <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=t.getDocumentBeingApproved()%>')"><%=t.getDocumentBeingApprovedName()%></span>
-                </td>
-                <td><%=t.getState()%>
-                </td>
-                <td><%=t.getDueDate()%>
-                </td>
-                <td><%=t.getComments()%>
-                </td>
-                <td><%=t.getCompletionDate()%>
-                </td>
-            </tr>
-
+            <c:forEach items="${allTasks}" var="task">
+                <tr>
+                    <td><a href="task/${task.getId()}" id="doc-link">${task.getName()}
+                    </a></td>
+                    <td>${task.getOwner().getUsername()}
+                    </td>
+                    <td><span class="doc-link"
+                              onclick="openPopup('/document/${task.getProcessedDocument().getId()}')">${task.getProcessedDocument().getName()}</span>
+                    </td>
+                    <td>${task.getState()}
+                    </td>
+                    <td>${task.getAssignedTo().getUsername()}
+                    </td>
+                    <td>${task.getDueDate()}
+                    </td>
+                    <td>${task.getComments()}
+                    </td>
+                    <td>${task.getCompletionDate()}
+                    </td>
+                    <td><span class="doc-link" onclick="openPopup('/route/${task.getParentRoute().getId()}')">${task.getParentRoute().getName()}</span>
+                    </td>
+                </tr>
+            </c:forEach>
             </tbody>
 
-        </table>--%>
+        </table>
 
-        <script src="jsscripts/popup.js"></script>
+        <script src="/jsscripts/popup.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function () {
