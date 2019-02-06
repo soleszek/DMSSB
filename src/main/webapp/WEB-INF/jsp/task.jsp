@@ -247,15 +247,15 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="AllDocuments">Documents</a></div>
-        <c:if test="${role ne 'viewer'}">
-            <div class="optionL"><a href="ShowAllRoutes">Routes</a></div>
-            <div class="optionL"><a href="AllUserTasks">Tasks</a></div>
-        </c:if>
+        <div class="optionL"><a href="/documents">Documents</a></div>
+        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+            <div class="optionL"><a href="/routeslist">Routes</a></div>
+            <div class="optionL"><a href="/tasks">Tasks</a></div>
+        </sec:authorize>
 
-        <c:if test="${role eq 'admin'}">
-            <div class="optionL"><a href="adminpanel.jsp">Admin Panel</a></div>
-        </c:if>
+        <sec:authorize access="hasRole('ADMIN')">
+            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
+        </sec:authorize>
 
         <div style="clear: both"></div>
     </div>
@@ -277,47 +277,54 @@
 
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="300">
-
-            <%
-                Task task = (Task) request.getAttribute("task");
-            %>
 
             <tr>
                 <td>Task name</td>
-                <td><%=task.getName()%>
+                <td>${task.getName()}
                 </td>
             </tr>
             <tr>
                 <td>Owner</td>
-                <td><%=task.getOwner()%>
+                <td>${task.getOwner().getUsername()}
                 </td>
             </tr>
             <tr>
                 <td>Promoted document</td>
-                <td><span class="link"><a href="#"
-                                          onclick="openPopup('OpenDocument?documentId=<%=task.getDocumentBeingApproved()%>')"><%=task.getDocumentBeingApprovedName()%></a></span>
+                <td><span class="doc-link"><a href="#"
+                                          onclick="openPopup('/document/${task.getProcessedDocument().getId()}')">${task.getProcessedDocument().getName()}</a></span>
                 </td>
             </tr>
             <tr>
                 <td>State</td>
-                <td><%=task.getState()%>
+                <td>${task.getState()}
+                </td>
+            </tr>
+            <tr>
+                <td>State</td>
+                <td>${task.getAssignedTo().getUsername()}
                 </td>
             </tr>
             <tr>
                 <td>Due date</td>
-                <td><%=task.getDueDate()%>
+                <td>${task.getDueDate()}
                 </td>
             </tr>
             <tr>
                 <td>Task comment</td>
-                <td><%=task.getComments()%>
+                <td>${task.getComments()}
                 </td>
             </tr>
             <tr>
                 <td>Completion date</td>
-                <td><%=task.getCompletionDate()%>
+                <td>${task.getCompletionDate()}
+                </td>
+            </tr>
+            <tr>
+                <td>Context route</td>
+                <td><span class="doc-link"><a href="#"
+                                          onclick="openPopup('/route/${task.getParentRoute().getId()}')">${task.getParentRoute().getName()}</a></span>
                 </td>
             </tr>
             <tr>
@@ -326,7 +333,7 @@
                 </td>
             </tr>
 
-        </table>--%>
+        </table>
 
     </div>
 
@@ -334,29 +341,27 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <%--<div id="modal-content-complete-task" class="modal">
+    <div id="modal-content-complete-task" class="modal">
 
-        <form class="modal-content animate" action="CompleteTask" method="get">
+        <form class="modal-content animate" action="/taks/completed/{taksId}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-content-complete-task').style.display='none'"
                       class="close" title="Close PopUp">&times;</span>
-                <img src="style/complete-task.png" alt="Document" class="avatar">
+                <img src="/style/complete-task.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">Complete task</h1>
             </div>
 
             <div class="container"><h3
                     style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are
-                completing task <%=task.getId()%>, <%=task.getComments()%>
+                completing task ${task.getId()}, ${task.getComments()}
             </h3>
-
-                <input type="hidden" name="taskId" value="<%=task.getId()%>">
 
                 <button type="submit">Complete</button>
             </div>
         </form>
 
-    </div>--%>
+    </div>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close
@@ -369,7 +374,7 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
