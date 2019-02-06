@@ -1,6 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
+import com.oleszeksylwester.dmssb.DMSSB.service.RouteService;
 import com.oleszeksylwester.dmssb.DMSSB.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +15,12 @@ import java.util.List;
 public class TaskController {
 
     private final TaskService taskService;
+    private final RouteService routeService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, RouteService routeService) {
         this.taskService = taskService;
+        this.routeService = routeService;
     }
 
     @GetMapping("/tasks")
@@ -48,7 +51,7 @@ public class TaskController {
     private ModelAndView completeTask(@PathVariable("taskId") Long taskId){
         ModelAndView mov = new ModelAndView();
 
-        Task task = taskService.findById(taskId);
+        Task task = routeService.completeTask(taskId);
 
         mov.addObject("task", task);
         mov.setViewName("task");

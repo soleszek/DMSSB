@@ -343,7 +343,7 @@
 
     <div id="modal-content-complete-task" class="modal">
 
-        <form class="modal-content animate" action="/taks/completed/{taksId}" method="get">
+        <form class="modal-content animate" action="/task/completed/${task.getId()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-content-complete-task').style.display='none'"

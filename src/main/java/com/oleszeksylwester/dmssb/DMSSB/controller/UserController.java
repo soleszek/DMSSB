@@ -1,6 +1,14 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
+import com.oleszeksylwester.dmssb.DMSSB.enums.DocumentStates;
+import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
+import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
+import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
+import com.oleszeksylwester.dmssb.DMSSB.service.TaskService;
 import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +32,15 @@ public class UserController {
     UserService userService;
 
     @Autowired
+    DocumentRepository documentRepository;
+
+    @Autowired
+    RouteRepository routeRepository;
+
+    @Autowired
+    TaskService taskService;
+
+    @Autowired
     @Qualifier("userValidator")
     private UserValidator userValidator;
 
@@ -33,8 +50,31 @@ public class UserController {
     }
 
     @GetMapping("/dashboard")
-    private String showDashboard() {
-        return "dashboard";
+    private ModelAndView showDashboard() {
+        ModelAndView mov = new ModelAndView();
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        Long documentCount = documentRepository.count();
+        Long routeCount = routeRepository.count();
+
+        List<Task> tasks = taskService.findUserTasks(username);
+        int userTasksCount = tasks.size();
+
+        mov.addObject("documentCount", documentCount);
+        mov.addObject("routeCount", routeCount);
+        mov.addObject("tasks", tasks);
+        mov.addObject("userTasksCount", userTasksCount);
+
+        mov.setViewName("dashboard");
+
+        return mov;
     }
 
     @GetMapping("/login")

@@ -3,19 +3,21 @@ package com.oleszeksylwester.dmssb.DMSSB.service;
 import com.oleszeksylwester.dmssb.DMSSB.enums.DocumentStates;
 import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
 import com.oleszeksylwester.dmssb.DMSSB.enums.RouteStates;
+import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
+import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,20 +29,21 @@ public class RouteService {
 
     private static final Logger LOGGER = Logger.getLogger(RouteService.class.getName());
 
-
     private final RouteRepository routeRepository;
     private final UserRepository userRepository;
     private final DocumentRepository documentRepository;
     private final NameFactory nameFactory;
     private final TaskService taskService;
+    private final TaskRepository taskRepository;
 
     @Autowired
-    public RouteService(RouteRepository routeRepository, UserRepository userRepository, DocumentRepository documentRepository, NameFactory nameFactory, TaskService taskService) {
+    public RouteService(RouteRepository routeRepository, UserRepository userRepository, DocumentRepository documentRepository, NameFactory nameFactory, TaskService taskService, TaskRepository taskRepository) {
         this.routeRepository = routeRepository;
         this.userRepository = userRepository;
         this.documentRepository = documentRepository;
         this.nameFactory = nameFactory;
         this.taskService = taskService;
+        this.taskRepository = taskRepository;
     }
 
     @Transactional
@@ -132,6 +135,19 @@ public class RouteService {
         }
 
         return route;
+    }
+
+    @Transactional
+    public Task completeTask(Long taskId){
+        Task task = taskRepository.getOne(taskId);
+        Long routeId = task.getParentRoute().getId();
+        promote(routeId);
+
+        task.setState(TaskStates.COMPLETED.getState());
+        task.setCompletionDate(LocalDate.now());
+        taskRepository.save(task);
+
+        return task;
     }
 
     @Transactional

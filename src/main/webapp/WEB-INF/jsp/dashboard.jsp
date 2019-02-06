@@ -87,20 +87,20 @@
     <div id="content">
         <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
             <div class="square">
-                <div class="tile1"><H1><a href="AllDocuments" class="tilelink">
+                <div class="tile1"><H1><a href="/documents" class="tilelink">
                     All documents<br><br>
-                    <c:out value="${allDocuments}"/>
+                    <c:out value="${documentCount}"/>
                 </a></H1></div>
-                <div class="tile1"><H1><a href="ShowAllRoutes" class="tilelink">
+                <div class="tile1"><H1><a href="/routeslist" class="tilelink">
                     Active routes<br><br>
-                    <c:out value="${activeRoutes.size()}"/>
+                    <c:out value="${routeCount}"/>
                 </a></H1><
                 </div>
                 <div style="clear: both"></div>
 
                 <div class="tile2"><H1><a href="AllUserTasks" class="tilelink">
                     Your active tasks<br><br>
-                    <c:out value="${assignedTasks.size()}"/>
+                    <c:out value="${userTasksCount}"/>
                 </a></H1></div>
                 <div class="tile3">
 

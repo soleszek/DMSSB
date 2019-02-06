@@ -5,6 +5,7 @@ import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
+import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,19 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
 
     private final TaskRepository taskRepository;
     private final NameFactory nameFactory;
-    private final RouteService routeService;
+    /*private final RouteService routeService;*/
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, NameFactory nameFactory, RouteService routeService) {
+    public TaskService(TaskRepository taskRepository, NameFactory nameFactory/*, RouteService routeService*/) {
         this.taskRepository = taskRepository;
         this.nameFactory = nameFactory;
-        this.routeService = routeService;
+        /*this.routeService = routeService;*/
     }
 
     public void createTask(Route route){
@@ -74,18 +76,6 @@ public class TaskService {
     }
 
     @Transactional
-    public Task completeTask(Long taskId){
-        Task task = taskRepository.getOne(taskId);
-        Long routeId = task.getParentRoute().getId();
-        routeService.promote(routeId);
-
-        task.setState(TaskStates.COMPLETED.getState());
-        taskRepository.save(task);
-
-        return task;
-    }
-
-    @Transactional
     public void SaveOrUpdate(Task task){
         taskRepository.save(task);
     }
@@ -98,6 +88,15 @@ public class TaskService {
     @Transactional(readOnly = true)
     public List<Task> findAll(){
         return taskRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Task> findUserTasks(String username){
+        List<Task> allTasks = taskRepository.findAll();
+
+        return allTasks.stream()
+                .filter(t -> t.getAssignedTo().getUsername().equals(username))
+                .collect(Collectors.toList());
     }
 
     @Transactional
