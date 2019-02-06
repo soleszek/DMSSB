@@ -202,7 +202,7 @@
                     </a>
                 </li>
             </ul>
-            <form class="thing" action="QuickSearch" method="get">
+            <form class="thing" action="/quicksearch" method="get">
                 <label for="ddd" class="thing-label">
                     Type to search...
                 </label>

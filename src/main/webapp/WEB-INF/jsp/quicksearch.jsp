@@ -1,14 +1,13 @@
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -36,7 +35,7 @@
         <div id="search">
             <ul class="sliding-icons">
                 <li>
-                    <a href="advancedsearch.jsp">
+                    <a href="/advancedsearch">
                         <div class="icon">
                             <i class="fas fa-search fa-2x"></i>
                             <i class="fas fa-search fa-2x" title="Advanced search"></i>
@@ -44,7 +43,7 @@
                     </a>
                 </li>
             </ul>
-            <form class="thing" action="/advancedsearch" method="get">
+            <form class="thing" action="/quicksearch" method="get">
                 <label for="ddd" class="thing-label">
                     Type to search...
                 </label>
@@ -63,7 +62,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -97,7 +97,7 @@
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
 
             <thead>
@@ -117,69 +117,78 @@
             </thead>
 
             <tbody>
-
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
-                </a></td>
-                <td><%=d.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=d.getType()%>
-                </td>
-                <td><%=d.getState()%>
-                </td>
-                <td><%=d.getRevision()%>
-                </td>
-                <td><%=d.getOwner()%>
-                </td>
-                <td><%=d.getCreationDate()%>
-                </td>
-                <td><%=d.getLastModification()%>
-                </td>
-                <td><%=d.getLink()%>
-                </td>
-                <td><%=d.getDescription()%>
-                </td>
-            </tr>
-
+            <sec:authorize access="hasRole('VIEWER')">
+                <c:if test="${fn:length(results) > 0}">
+                    <c:forEach var="d" items="${results}">
+                        <c:if test="${d.getState() eq 'released'}">
+                            <tr>
+                                <td><a href="/document/${d.getId()}" id="doc-link">${d.getName()}
+                                </a></td>
+                                <td>${d.getTitle()}
+                                </td>
+                                <td>
+                                    <div id="popup" onclick="openPopup('/document/${d.getId()}')"><i
+                                            class="far fa-window-restore"></i></div>
+                                </td>
+                                <td>${d.getType()}
+                                </td>
+                                <td>${d.getState()}
+                                </td>
+                                <td>${d.getRevision()}
+                                </td>
+                                <td>${d.getOwner().getUsername()}
+                                </td>
+                                <td>${d.getCreationDate()}
+                                </td>
+                                <td>${d.getLastModification()}
+                                </td>
+                                <td>${d.getLink()}
+                                </td>
+                                <td>${d.getDescription()}
+                                </td>
+                            </tr>
+                        </c:if>
+                    </c:forEach>
+                </c:if>
+            </sec:authorize>
             </tbody>
 
-            <tbody>
+            <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                <tbody>
+                <c:if test="${fn:length(results) > 0}">
+                    <c:forEach var="d" items="${results}">
+                        <tr>
+                            <td><a href="/document/${d.getId()}" id="doc-link">${d.getName()}
+                            </a></td>
+                            <td>${d.getTitle()}
+                            </td>
+                            <td>
+                                <div id="popup" onclick="openPopup('/document/${d.getId()}')"><i
+                                        class="far fa-window-restore"></i></div>
+                            </td>
+                            <td>${d.getType()}
+                            </td>
+                            <td>${d.getState()}
+                            </td>
+                            <td>${d.getRevision()}
+                            </td>
+                            <td>${d.getOwner().getUsername()}
+                            </td>
+                            <td>${d.getCreationDate()}
+                            </td>
+                            <td>${d.getLastModification()}
+                            </td>
+                            <td>${d.getLink()}
+                            </td>
+                            <td>${d.getDescription()}
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+                </tbody>
+            </sec:authorize>
 
-            <tr>
-                <td><a href="OpenDocument?documentId=<%=d.getId()%>" id="doc-link"><%=d.getName()%>
-                </a></td>
-                <td><%=d.getTitle()%>
-                </td>
-                <td>
-                    <div id="popup" onclick="openPopup('OpenDocument?documentId=<%=d.getId()%>')"><i
-                            class="far fa-window-restore"></i></div>
-                </td>
-                <td><%=d.getType()%>
-                </td>
-                <td><%=d.getState()%>
-                </td>
-                <td><%=d.getRevision()%>
-                </td>
-                <td><%=d.getOwner()%>
-                </td>
-                <td><%=d.getCreationDate()%>
-                </td>
-                <td><%=d.getLastModification()%>
-                </td>
-                <td><%=d.getLink()%>
-                </td>
-                <td><%=d.getDescription()%>
-                </td>
-            </tr>
-
-            </tbody>
-
-
-        </table>--%>
+        </table>
 
     </div>
 
@@ -198,7 +207,7 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="style/documents-view.css" type="text/css">
+    <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -47,7 +47,7 @@
                     </a>
                 </li>
             </ul>
-            <form class="thing" action="QuickSearch" method="get">
+            <form class="thing" action="/quicksearch" method="get">
                 <label for="ddd" class="thing-label">
                     Type to search...
                 </label>
@@ -66,7 +66,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -100,14 +101,14 @@
         <select id="object">
             <option selected>Select type of object</option>
             <option value="div1">Documents</option>
-            <%--<% if (!role.equals("viewer")) { %>--%>
-            <option value="div2">Routes</option>
-            <option value="div3">Tasks</option>
-            <option value="div4">Users</option>
-            <%--<% } %>--%>
+            <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                <option value="div2">Routes</option>
+                <option value="div3">Tasks</option>
+                <option value="div4">Users</option>
+            </sec:authorize>
         </select>
         <div class="form-div1" id="div1">
-            <form class="edit-form" action="AdvancedSearchDocument" method="post">
+            <form class="edit-form" action="/adcancedsearch/document" method="post">
 
                 <table id="example1" class="display" style="width:100%">
                     <col width="220">
@@ -181,7 +182,7 @@
             </form>
         </div>
         <div class="form-div2" id="div2">
-            <form id="edit-form" action="AdvancedSearchRoute" method="post">
+            <form id="edit-form" action="/adcancedsearch/route" method="post">
 
                 <table id="example2" class="display" style="width:100%">
                     <col width="300">
@@ -263,7 +264,7 @@
             </form>
         </div>
         <div class="form-div3" id="div3">
-            <form class="edit-form" action="AdvancedSearchTask" method="post">
+            <form class="edit-form" action="/adcancedsearch/task" method="post">
                 <table id="example3" class="display" style="width:100%">
                     <col width="300">
 
@@ -314,7 +315,7 @@
             </form>
         </div>
         <div class="form-div4" id="div4">
-            <form <%--id="edit-form"--%> action="AdvancedSearchUser" method="post">
+            <form <%--id="edit-form"--%> action="/adcancedsearch/user" method="post">
 
                 <table id="example4" class="display" style="width:100%">
                     <col width="220">
@@ -438,14 +439,14 @@
         });
     </script>
 
-    <script src="jsscripts/advancedsearch.js"></script>
-    <script src="jsscripts/dropdownToInput.js"></script>
-    <script src="jsscripts/dropdownToInputState.js"></script>
-    <script src="jsscripts/dropdownToInputRouteState.js"></script>
-    <script src="jsscripts/dropdownToInputDocState.js"></script>
-    <script src="jsscripts/dropdownToInputDocType.js"></script>
-    <script src="jsscripts/resetcreationdate.js"></script>
-    <script src="jsscripts/resetlastmodificationdate.js"></script>
+    <script src="/jsscripts/advancedsearch.js"></script>
+    <script src="/jsscripts/dropdownToInput.js"></script>
+    <script src="/jsscripts/dropdownToInputState.js"></script>
+    <script src="/jsscripts/dropdownToInputRouteState.js"></script>
+    <script src="/jsscripts/dropdownToInputDocState.js"></script>
+    <script src="/jsscripts/dropdownToInputDocType.js"></script>
+    <script src="/jsscripts/resetcreationdate.js"></script>
+    <script src="/jsscripts/resetlastmodificationdate.js"></script>
 
 
 </div>

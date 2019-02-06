@@ -20,13 +20,11 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final NameFactory nameFactory;
-    /*private final RouteService routeService;*/
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, NameFactory nameFactory/*, RouteService routeService*/) {
+    public TaskService(TaskRepository taskRepository, NameFactory nameFactory) {
         this.taskRepository = taskRepository;
         this.nameFactory = nameFactory;
-        /*this.routeService = routeService;*/
     }
 
     public void createTask(Route route){
