@@ -142,7 +142,7 @@
 
         </table>--%>
 
-        <script src="jsscripts/popup.js"></script>
+        <script src="/jsscripts/popup.js"></script>
 
         <script type="text/javascript">
             $(document).ready(function () {

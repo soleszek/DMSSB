@@ -92,12 +92,9 @@
 
     <div id="content">
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
 
-            <%
-                List<Route> matchingRoutes = (List<Route>) request.getAttribute("matchingRoutes");
-            %>
             <thead>
             <tr>
                 <th>Promotion request name</th>
@@ -114,7 +111,7 @@
                 <th>Finish date</th>
             </tr>
             </thead>
-            <%
+            <%--<%
                 if (matchingRoutes != null) {
             %>
             <tbody>
@@ -158,9 +155,9 @@
             </tbody>
             <%
                 }
-            %>
+            %>--%>
 
-        </table>--%>
+        </table>
 
     </div>
 
@@ -179,7 +176,7 @@
         }
     </script>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {

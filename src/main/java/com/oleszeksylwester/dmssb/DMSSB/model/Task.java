@@ -103,18 +103,6 @@ public class Task {
         this.parentRoute = builder.parentRoute;
     }
 
-/*    public Task(String name, User owner, User assignedTo, Document processedDocument, String state, LocalDate dueDate, LocalDate completionDate, String comments, Route parentRoute) {
-        this.name = name;
-        this.owner = owner;
-        this.assignedTo = assignedTo;
-        this.processedDocument = processedDocument;
-        this.state = state;
-        this.dueDate = dueDate;
-        this.completionDate = completionDate;
-        this.comments = comments;
-        this.parentRoute = parentRoute;
-    }*/
-
     public Long getId() {
         return task_id;
     }

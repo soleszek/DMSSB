@@ -108,7 +108,7 @@
             </sec:authorize>
         </select>
         <div class="form-div1" id="div1">
-            <form class="edit-form" action="/adcancedsearch/document" method="post">
+            <form class="edit-form" action="/advancedsearch/document" method="post">
 
                 <table id="example1" class="display" style="width:100%">
                     <col width="220">
@@ -182,7 +182,7 @@
             </form>
         </div>
         <div class="form-div2" id="div2">
-            <form id="edit-form" action="/adcancedsearch/route" method="post">
+            <form id="edit-form" action="/advancedsearch/route" method="post">
 
                 <table id="example2" class="display" style="width:100%">
                     <col width="300">
@@ -199,7 +199,7 @@
                     </tr>
                     <tr>
                         <td>Promoted document</td>
-                        <td><input type="text" name="promotedDocument" value="">
+                        <td><input type="text" name="documentBeingApproved" value="">
                         </td>
                     </tr>
                     <tr>
@@ -215,26 +215,26 @@
                     </tr>
                     <tr>
                         <td>Check due date</td>
-                        <td><input type="text" name="checkDueDate" value="" id="checkDueDate" class="datepicker"
+                        <td><input type="text" name="checkingDueDate" value="" id="checkDueDate" class="datepicker"
                                    readonly><input type="button" value="clear"
                                                    onclick="document.getElementById('checkDueDate').value = ''"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Person assigned to check</td>
-                        <td><input type="text" name="assignedToCheck" value="">
+                        <td><input type="text" name="responsibleForChecking" value="">
                         </td>
                     </tr>
                     <tr>
                         <td>Approve due date</td>
-                        <td><input type="text" name="approveDueDate" value="" id="approveDueDate" class="datepicker"
+                        <td><input type="text" name="deadline" value="" id="approveDueDate" class="datepicker"
                                    readonly><input type="button" value="clear"
                                                    onclick="document.getElementById('approveDueDate').value = ''"/>
                         </td>
                     </tr>
                     <tr>
                         <td>Person assigned to approve</td>
-                        <td><input type="text" name="assignedToApprove" value="">
+                        <td><input type="text" name="responsibleForApproving" value="">
                         </td>
                     </tr>
                     <tr>
@@ -244,7 +244,7 @@
                     </tr>
                     <tr>
                         <td>Date of creation</td>
-                        <td><input type="text" name="dateOfCreation" value="" id="dateOfCreation" class="datepicker"
+                        <td><input type="text" name="creationDate" value="" id="dateOfCreation" class="datepicker"
                                    readonly><input type="button" value="clear"
                                                    onclick="document.getElementById('dateOfCreation').value = ''"/>
                         </td>
@@ -264,7 +264,7 @@
             </form>
         </div>
         <div class="form-div3" id="div3">
-            <form class="edit-form" action="/adcancedsearch/task" method="post">
+            <form class="edit-form" action="/advancedsearch/task" method="post">
                 <table id="example3" class="display" style="width:100%">
                     <col width="300">
 
@@ -279,8 +279,13 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Assigned to</td>
+                        <td><input type="text" name="assignedTo" value="">
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Promoted document</td>
-                        <td><input type="text" name="promotedDocument" value="">
+                        <td><input type="text" name="processedDocument" value="">
                         </td>
                     </tr>
                     <tr>
@@ -298,13 +303,18 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>Completion date</td>
+                        <td><input type="text" name="completionDate" value="" class="datepicker">
+                        </td>
+                    </tr>
+                    <tr>
                         <td>Task comment</td>
                         <td><input type="text" name="comment" value="">
                         </td>
                     </tr>
                     <tr>
-                        <td>Completion date</td>
-                        <td><input type="text" name="completionDate" value="" class="datepicker">
+                        <td>Parent route</td>
+                        <td><input type="text" name="parentRoute" value="">
                         </td>
                     </tr>
 
@@ -315,7 +325,7 @@
             </form>
         </div>
         <div class="form-div4" id="div4">
-            <form <%--id="edit-form"--%> action="/adcancedsearch/user" method="post">
+            <form <%--id="edit-form"--%> action="/advancedsearch/user" method="post">
 
                 <table id="example4" class="display" style="width:100%">
                     <col width="220">
@@ -346,7 +356,7 @@
                     </tr>
                     <tr>
                         <td>Login</td>
-                        <td><input type="text" name="login" value="">
+                        <td><input type="text" name="username" value="">
                         </td>
                     </tr>
 

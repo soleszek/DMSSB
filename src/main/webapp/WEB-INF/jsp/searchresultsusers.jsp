@@ -142,7 +142,7 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <script src="jsscripts/popup.js"></script>
+    <script src="/jsscripts/popup.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
