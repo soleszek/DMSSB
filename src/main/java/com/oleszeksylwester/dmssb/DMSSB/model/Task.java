@@ -10,10 +10,10 @@ public class Task {
     private Long task_id;
     private String name;
     @ManyToOne(optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="owner_id")
     private User owner;
     @ManyToOne(optional = false)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="assignedTo_id")
     private User assignedTo;
     @ManyToOne(optional = false)
     @JoinColumn(name="document_d")

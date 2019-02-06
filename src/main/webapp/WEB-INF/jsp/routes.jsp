@@ -333,7 +333,7 @@
                                     class="far fa-window-restore"></i></div>
                         </td>
                         <td><span class="doc-link"
-                                  onclick="openPopup('/document/${item.getDocumentBeingApprovedId().getId()}')">${item.getDocumentBeingApprovedId().getName()}</span>
+                                  onclick="openPopup('/document/${item.getDocumentBeingApproved().getId()}')">${item.getDocumentBeingApproved().getName()}</span>
                         </td>
                         <td>${item.getState()}
                         </td>

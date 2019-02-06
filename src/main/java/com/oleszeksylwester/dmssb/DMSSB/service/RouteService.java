@@ -47,7 +47,7 @@ public class RouteService {
     @Transactional
     public Route SaveOrUpdate(Route route, String checkingDueDateString, String deadlineString, Long id){
 
-        String username = null;
+        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             username = ((UserDetails)principal).getUsername();
