@@ -232,7 +232,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -265,109 +266,96 @@
 
     <div id="content">
 
-        <%--<div id="navbar">
+        <div id="navbar">
             <ul>
                 <li>
-                    <%
-                        if (route.getState().equals("not started")) {
-                    %>
-                    <a href="#">
-                        <div class="icon">
-                            <i class="fas fa-forward fa-2x"></i>
-                            <i class="fas fa-forward fa-2x" title="Start route"
-                               onclick="document.getElementById('modal-content-start-route').style.display='block'"></i>
-                        </div>
-                    </a>
-                    <%
-                    } else {
-                    %>
-
-                    <a href="#">
-                        <div class="icon-disabled">
-                            <i class="fas fa-forward fa-2x" title="You don't have privileges"></i>
-                        </div>
-                    </a>
-
-                    <%
-                        }
-                    %>
-
-
+                    <c:choose>
+                        <c:when test="${route.getState() eq 'not started'}">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-forward fa-2x"></i>
+                                    <i class="fas fa-forward fa-2x" title="Start route"
+                                       onclick="document.getElementById('modal-content-start-route').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </c:when>
+                        <c:when test="${route.getState() ne 'not started'}">
+                            <a href="#">
+                                <div class="icon-disabled">
+                                    <i class="fas fa-forward fa-2x" title="You don't have privileges"></i>
+                                </div>
+                            </a>
+                        </c:when>
+                    </c:choose>
                 </li>
-
                 <li>
-                    <%
-                        if (route.getState().equals("not started")) {
-                    %>
-                    <a href="#">
-                        <div class="icon">
-                            <i class="fas fa-minus-square fa-2x"></i>
-                            <i class="fas fa-minus-square fa-2x" title="Delete"
-                               onclick="document.getElementById('modal-wrapper-deleteroute').style.display='block'"></i>
-                        </div>
-                    </a>
-                    <%
-                    } else {
-                    %>
-
-                    <a href="#">
-                        <div class="icon-disabled">
-                            <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
-                        </div>
-                    </a>
-
-                    <%
-                        }
-                    %>
+                    <c:choose>
+                        <c:when test="${route.getState() eq 'not started'}">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-minus-square fa-2x"></i>
+                                    <i class="fas fa-minus-square fa-2x" title="Delete"
+                                       onclick="document.getElementById('modal-wrapper-deleteroute').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </c:when>
+                        <c:when test="${route.getState() ne 'not started'}">
+                            <a href="#">
+                                <div class="icon-disabled">
+                                    <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
+                                </div>
+                            </a>
+                        </c:when>
+                    </c:choose>
 
 
                 </li>
             </ul>
-        </div>--%>
+        </div>
 
         <div class="route-table">
 
             <form id="edit-form" action="UpdateRoute" method="post">
 
-                <%--<table &lt;%&ndash;class="user-table"&ndash;%&gt; id="example" class="display" style="width:100%">
+                <table id="example" class="display" style="width:100%">
                     <col width="300">
 
                     <tr>
                         <td>Promotion request name</td>
-                        <td><%=route.getName()%>
+                        <td>${route.getName()}
                         </td>
                     </tr>
                     <tr>
                         <td>Owner</td>
-                        <td><%=route.getOwner()%>
+                        <td>${route.getOwner().getUsername()}
                         </td>
                     </tr>
                     <tr>
                         <td>Promoted document</td>
                         <td><span class="link"><a href="#"
-                                                  onclick="openPopup('OpenDocument?documentId=<%=document.getId()%>')"><%=document.getName()%></a></span>
+                                                  onclick="openPopup('/document/${item.getId()}${route.getDocumentBeingApprovedId().getId()}')">${oute.getDocumentBeingApprovedId().getName()}</a></span>
                         </td>
                     </tr>
                     <tr>
                         <td>State</td>
-                        <td><%=route.getState()%>
+                        <td>${route.getState()}
                         </td>
                     </tr>
                     <tr>
                         <td>Check due date</td>
                         <td><input type="text" class="edit-text" name="checkingDueDate"
-                                   value="<%=route.getCheckingDueDate()%>" readonly required>
+                                   value="${route.getCheckingDueDate()}" readonly required>
                         </td>
                     </tr>
                     <tr>
                         <td>Person assigned to check</td>
                         <td><input type="text" class="edit-text" name="responsibleForChecking"
-                                   value="<%=route.getResponsibleForChecking()%>" readonly required>
+                                   value="${route.getResponsibleForChecking().getUsername()}" readonly required>
                         </td>
                     </tr>
                     <tr>
                         <td>Approve due date</td>
-                        <td><input type="text" class="edit-text" name="deadline" value="<%=route.getDeadline()%>"
+                        <td><input type="text" class="edit-text" name="deadline" value="${route.getDeadline()}"
                                    readonly
                                    required>
                         </td>
@@ -375,51 +363,61 @@
                     <tr>
                         <td>Person assign to approve</td>
                         <td><input type="text" class="edit-text" name="responsibleForApproving"
-                                   value="<%=route.getResponsibleForApproving()%>" readonly required>
+                                   value="${route.getResponsibleForApproving().getUsername()}" readonly required>
                         </td>
                     </tr>
                     <tr>
                         <td>Comments</td>
-                        <td><input type="text" class="edit-text" name="comments" value="<%=route.getComments()%>"
+                        <td><input type="text" class="edit-text" name="comments" value="${route.getComments()}"
                                    readonly required>
                         </td>
                     </tr>
                     <tr>
                         <td>Date of creation</td>
-                        <td><%=route.getCreationDate()%>
+                        <td>${route.getCreationDate()}
                         </td>
                     </tr>
                     <tr>
                         <td>Finish date</td>
-                        <td><%=route.getFinishDate()%>
+                        <td>${route.getFinishDate()}
                         </td>
                     </tr>
 
-                    <input type="hidden" name="routeId" value="<%=route.getId()%>">
-                    <input type="hidden" name="documentId" value="<%=document.getId()%>">
-
-                    <script src="jsscripts/editform.js"></script>
+                    <script src="/jsscripts/editform.js"></script>
 
                 </table>
 
-                <%
-                    if (!route.getState().equals("checking") && !route.getState().equals("approving") && !route.getState().equals("completed") || role.equals("admin")) {
-                %>
+                <c:if test="${route.getState() eq 'not started'}">
+                    <button type="button" id="editButton" class="button-edit" style="visibility:visible"
+                            onclick="edit()">
+                        Edit
+                    </button>
+                    <button type="submit" id="saveButton" class="button-edit" style="visibility:hidden"
+                            onclick="save()">
+                        Save
+                    </button>
+                    <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden"
+                            onclick="cancel()">Cancel
+                    </button>
+                    <br>
+                </c:if>
 
-                <button type="button" id="editButton" class="button-edit" style="visibility:visible" onclick="edit()">
-                    Edit
-                </button>
-                <button type="submit" id="saveButton" class="button-edit" style="visibility:hidden" onclick="save()">
-                    Save
-                </button>
-                <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden"
-                        onclick="cancel()">Cancel
-                </button>
-                <br>
-
-                <%
-                    }
-                %>--%>
+                <c:if test="${route.getState() eq 'checking' or route.getState() eq 'approving' or route.getState() eq 'completed'}">
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <button type="button" id="editButton" class="button-edit" style="visibility:visible"
+                                onclick="edit()">
+                            Edit
+                        </button>
+                        <button type="submit" id="saveButton" class="button-edit" style="visibility:hidden"
+                                onclick="save()">
+                            Save
+                        </button>
+                        <button type="button" id="cancelButton" class="button-edit" style="visibility:hidden"
+                                onclick="cancel()">Cancel
+                        </button>
+                        <br>
+                    </sec:authorize>
+                </c:if>
 
             </form>
 
@@ -427,48 +425,34 @@
 
         <div class="route-stages">
 
-                <%--<ul class="progressbar">
-
-                    <%
-                        if (route.getState().equals("not started")) {
-                    %>
-
-                    <li><i class="fas fa-flag fa-3x"></i></li>
-                    <li>Checking</li>
-                    <li>Approving</li>
-                    <li><i class="fas fa-flag-checkered fa-3x"></i></li>
-
-                    <%
-                    } else if (route.getState().equals("checking")) {
-                    %>
-
-                    <li class="active"><i class="fas fa-flag fa-3x"></i></li>
-                    <li>Checking</li>
-                    <li>Approving</li>
-                    <li><i class="fas fa-flag-checkered fa-3x"></i></li>
-                    <%
-                    } else if (route.getState().equals("approving")) {
-                    %>
-
-                    <li class="active"><i class="fas fa-flag fa-3x"></i></li>
-                    <li class="active">Checking</li>
-                    <li>Approving</li>
-                    <li><i class="fas fa-flag-checkered fa-3x"></i></li>
-
-                    <%
-                    } else if (route.getState().equals("completed")) {
-                    %>
-
-                    <li class="active"><i class="fas fa-flag fa-3x"></i></li>
-                    <li class="active">Checking</li>
-                    <li class="active">Approving</li>
-                    <li class="active"><i class="fas fa-flag-checkered fa-3x"></i></li>
-
-                    <%
-                        }
-                    %>
-
-                </ul>--%>
+            <ul class="progressbar">
+                <c:choose>
+                    <c:when test="${route.getState() eq 'not started'}">
+                        <li><i class="fas fa-flag fa-3x"></i></li>
+                        <li>Checking</li>
+                        <li>Approving</li>
+                        <li><i class="fas fa-flag-checkered fa-3x"></i></li>
+                    </c:when>
+                    <c:when test="${route.getState() ne 'checking'}">
+                        <li class="active"><i class="fas fa-flag fa-3x"></i></li>
+                        <li>Checking</li>
+                        <li>Approving</li>
+                        <li><i class="fas fa-flag-checkered fa-3x"></i></li>
+                    </c:when>
+                    <c:when test="${route.getState() ne 'approving'}">
+                        <li class="active"><i class="fas fa-flag fa-3x"></i></li>
+                        <li class="active">Checking</li>
+                        <li>Approving</li>
+                        <li><i class="fas fa-flag-checkered fa-3x"></i></li>
+                    </c:when>
+                    <c:when test="${route.getState() ne 'completed'}">
+                        <li class="active"><i class="fas fa-flag fa-3x"></i></li>
+                        <li class="active">Checking</li>
+                        <li class="active">Approving</li>
+                        <li class="active"><i class="fas fa-flag-checkered fa-3x"></i></li>
+                    </c:when>
+                </c:choose>
+            </ul>
 
         </div>
 
