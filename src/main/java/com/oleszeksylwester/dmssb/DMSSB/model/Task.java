@@ -9,7 +9,9 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long task_id;
     private String name;
-    private String owner;
+    @ManyToOne(optional = false)
+    @JoinColumn(name="user_id")
+    private User owner;
     @ManyToOne(optional = false)
     @JoinColumn(name="user_id")
     private User assignedTo;
@@ -28,7 +30,80 @@ public class Task {
 
     }
 
-    public Task(String name, String owner, User assignedTo, Document processedDocument, String state, LocalDate dueDate, LocalDate completionDate, String comments, Route parentRoute) {
+    public static class Builder {
+        private String name;
+        private User owner;
+        private User assignedTo;
+        private Document processedDocument;
+        private String state;
+        private LocalDate dueDate;
+        private LocalDate completionDate;
+        private String comments;
+        private Route parentRoute;
+
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder owner (User owner){
+            this.owner = owner;
+            return this;
+        }
+
+        public Builder assignedTo (User assignedTo){
+            this.assignedTo = assignedTo;
+            return this;
+        }
+
+        public Builder processedDocument(Document processedDocument){
+            this.processedDocument = processedDocument;
+            return this;
+        }
+
+        public Builder state (String state) {
+            this.state = state;
+            return this;
+        }
+
+        public Builder dueDate (LocalDate dueDate) {
+            this.dueDate = dueDate;
+            return this;
+        }
+
+        public Builder completionDate (LocalDate completionDate) {
+            this.completionDate = completionDate;
+            return this;
+        }
+
+        public Builder comments(String comments) {
+            this.comments = comments;
+            return this;
+        }
+
+        public Builder parentRoute(Route parentRoute) {
+            this.parentRoute = parentRoute;
+            return this;
+        }
+
+        public Task build() {
+            return new Task(this);
+        }
+    }
+
+    private Task (Builder builder){
+        this.name = builder.name;
+        this.owner = builder.owner;
+        this.assignedTo = builder.assignedTo;
+        this.processedDocument = builder.processedDocument;
+        this.state = builder.state;
+        this.dueDate = builder.dueDate;
+        this.completionDate = builder.completionDate;
+        this.comments = builder.comments;
+        this.parentRoute = builder.parentRoute;
+    }
+
+/*    public Task(String name, User owner, User assignedTo, Document processedDocument, String state, LocalDate dueDate, LocalDate completionDate, String comments, Route parentRoute) {
         this.name = name;
         this.owner = owner;
         this.assignedTo = assignedTo;
@@ -38,7 +113,7 @@ public class Task {
         this.completionDate = completionDate;
         this.comments = comments;
         this.parentRoute = parentRoute;
-    }
+    }*/
 
     public Long getId() {
         return task_id;
@@ -52,11 +127,11 @@ public class Task {
         this.name = name;
     }
 
-    public String getOwner() {
+    public User getOwner() {
         return owner;
     }
 
-    public void setOwner(String owner) {
+    public void setOwner(User owner) {
         this.owner = owner;
     }
 

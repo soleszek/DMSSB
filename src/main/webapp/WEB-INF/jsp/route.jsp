@@ -464,12 +464,12 @@
 
     <div id="modal-content-start-route" class="modal">
 
-        <%--<form class="modal-content animate" action="StartRoute" method="get">
+        <form class="modal-content animate" action="/route/start" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-content-start-route').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/start-route.png" alt="Document" class="avatar">
+                <img src="/style/start-route.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">Starting promotion request</h1>
             </div>
 
@@ -480,22 +480,22 @@
             <div class="container">
                 <div class="custom-select">
                     <select name="state">
-                        <option value="release">Release</option>
+                        <option value="">SELECT</option>
                         <option value="release">Release</option>
                         <option value="cancel">Cancel</option>
                     </select>
                 </div>
 
-                <input type="hidden" name="routeId" value="<%=route.getId()%>">
+                <input type="hidden" name="routeId" value="${route.getId}>
 
                 <div class="container"><h2
                         style="text-align:center; margin-left: 24px; padding-top: 35px; padding-bottom: 20px">New task
-                    will be sent to <%=route.getResponsibleForChecking()%>
+                    will be sent to ${route.getResponsibleForChecking().getUsername()}
                 </h2></div>
 
                 <button type="submit">Submit</button>
             </div>
-        </form>--%>
+        </form>
 
     </div>
 
