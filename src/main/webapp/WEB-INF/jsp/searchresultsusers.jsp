@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -60,7 +61,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -94,12 +96,8 @@
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
-
-            <%
-                List<User> users = (List<User>) request.getAttribute("matchingUsers");
-            %>
 
             <thead>
             <tr>
@@ -108,33 +106,30 @@
                 <th>Name</th>
                 <th>Last name</th>
                 <th>Role</th>
-                <th>Password</th>
             </tr>
             </thead>
 
-            <tbody>
-            <% for (User u : users) {
-            %>
-            <tr>
-                <td><a href="AnyUserShow?userId=<%=u.getId()%>" id="doc-link"><%=u.getName()%>
-                </a></td>
-                <td><span class="doc-link"
-                          onclick="openPopup('AnyUserShow?userId=<%=u.getId()%>')"><%=u.getLogin()%></span></td>
-                <td><%=u.getUserName()%>
-                </td>
-                <td><%=u.getLastName()%>
-                </td>
-                <td><%=u.getRole()%>
-                </td>
-                <td><%=u.getPassword()%>
-                </td>
-            </tr>
-            <%
-                }
-            %>
-            </tbody>
-
-        </table>--%>
+            <c:if test="${fn:length(results) > 0}">
+                <tbody>
+                <c:forEach var="user" items="${results}">
+                    <tr>
+                        <td><a href="/userdetails/${user.getUser_id()}" id="doc-link">${user.getName()}
+                        </a></td>
+                        <td><span class="doc-link"
+                                  onclick="openPopup('/userdetails/${user.getUser_id()}')">${user.getUsername()}</span></td>
+                        <td>${user.getFirstName()}
+                        </td>
+                        <td>${user.getLastName()}
+                        </td>
+                        <td><c:forEach var="role" items="${user.getRoles()}">
+                            ${role.getRole()}
+                        </c:forEach>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
+        </table>
 
     </div>
 

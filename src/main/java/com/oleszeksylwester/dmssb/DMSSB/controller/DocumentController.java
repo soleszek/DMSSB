@@ -1,10 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
-import com.oleszeksylwester.dmssb.DMSSB.model.Route;
-import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
-import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.DataOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -60,6 +57,11 @@ public class DocumentController {
             LOGGER.log(Level.SEVERE, "Problem with acquring stream from MultipartFile");
         }
         documentService.SaveOrUpdate(document, fileContent, type, path);
+
+        String fileName = DataOperations.drawingsPath + String.valueOf(document.getId());
+        String pdf = documentService.readPdfDocument(fileName);
+
+        mov.addObject("pdf", pdf);
         mov.addObject("document", document);
         mov.setViewName("document");
 
@@ -69,6 +71,10 @@ public class DocumentController {
     @GetMapping("/document")
     private ModelAndView displayDocument(@ModelAttribute("document") Document document){
         ModelAndView mov = new ModelAndView();
+        String fileName = DataOperations.drawingsPath + String.valueOf(document.getId());
+        String pdf = documentService.readPdfDocument(fileName);
+
+        mov.addObject("pdf", pdf);
         mov.addObject("document", document);
         mov.setViewName("document");
 
@@ -80,6 +86,10 @@ public class DocumentController {
         ModelAndView mov = new ModelAndView();
         Document document = documentService.findById(documentId);
 
+        String fileName = DataOperations.drawingsPath + String.valueOf(documentId);
+        String pdf = documentService.readPdfDocument(fileName);
+
+        mov.addObject("pdf", pdf);
         mov.addObject("document", document);
         mov.setViewName("document");
 
@@ -89,6 +99,10 @@ public class DocumentController {
     @PostMapping("/updateDocument")
     private ModelAndView updateDocument(@ModelAttribute Document document){
         ModelAndView mov = new ModelAndView();
+        String fileName = DataOperations.drawingsPath + String.valueOf(document.getId());
+        String pdf = documentService.readPdfDocument(fileName);
+
+        mov.addObject("pdf", pdf);
         mov.addObject(document);
         mov.setViewName("document");
 
@@ -132,6 +146,22 @@ public class DocumentController {
         mov.addObject("pdf", pdf);
         mov.addObject("document", document);
         mov.setViewName("viewer");
+
+        return mov;
+    }
+
+    @GetMapping("/new/revision/{documentId}")
+    private ModelAndView createNewRevision(@PathVariable("documentId") Long documentId){
+        ModelAndView mov = new ModelAndView();
+
+        Document document = documentService.createNewRevision(documentId);
+
+        String name = document.getName();
+        List<Document> revisions = documentService.findAllRevisions(name);
+
+        mov.addObject(document);
+        mov.addObject("revisions", revisions);
+        mov.setViewName("revisions");
 
         return mov;
     }

@@ -221,7 +221,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -343,7 +344,8 @@
                 </tr>
                 <tr>
                     <td>Attachement</td>
-                    <td><c:out value="${document.getLink()}"/>
+                    <td>
+                        <a download="new file" href="data:application/pdf;base64,${pdf}" type='application/pdf'><c:out value="${document.getLink()}"/></a>
                     </td>
                 </tr>
                 <tr>
@@ -380,6 +382,14 @@
             </sec:authorize>
 
         </form>
+        <%--<br>
+        <br>
+        <form action="/new/comment" id="usrform" method="post">
+            Name: <input type="text" name="usrname" value="<sec:authentication property="principal.username"/>" readonly>
+            <input type="submit" value="Dodaj">
+        </form>
+        <br>
+        <textarea rows="4" cols="50" name="comment" form="usrform" placeholder="Enter your comment..."></textarea>--%>
 
 
     </div>

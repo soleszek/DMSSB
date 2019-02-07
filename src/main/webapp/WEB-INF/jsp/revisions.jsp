@@ -94,32 +94,28 @@
     <div id="content">
 
         <div id="navbar">
-            <%--<ul>
+            <ul>
                 <li>
-                    <%
-                        if (!role.equals("viewer") && !document.getState().equals("in work") && !document.getState().equals("frozen")) {
-                    %>
-                    <a href="#">
-                        <div class="icon">
-                            <i class="far fa-clone fa-2x"></i>
-                            <i class="far fa-clone fa-2x" title="Create new revision"
-                               onclick="javascript:location.href='CreateNewRevision?documentId=<%=document.getId()%>'"></i>
-                        </div>
-                    </a>
-                    <%
-                    } else {
-                    %>
-
-                    <a href="#">
-                        <div class="icon-disabled">
-                            <i class="far fa-clone fa-2x" title="You don't have privileges"></i>
-                        </div>
-                    </a>
-                    <%
-                        }
-                    %>
+                    <c:if test="${document.getState() eq 'released'}">
+                        <sec:authorize access="!hasRole('VIEWER')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="far fa-clone fa-2x"></i>
+                                    <i class="far fa-clone fa-2x" title="Create new revision"
+                                       onclick="javascript:location.href='/new/revision/${document.getId()}'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </c:if>
+                    <c:if test="${document.getState() eq 'in work' or document.getState() eq 'frozen'}">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="far fa-clone fa-2x" title="You don't have privileges"></i>
+                            </div>
+                        </a>
+                    </c:if>
                 </li>
-            </ul>--%>
+            </ul>
 
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
 

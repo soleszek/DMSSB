@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -61,7 +62,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -96,12 +98,8 @@
             <input id="txtSearch" placeholder="Filter table" class="form-control"/>
         </div>
 
-        <%--<table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%">
             <col width="60">
-
-            <%
-                List<Task> matchingTasks = (List<Task>) request.getAttribute("matchingTasks");
-            %>
 
             <thead>
             <tr>
@@ -109,38 +107,42 @@
                 <th>Owner</th>
                 <th>Submitted document</th>
                 <th>State</th>
+                <th>Assigned to</th>
                 <th>Due date</th>
                 <th>Comments</th>
                 <th>Completion date</th>
+                <th>Context route</th>
             </tr>
             </thead>
 
-            <tbody>
-            <% for (Task t : matchingTasks) {
-            %>
-            <tr>
-                <td><a href="OpenTask?taskId=<%=t.getId()%>" id="doc-link"><%=t.getName()%>
-                </a></td>
-                <td><%=t.getOwner()%>
-                </td>
-                <td><span class="doc-link"
-                          onclick="openPopup('OpenDocument?documentId=<%=t.getDocumentBeingApproved()%>')"><%=t.getDocumentBeingApprovedName()%></span>
-                </td>
-                <td><%=t.getState()%>
-                </td>
-                <td><%=t.getDueDate()%>
-                </td>
-                <td><%=t.getComments()%>
-                </td>
-                <td><%=t.getCompletionDate()%>
-                </td>
-            </tr>
-            <%
-                }
-            %>
-            </tbody>
-
-        </table>--%>
+            <c:if test="${fn:length(results) > 0}">
+                <tbody>
+                <c:forEach var="task" items="${results}">
+                    <tr>
+                        <td><a href="task/${task.getId()}" id="doc-link">${task.getName()}
+                        </a></td>
+                        <td>${task.getOwner().getUsername()}
+                        </td>
+                        <td><span class="doc-link"
+                                  onclick="openPopup('/document/${task.getProcessedDocument().getId()}')">${task.getProcessedDocument().getName()}</span>
+                        </td>
+                        <td>${task.getState()}
+                        </td>
+                        <td>${task.getAssignedTo().getUsername()}
+                        </td>
+                        <td>${task.getDueDate()}
+                        </td>
+                        <td>${task.getComments()}
+                        </td>
+                        <td>${task.getCompletionDate()}
+                        </td>
+                        <td><span class="doc-link" onclick="openPopup('/route/${task.getParentRoute().getId()}')">${task.getParentRoute().getName()}</span>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
+        </table>
 
         <script src="/jsscripts/popup.js"></script>
 

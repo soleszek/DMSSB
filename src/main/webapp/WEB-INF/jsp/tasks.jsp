@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -113,32 +114,34 @@
             </tr>
             </thead>
 
-            <tbody>
-            <c:forEach items="${allTasks}" var="task">
-                <tr>
-                    <td><a href="task/${task.getId()}" id="doc-link">${task.getName()}
-                    </a></td>
-                    <td>${task.getOwner().getUsername()}
-                    </td>
-                    <td><span class="doc-link"
-                              onclick="openPopup('/document/${task.getProcessedDocument().getId()}')">${task.getProcessedDocument().getName()}</span>
-                    </td>
-                    <td>${task.getState()}
-                    </td>
-                    <td>${task.getAssignedTo().getUsername()}
-                    </td>
-                    <td>${task.getDueDate()}
-                    </td>
-                    <td>${task.getComments()}
-                    </td>
-                    <td>${task.getCompletionDate()}
-                    </td>
-                    <td><span class="doc-link" onclick="openPopup('/route/${task.getParentRoute().getId()}')">${task.getParentRoute().getName()}</span>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-
+            <c:if test="${fn:length(alltasks) > 0}">
+                <tbody>
+                <c:forEach items="${allTasks}" var="task">
+                    <tr>
+                        <td><a href="task/${task.getId()}" id="doc-link">${task.getName()}
+                        </a></td>
+                        <td>${task.getOwner().getUsername()}
+                        </td>
+                        <td><span class="doc-link"
+                                  onclick="openPopup('/document/${task.getProcessedDocument().getId()}')">${task.getProcessedDocument().getName()}</span>
+                        </td>
+                        <td>${task.getState()}
+                        </td>
+                        <td>${task.getAssignedTo().getUsername()}
+                        </td>
+                        <td>${task.getDueDate()}
+                        </td>
+                        <td>${task.getComments()}
+                        </td>
+                        <td>${task.getCompletionDate()}
+                        </td>
+                        <td><span class="doc-link"
+                                  onclick="openPopup('/route/${task.getParentRoute().getId()}')">${task.getParentRoute().getName()}</span>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </c:if>
         </table>
 
         <script src="/jsscripts/popup.js"></script>

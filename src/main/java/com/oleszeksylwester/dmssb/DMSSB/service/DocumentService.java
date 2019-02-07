@@ -52,7 +52,7 @@ public class DocumentService {
         document.setLastModification(LocalDate.now());
         document.setLink(path);
 
-        String username = null;
+        String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             username = ((UserDetails)principal).getUsername();
@@ -100,6 +100,48 @@ public class DocumentService {
         return allDocuments.stream()
                 .filter(u -> u.getName().equals(name))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Document createNewRevision(Long id){
+        Document document = findById(id);
+
+        List<Document> documents = findAll();
+        String name = document.getName();
+
+        List<Document> documentRevisions = documents.stream()
+                .filter(r -> r.getName().equals(name))
+                .collect(Collectors.toList());
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+        User user = userRepository.findByUsername(username);
+
+        Long lastRevisionId = documentRevisions.get(documentRevisions.size() - 1).getId();
+        int lastRevisionNumber = findById(lastRevisionId).getRevision();
+
+        Document newRevision = new Document.Builder()
+                .name(document.getName())
+                .revision(lastRevisionNumber + 1)
+                .type(document.getType())
+                .title(document.getTitle())
+                .description("")
+                .state(DocumentStates.INWORK.getState())
+                .owner(user)
+                .creationDate(LocalDate.now())
+                .lastModification(LocalDate.now())
+                .link("")
+                .build();
+
+        documentRepository.save(newRevision);
+
+        return newRevision;
+
     }
 
     @Transactional

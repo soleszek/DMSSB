@@ -26,7 +26,7 @@ public class Document {
     public Document() {
     }
 
-    public Document(String name, int revision, String type, String title, String description, String state, User owner, LocalDate creationDate, LocalDate lastModification, String link) {
+/*    public Document(String name, int revision, String type, String title, String description, String state, User owner, LocalDate creationDate, LocalDate lastModification, String link) {
         this.name = name;
         this.revision = revision;
         this.type = type;
@@ -37,6 +37,86 @@ public class Document {
         this.creationDate = creationDate;
         this.lastModification = lastModification;
         this.link = link;
+    }*/
+
+    public static class Builder{
+        private String name;
+        private int revision;
+        private String type;
+        private String title;
+        private String description;
+        private String state;
+        private User owner;
+        private LocalDate creationDate;
+        private LocalDate lastModification;
+        private String link;
+
+        public Builder name(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder revision (int revision){
+            this.revision = revision;
+            return this;
+        }
+
+        public Builder type (String type){
+            this.type = type;
+            return this;
+        }
+
+        public Builder title (String title){
+            this.title = title;
+            return this;
+        }
+
+        public Builder description (String description){
+            this.description = description;
+            return this;
+        }
+
+        public Builder state(String state){
+            this.state = state;
+            return this;
+        }
+
+        public Builder owner(User owner){
+            this.owner = owner;
+            return this;
+        }
+
+        public Builder creationDate(LocalDate creationDate){
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        public Builder lastModification (LocalDate lastModification){
+            this.lastModification = lastModification;
+            return this;
+        }
+
+        public Builder link(String link){
+            this.link = link;
+            return this;
+        }
+
+        public Document build(){
+            return new Document(this);
+        }
+    }
+
+    private Document(Builder builder){
+        this.name = builder.name;
+        this.revision = builder.revision;
+        this.type = builder.type;
+        this.title = builder.title;
+        this.description = builder.description;
+        this.state = builder.state;
+        this.owner = builder.owner;
+        this.creationDate = builder.creationDate;
+        this.lastModification = builder.lastModification;
+        this.link = builder.link;
     }
 
     public Long getId() {
