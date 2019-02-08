@@ -177,4 +177,15 @@ public class DocumentService {
 
         return new String(Base64.encodeBase64(pdfBytes));
     }
+
+    @Transactional
+    public Document update(Long documentId, String title, String description){
+        Document document = findById(documentId);
+        document.setTitle(title);
+        document.setDescription(description);
+        document.setLastModification(LocalDate.now());
+        documentRepository.save(document);
+
+        return document;
+    }
 }

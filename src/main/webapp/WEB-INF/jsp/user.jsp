@@ -281,10 +281,28 @@
                         </a>
                     </sec:authorize>
                 </li>
+                <li>
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <a href="#">
+                            <div class="icon">
+                                <i class="fas fa-power-off fa-2x"></i>
+                                <i class="fas fa-power-off fa-2x" title="Deactivate user"
+                                   onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="fas fa-power-off fa-2x" title="You don't have privileges"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                </li>
             </ul>
         </div>
 
-        <form id="edit-form" action="UpdateUser" method="post">
+        <form id="edit-form" action="/update/user/${user.getUser_id()}" method="post">
 
             <table id="example" class="display" style="width:100%">
                 <col width="220">
@@ -298,7 +316,7 @@
                 </tr>
                 <tr>
                     <td>First Name</td>
-                    <td><input type="text" class="edit-text" name="userName"
+                    <td><input type="text" class="edit-text" name="firstName"
                                value="<c:out value="${user.getFirstName()}"/>"
                                readonly required size="35"></td>
                 </tr>
@@ -315,7 +333,8 @@
                                value="<c:out value="${role.getRole()}"/>"
                                readonly required>
                     </c:forEach>
-                        <select name="role" id="select-role" style="visibility: hidden;" onchange="replaceValue(event)">
+                        <select name="roleSelect" id="select-role" style="visibility: hidden;"
+                                onchange="replaceValue(event)">
                             <option value="">SELECT</option>
                             <option value="VIEWER">Viewer</option>
                             <option value="CONTRIBUTOR">Contributor</option>
@@ -326,12 +345,17 @@
                 </tr>
                 <tr>
                     <td>Login</td>
-                    <td><input type="text" class="edit-text" name="login" value="<c:out value="${user.getUsername()}"/>"
+                    <td><input type="text" class="noedit-text" name="login" value="<c:out value="${user.getUsername()}"/>"
                                readonly
                                required>
                     </td>
                 </tr>
-                <input type="hidden" name="userId" value="<c:out value="${user.getUser_id()}"/>">
+                <tr>
+                    <td>Active</td>
+                    <td><input type="text" class="edit-text" name="login" value="<c:out value="${user.getEnabled()}"/>"
+                               readonly>
+                    </td>
+                </tr>
 
             </table>
 
@@ -384,48 +408,85 @@
 
     </div>
 
-    <script>
-        // If user clicks anywhere outside of the modal, Modal will close
+    <div id="modal-wrapper-deactivateuser" class="modal">
 
-        var modal = document.getElementById('modal-wrapper-deleteuser');
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        <form class="modal-content animate" action="/status/user/${user.getUser_id()}" method="get">
+
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='none'"
+                      class="close"
+                      title="Close PopUp">&times;</span>
+                <img src="/style/deactivate-user.png" alt="Document" class="avatar">
+                <c:choose>
+                <c:when test="${user.getEnabled() eq '1'}">
+                <h1 style="text-align:center">Deactivate user</h1>
+            </div>
+
+            <div class="container"><h3
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
+                deactivate ${user.getUsername()}
+            </h3>
+                <button type="submit">Complete</button>
+            </div>
+            </c:when>
+            <c:otherwise>
+            <h1 style="text-align:center">Activate user</h1>
+    </div>
+
+    <div class="container"><h3
+            style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
+        activate ${user.getUsername()}
+    </h3>
+        <button type="submit">Complete</button>
+    </div>
+    </c:otherwise>
+    </c:choose>
+    </form>
+
+</div>
+
+<script>
+    // If user clicks anywhere outside of the modal, Modal will close
+
+    var modal = document.getElementById('modal-wrapper-deleteuser');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
         }
-    </script>
+    }
+</script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
+<script type="text/javascript">
+    $(document).ready(function () {
 
-            // Setup - add a text input to each footer cell
-            $('#example tfoot th').each(function () {
-                var title = $(this).text();
-                $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-            });
-
-            // DataTable
-            var table = $('#example').DataTable({
-                "lengthMenu": [[10, 20], [10, 20]]
-            });
-
+        // Setup - add a text input to each footer cell
+        $('#example tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
         });
-    </script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('#example').DataTable();
-
-            $('#example_filter').hide(); // Hide default search datatables where example is the ID of table
-
-            $('#txtSearch').on('keyup', function () {
-                $('#example')
-                    .DataTable()
-                    .search($('#txtSearch').val(), false, true)
-                    .draw();
-            });
+        // DataTable
+        var table = $('#example').DataTable({
+            "lengthMenu": [[10, 20], [10, 20]]
         });
-    </script>
+
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#example').DataTable();
+
+        $('#example_filter').hide(); // Hide default search datatables where example is the ID of table
+
+        $('#txtSearch').on('keyup', function () {
+            $('#example')
+                .DataTable()
+                .search($('#txtSearch').val(), false, true)
+                .draw();
+        });
+    });
+</script>
 
 </div>
 

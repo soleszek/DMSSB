@@ -295,7 +295,7 @@
             </ul>
         </div>
 
-        <form id="edit-form" action="UpdateDocument" method="post">
+        <form id="edit-form" action="/update/document/${document.getId()}" method="post">
 
             <table class="document-table">
                 <col width="220">
@@ -355,8 +355,6 @@
                                readonly required size="35">
                     </td>
                 </tr>
-
-                <input type="hidden" name="documentId" value="<c:out value="${document.getId()}"/>">
 
             </table>
 

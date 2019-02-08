@@ -49,6 +49,22 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public User update(Long userId, String firstName, String lastName, String roleName){
+        User user = findById(userId);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByRole(roleName);
+        roles.add(userRole);
+        user.setRoles(roles);
+
+        userRepository.save(user);
+
+        return user;
+    }
+
     @Transactional(readOnly = true)
     public User findById(Long id){
         return userRepository.findById(id).orElseThrow(()-> new RuntimeException("There is no user with this id"));
@@ -84,6 +100,21 @@ public class UserService {
                 .stream()
                 .filter( e -> e.getRoles().stream().anyMatch(r -> r.getRole().equals("MANAGER")))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public User changeUserStatus(Long userId){
+        User user = findById(userId);
+
+        String isEnabled = user.getEnabled();
+
+        if(isEnabled.equals("1")){
+            user.setEnabled("0");
+        } else {
+            user.setEnabled("1");
+        }
+
+        return user;
     }
 
     @Transactional

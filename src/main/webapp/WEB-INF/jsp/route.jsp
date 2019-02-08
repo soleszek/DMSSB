@@ -315,7 +315,7 @@
 
         <div class="route-table">
 
-            <form id="edit-form" action="UpdateRoute" method="post">
+            <form id="edit-form" action="/route/update/${route.getId()}" method="post">
 
                 <table id="example" class="display" style="width:100%">
                     <col width="300">

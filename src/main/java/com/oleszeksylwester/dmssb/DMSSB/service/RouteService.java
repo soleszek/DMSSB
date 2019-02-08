@@ -151,6 +151,28 @@ public class RouteService {
     }
 
     @Transactional
+    public Route update(Long routeId, String checkingDueDateString, String responsibleForChecking, String deadlineString, String responsibleForApproving, String comments){
+        Route route = findById(routeId);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate checkingDueDate = LocalDate.parse(checkingDueDateString, formatter);
+        LocalDate deadline = LocalDate.parse(deadlineString, formatter);
+
+        User userRespForChecking = userRepository.findByUsername(responsibleForChecking);
+        User userRespForApproving = userRepository.findByUsername(responsibleForApproving);
+
+        route.setCheckingDueDate(checkingDueDate);
+        route.setResponsibleForChecking(userRespForChecking);
+        route.setDeadline(deadline);
+        route.setResponsibleForApproving(userRespForApproving);
+        route.setComments(comments);
+
+        routeRepository.save(route);
+
+        return route;
+    }
+
+    @Transactional
     public void deleteById(Long id){
         routeRepository.deleteById(id);
     }

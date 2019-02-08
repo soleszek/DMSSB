@@ -70,7 +70,9 @@ public class RouteController {
         ModelAndView mov = new ModelAndView();
 
         Route savedRoute = routeService.SaveOrUpdate(route, checkingDueDate, deadline, id);
+        Document document = documentService.findById(savedRoute.getDocumentBeingApproved().getId());
 
+        mov.addObject("document", document);
         mov.addObject("route", savedRoute);
         mov.setViewName("route");
 
@@ -82,7 +84,9 @@ public class RouteController {
         ModelAndView mov = new ModelAndView();
 
         Route route = routeService.findById(routeId);
+        Document document = documentService.findById(route.getDocumentBeingApproved().getId());
 
+        mov.addObject("document", document);
         mov.addObject("route", route);
         mov.setViewName("route");
 
@@ -94,7 +98,9 @@ public class RouteController {
         ModelAndView mov = new ModelAndView();
 
         Route route = routeService.promote(routeId);
+        Document document = documentService.findById(route.getDocumentBeingApproved().getId());
 
+        mov.addObject("document", document);
         mov.addObject("route", route);
         mov.setViewName("route");
 
@@ -122,6 +128,20 @@ public class RouteController {
         mov.addObject("document", document);
         mov.addObject("routes", routes);
         mov.setViewName("routes");
+
+        return mov;
+    }
+
+    @PostMapping("/route/update/{routeId}")
+    private ModelAndView updateRoute(@PathVariable("routeId") Long routeId, @RequestParam("checkingDueDate") String checkingDueDate, @RequestParam("responsibleForChecking") String responsibleForChecking, @RequestParam("deadline") String deadline, @RequestParam("responsibleForApproving") String responsibleForApproving, @RequestParam("comments") String comments){
+        ModelAndView mov = new ModelAndView();
+
+        Route route = routeService.update(routeId, checkingDueDate, responsibleForChecking, deadline, responsibleForApproving, comments);
+        Document document = documentService.findById(route.getDocumentBeingApproved().getId());
+
+        mov.addObject("document", document);
+        mov.addObject("route", route);
+        mov.setViewName("route");
 
         return mov;
     }

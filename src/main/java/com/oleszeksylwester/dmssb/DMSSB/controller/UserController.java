@@ -181,4 +181,28 @@ public class UserController {
 
         return mov;
     }
+
+    @PostMapping(value = "/update/user/{userId}")
+    private ModelAndView updateUser(@PathVariable("userId") Long userId, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("role") String roleName){
+        ModelAndView mov = new ModelAndView();
+
+        User user = userService.update(userId, firstName, lastName, roleName);
+
+        mov.addObject(user);
+        mov.setViewName("user");
+
+        return mov;
+    }
+
+    @GetMapping(value = "/status/user/{userId}")
+    private ModelAndView changeUserStatus(@PathVariable("userId") Long userId){
+        ModelAndView mov = new ModelAndView();
+
+        User user = userService.changeUserStatus(userId);
+
+        mov.addObject(user);
+        mov.setViewName("user");
+
+        return mov;
+    }
 }

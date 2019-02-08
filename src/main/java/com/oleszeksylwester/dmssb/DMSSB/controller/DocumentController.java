@@ -96,10 +96,13 @@ public class DocumentController {
         return mov;
     }
 
-    @PostMapping("/updateDocument")
-    private ModelAndView updateDocument(@ModelAttribute Document document){
+    @PostMapping("/update/document/{documentId}")
+    private ModelAndView updateDocument(@PathVariable("documentId") Long documentId, @RequestParam("title") String title, @RequestParam("description") String description){
         ModelAndView mov = new ModelAndView();
-        String fileName = DataOperations.drawingsPath + String.valueOf(document.getId());
+
+        Document document = documentService.update(documentId, title, description);
+
+        String fileName = DataOperations.drawingsPath + String.valueOf(documentId);
         String pdf = documentService.readPdfDocument(fileName);
 
         mov.addObject("pdf", pdf);
