@@ -231,7 +231,7 @@
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
+                <form id="usershow" action="/userdetails" method="get">
                     <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
                             property="principal.username"/>
                     </a>
@@ -500,7 +500,7 @@
 
     <div id="modal-wrapper-deleteroute" class="modal">
 
-        <form class="modal-content animate" action="/route/delete" method="get">
+        <form class="modal-content animate" action="/route/delete/${route.getId()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-deleteroute').style.display='none'" class="close"

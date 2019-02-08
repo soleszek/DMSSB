@@ -166,4 +166,21 @@ public class DocumentController {
         return mov;
     }
 
+    @GetMapping("/delete/document/{documentId}")
+    private ModelAndView deleteDocument(@PathVariable("documentId") Long documentId) {
+        ModelAndView mov = new ModelAndView();
+
+        documentService.deleteById(documentId);
+
+        List<Document> documents = documentService.findAll();
+        List<Document> approvedDocuments = documentService.findAllApproved();
+
+        mov.addObject("document", new Document());
+        mov.addObject("approvedDocuments", approvedDocuments);
+        mov.addObject("documents", documents);
+        mov.setViewName("documents");
+
+        return mov;
+    }
+
 }

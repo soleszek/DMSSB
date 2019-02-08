@@ -228,8 +228,9 @@
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                <form id="usershow" action="/userdetails" method="get">
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -290,24 +291,28 @@
 
                 <tr>
                     <td>Name</td>
-                    <td><input type="text" class="noedit-text" name="name" value="<c:out value="${user.getName()}"/>" readonly
+                    <td><input type="text" class="noedit-text" name="name" value="<c:out value="${user.getName()}"/>"
+                               readonly
                                disabled>
                     </td>
                 </tr>
                 <tr>
                     <td>First Name</td>
-                    <td><input type="text" class="edit-text" name="userName" value="<c:out value="${user.getFirstName()}"/>"
+                    <td><input type="text" class="edit-text" name="userName"
+                               value="<c:out value="${user.getFirstName()}"/>"
                                readonly required size="35"></td>
                 </tr>
                 <tr>
                     <td>Last Name</td>
-                    <td><input type="text" class="edit-text" name="lastName" value="<c:out value="${user.getLastName()}"/>"
+                    <td><input type="text" class="edit-text" name="lastName"
+                               value="<c:out value="${user.getLastName()}"/>"
                                readonly required size="35"></td>
                 </tr>
                 <tr>
                     <td>Role</td>
                     <td><c:forEach var="role" items="${user.getRoles()}">
-                        <input type="text" class="noedit-text" id="role" name="role" value="<c:out value="${role.getRole()}"/>"
+                        <input type="text" class="noedit-text" id="role" name="role"
+                               value="<c:out value="${role.getRole()}"/>"
                                readonly required>
                     </c:forEach>
                         <select name="role" id="select-role" style="visibility: hidden;" onchange="replaceValue(event)">
@@ -321,7 +326,8 @@
                 </tr>
                 <tr>
                     <td>Login</td>
-                    <td><input type="text" class="edit-text" name="login" value="<c:out value="${user.getUsername()}"/>" readonly
+                    <td><input type="text" class="edit-text" name="login" value="<c:out value="${user.getUsername()}"/>"
+                               readonly
                                required>
                     </td>
                 </tr>
@@ -344,8 +350,8 @@
                     Cancel
                 </button>
 
-                <script src="jsscripts/editform-user.js"></script>
-                <script src="jsscripts/dropdownToInput.js"></script>
+                <script src="/jsscripts/editform-user.js"></script>
+                <script src="/jsscripts/dropdownToInput.js"></script>
 
             </sec:authorize>
 
@@ -359,25 +365,22 @@
 
     <div id="modal-wrapper-deleteuser" class="modal">
 
-        <%--<form class="modal-content animate" action="DeleteUser" method="get">
+        <form class="modal-content animate" action="/delete/user/${user.getUser_id()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-deleteuser').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="style/delete-user.png" alt="Document" class="avatar">
+                <img src="/style/delete-user.png" alt="Document" class="avatar">
                 <h1 style="text-align:center">Delete user</h1>
             </div>
 
             <div class="container"><h3
                     style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                delete <%=userObject.getLogin()%>
+                delete ${user.getUsername()}
             </h3>
-
-                <input type="hidden" name="userId" value="<%=userObject.getId()%>">
-
                 <button type="submit">Complete</button>
             </div>
-        </form>--%>
+        </form>
 
     </div>
 

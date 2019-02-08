@@ -146,6 +146,12 @@ public class DocumentService {
 
     @Transactional
     public void deleteById(Long id){
+
+        Document document = findById(id);
+        String type = document.getType();
+        String fileName = id.toString();
+        DataOperations.deleteData(type, fileName);
+
         documentRepository.deleteById(id);
     }
 

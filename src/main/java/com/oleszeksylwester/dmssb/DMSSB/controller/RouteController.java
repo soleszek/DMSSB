@@ -101,11 +101,27 @@ public class RouteController {
         return mov;
     }
 
-    @GetMapping("/route/delete")
+    @GetMapping("/route/delete/{routeId}")
     private ModelAndView deleteRoute(@PathVariable("routeId") Long routeId){
         ModelAndView mov = new ModelAndView();
 
-        mov.setViewName("route");
+        Route route = routeService.findById(routeId);
+
+        Document document = documentService.findById(route.getDocumentBeingApproved().getId());
+
+        routeService.deleteById(routeId);
+
+        List<User> checkers = userService.findCheckers();
+        List<User> approvers = userService.findApprovers();
+
+        List<Route> routes = routeService.findRoutesOfDocument(document.getId());
+
+        mov.addObject("checkers", checkers);
+        mov.addObject("approvers", approvers);
+        mov.addObject("route", new Route());
+        mov.addObject("document", document);
+        mov.addObject("routes", routes);
+        mov.setViewName("routes");
 
         return mov;
     }

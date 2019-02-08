@@ -61,7 +61,7 @@
                 </form>
             </div>
             <div class="option">
-                <form id="usershow" action="/displayUserDetails" method="get">
+                <form id="usershow" action="/userdetails" method="get">
                     <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
                             property="principal.username"/>
                     </a>

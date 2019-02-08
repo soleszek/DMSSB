@@ -125,7 +125,7 @@ public class UserController {
 
     }
 
-    @GetMapping(value = "/displayUserDetails")
+    @GetMapping(value = "/userdetails")
     private ModelAndView displayUserDetails(){
         ModelAndView mov = new ModelAndView();
 
@@ -148,9 +148,7 @@ public class UserController {
     private ModelAndView displayAllUsers(){
         ModelAndView mov = new ModelAndView();
 
-        List<User> users;
-
-        users = userService.findAll();
+        List<User> users = userService.findAll();
 
         mov.addObject("users", users);
         mov.setViewName("allusers");
@@ -166,6 +164,20 @@ public class UserController {
 
         mov.addObject("user", user);
         mov.setViewName("user");
+
+        return mov;
+    }
+
+    @GetMapping(value = "/delete/user/{userId}")
+    private ModelAndView deleteUser(@PathVariable("userId") Long userId){
+        ModelAndView mov = new ModelAndView();
+
+        userService.deleteById(userId);
+
+        List<User> users = userService.findAll();
+
+        mov.addObject("users", users);
+        mov.setViewName("allusers");
 
         return mov;
     }
