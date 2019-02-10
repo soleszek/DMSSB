@@ -81,6 +81,8 @@ public class DocumentService {
         return documentRepository.findAll();
     }
 
+    //TODO
+    //Jak napisać zapytanie, które umożliwi pobranie z bazy tylko zatwierdzonych wersji
     @Transactional(readOnly = true)
     public List<Document> findAllApproved(){
         List<Document> allDocuments = documentRepository.findAll();
@@ -90,6 +92,8 @@ public class DocumentService {
                 .collect(Collectors.toList());
     }
 
+    //TODO
+    //Jak napisać zapytanie, które umożliwi pobranie wszystkich rewizji o zadanym NAME
     @Transactional(readOnly = true)
     public List<Document> findAllRevisions(String name){
         List<Document> allDocuments = documentRepository.findAll();
