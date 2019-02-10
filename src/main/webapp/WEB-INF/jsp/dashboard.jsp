@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style/style.css" type="text/css">
+    <link rel="stylesheet" href="/style/style.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
@@ -55,7 +55,8 @@
             </div>
             <div class="option">
                 <form id="usershow" action="/userdetails" method="get">
-                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication property="principal.username"/>
+                    <a href="#" onclick="document.getElementById('usershow').submit()">Witaj <sec:authentication
+                            property="principal.username"/>
                     </a>
                 </form>
             </div>
@@ -143,6 +144,15 @@
             <div class="square">
                 <div class="tile5">
 
+                        <a href="/messages" class="tilelink">
+                            <div class="icon">
+                                <br><br>
+                                <i class="far fa-envelope fa-10x" title="Messages"></i>
+                                <H1>New messages<br><br>
+                                    <c:out value="${newMessagesCount}"/>
+                                </H1>
+                            </div>
+                        </a>
 
                 </div>
 

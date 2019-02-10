@@ -5,6 +5,7 @@ import com.oleszeksylwester.dmssb.DMSSB.enums.TaskStates;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.DocumentService;
@@ -41,6 +42,9 @@ public class UserController {
     TaskService taskService;
 
     @Autowired
+    MessageRepository messageRepository;
+
+    @Autowired
     @Qualifier("userValidator")
     private UserValidator userValidator;
 
@@ -63,10 +67,12 @@ public class UserController {
 
         Long documentCount = documentRepository.count();
         Long routeCount = routeRepository.count();
+        Long newMessagesCount = messageRepository.count();
 
         List<Task> tasks = taskService.findUserTasks(username);
         int userTasksCount = tasks.size();
 
+        mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("documentCount", documentCount);
         mov.addObject("routeCount", routeCount);
         mov.addObject("tasks", tasks);
