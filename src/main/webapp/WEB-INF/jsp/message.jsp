@@ -1,7 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -266,23 +264,37 @@
         <div id="navbar">
             <ul>
                 <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                    <sec:authorize access="hasRole('ADMIN')">
                         <a href="#">
                             <div class="icon">
-                                <i class="far fa-comments fa-2x"></i>
-                                <i class="far fa-comments fa-2x" title="Create new message"
-                                   onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
+                                <i class="fas fa-minus-square fa-2x"></i>
+                                <i class="fas fa-minus-square fa-2x" title="Delete user"
+                                   onclick="document.getElementById('modal-wrapper-deleteuser').style.display='block'"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
                             </div>
                         </a>
                     </sec:authorize>
                 </li>
                 <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                    <sec:authorize access="hasRole('ADMIN')">
                         <a href="#">
                             <div class="icon">
-                                <i class="fas fa-user-plus fa-2x"></i>
-                                <i class="fas fa-user-plus fa-2x" title="Change your role"
+                                <i class="fas fa-power-off fa-2x"></i>
+                                <i class="fas fa-power-off fa-2x" title="Deactivate user"
                                    onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
+                        <a href="#">
+                            <div class="icon-disabled">
+                                <i class="fas fa-power-off fa-2x" title="You don't have privileges"></i>
                             </div>
                         </a>
                     </sec:authorize>
@@ -290,48 +302,34 @@
             </ul>
         </div>
 
-        <table id="example" class="display" style="width:100%">
-            <col width="60">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Subject</th>
-                <th><i class="far fa-window-restore"></i></th>
-                <th>Sender</th>
-                <th>Receiver</th>
-                <th>Sending date</th>
-                <th>Receiving date</th>
-            </tr>
-            </thead>
+            <table id="example" class="display" style="width:100%">
+                <col width="220">
 
-            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
-                <c:if test="${fn:length(messages) > 0}">
-                    <tbody>
-                    <c:forEach items="${messages}" var="item">
-                        <tr>
-                            <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getName()}
-                            </a></td>
-                            <td>${item.getTitle()}
-                            </td>
-                            <td>
-                                <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
-                                        class="far fa-window-restore"></i></div>
-                            </td>
-                            <td>${item.getSender().getUsername()}
-                            </td>
-                            <td>${item.getReceiver().getUsername()}
-                            </td>
-                            <td>${item.getSendingDate()}
-                            </td>
-                            <td>${item.getReceivingDate()}
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </c:if>
-            </sec:authorize>
+                <tr>
+                    <td>Name</td>
+                    <td>${sentMessage.getName()}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>${sentMessage.getTitle()}</td>
+                </tr>
+                <tr>
+                    <td>Sender</td>
+                    <td>${sentMessage.getSender().getUsername()}</td>
+                </tr>
+                <tr>
+                    <td>Sending date</td>
+                    <td>${sentMessage.getSendingDate()}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Receiving date</td>
+                    <td>${sentMessage.getReceivingDate()}
+                    </td>
+                </tr>
 
-        </table>
+            </table>
 
     </div>
 
@@ -339,28 +337,25 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper-newmessage" class="modal">
+    <div id="modal-wrapper-deleteuser" class="modal">
 
-        <form:form class="modal-content animate" id="usrform" action="/new/message/${user.getUser_id()}" method="post"
-                   modelAttribute="message">
+        <form class="modal-content animate" action="/delete/user/${user.getUser_id()}" method="get">
 
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-newmessage').style.display='none'" class="close"
+                <span onclick="document.getElementById('modal-wrapper-deleteuser').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="/style/create-new-message.png" alt="Document" class="avatar">
-                <h1 style="text-align:center">Create new message</h1>
-
-                <br><br>
-                <input type="text" name="username" value="" placeholder="To..."/>
-                <br><br>
-                <form:input path="title" placeholder="Enter title" class="modal-text" type="text"/>
-                <br><br>
-                <textarea class="modal-text" rows="4" cols="50" name="content" form="usrform"
-                          placeholder="Enter your message..." style="resize:none" value=""></textarea><br>
-                <button type="submit">Send</button>
-                <br>
+                <img src="/style/delete-user.png" alt="Document" class="avatar">
+                <h1 style="text-align:center">Delete user</h1>
             </div>
-        </form:form>
+
+            <div class="container"><h3
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
+                delete ${user.getUsername()}
+            </h3>
+                <button type="submit">Complete</button>
+            </div>
+        </form>
+
     </div>
 
     <div id="modal-wrapper-deactivateuser" class="modal">
@@ -400,12 +395,10 @@
 
 </div>
 
-<script src="/jsscripts/popup.js"></script>
-
 <script>
     // If user clicks anywhere outside of the modal, Modal will close
 
-    var modal = document.getElementById('modal-wrapper-newmessage');
+    var modal = document.getElementById('modal-wrapper-deleteuser');
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";

@@ -89,11 +89,11 @@ public class Message {
         this.receivingDate = receivingDate;
     }
 
-    public boolean isRead() {
+    public boolean getIsRead() {
         return isRead;
     }
 
-    public void setRead(boolean read) {
+    public void setIsRead(boolean read) {
         isRead = read;
     }
 }
