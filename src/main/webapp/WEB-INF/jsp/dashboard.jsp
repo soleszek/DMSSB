@@ -63,6 +63,12 @@
             <div class="optionSO">
                 <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
+            <div class="notifications">
+                <a href="/dashboard" id="notifications">
+                    <i class="fas fa-bell fa-2x" title="Notifications"></i>
+                    <span class="num">4</span>
+                </a>
+            </div>
             <div style="clear: both"></div>
 
         </div>
