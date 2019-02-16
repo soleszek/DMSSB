@@ -31,11 +31,9 @@ public class MessageController {
         this.userService = userService;
     }
 
-    @GetMapping("/messages")
-    private ModelAndView messages(){
+    @GetMapping("/messages/unread")
+    private ModelAndView unreadMessages(){
         ModelAndView mov = new ModelAndView();
-
-        List<Message> messages = messageRepository.findAll();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -46,11 +44,78 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsFalse(user);
 
         mov.addObject("user", user);
         mov.addObject("message", new Message());
         mov.addObject("messages", messages);
-        mov.setViewName("/messages");
+        mov.setViewName("/messages-unread");
+        return mov;
+    }
+
+    @GetMapping("/messages/all")
+    private ModelAndView allMessages(){
+        ModelAndView mov = new ModelAndView();
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiver(user);
+
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-all");
+        return mov;
+    }
+
+    @GetMapping("/messages/sent")
+    private ModelAndView sentMessages(){
+        ModelAndView mov = new ModelAndView();
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllBySender(user);
+
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-sent");
+        return mov;
+    }
+
+    @GetMapping("/messages/deleted")
+    private ModelAndView deletedMessages(){
+        ModelAndView mov = new ModelAndView();
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllBySenderAndReceiverAndIsDeletedIsTrue(user, user);
+
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-deleted");
         return mov;
     }
 

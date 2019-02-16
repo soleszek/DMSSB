@@ -248,16 +248,10 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/documents">Documents</a></div>
-        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-            <div class="optionL"><a href="/routeslist">Routes</a></div>
-            <div class="optionL"><a href="/tasks">Tasks</a></div>
-        </sec:authorize>
-
-        <sec:authorize access="hasRole('ADMIN')">
-            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
-        </sec:authorize>
-
+        <div class="optionL"><a href="/messages/unread">Unread</a></div>
+        <div class="optionL"><a href="/messages/all">All</a></div>
+        <div class="optionL"><a href="/messages/sent">Sent</a></div>
+        <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -294,13 +288,11 @@
             <col width="60">
             <thead>
             <tr>
-                <th>Name</th>
+                <th><input type="checkbox" disabled></th>
                 <th>Subject</th>
                 <th><i class="far fa-window-restore"></i></th>
                 <th>Sender</th>
-                <th>Receiver</th>
-                <th>Sending date</th>
-                <th>Receiving date</th>
+                <th>Date</th>
             </tr>
             </thead>
 
@@ -309,19 +301,14 @@
                     <tbody>
                     <c:forEach items="${messages}" var="item">
                         <tr>
-                            <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getName()}
-                            </a></td>
-                            <td>${item.getTitle()}
+                            <td><input type="checkbox" name=${item.getMessage_id()}></td>
+                            <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
                             </td>
                             <td>
                                 <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                         class="far fa-window-restore"></i></div>
                             </td>
                             <td>${item.getSender().getUsername()}
-                            </td>
-                            <td>${item.getReceiver().getUsername()}
-                            </td>
-                            <td>${item.getSendingDate()}
                             </td>
                             <td>${item.getReceivingDate()}
                             </td>

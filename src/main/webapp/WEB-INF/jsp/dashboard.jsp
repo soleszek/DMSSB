@@ -150,7 +150,7 @@
             <div class="square">
                 <div class="tile5">
 
-                        <a href="/messages" class="tilelink">
+                        <a href="/messages/unread" class="tilelink">
                             <div class="icon">
                                 <br><br>
                                 <i class="far fa-envelope fa-10x" title="Messages"></i>
