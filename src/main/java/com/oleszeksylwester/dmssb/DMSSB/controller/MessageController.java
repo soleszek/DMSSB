@@ -123,20 +123,20 @@ public class MessageController {
     private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("userId") Long userId){
         ModelAndView mov = new ModelAndView();
 
-        Message sentMessage = messageService.SaveOrUpdate(message, userId, username);
+        Message oneMessage = messageService.SaveOrUpdate(message, userId, username, content);
 
-        mov.addObject("sentMessage", sentMessage);
+        mov.addObject("oneMessage", oneMessage);
         mov.setViewName("message");
         return mov;
     }
 
-    @GetMapping("/message/{messageId}")
-    private ModelAndView message(@RequestParam("messageId") Long messageId){
+    @GetMapping("/message/{message_id}")
+    private ModelAndView message(@PathVariable("message_id") Long message_id){
         ModelAndView mov = new ModelAndView();
 
-        Message sentMessage = messageService.findById(messageId);
+        Message oneMessage = messageRepository.getOne(message_id);
 
-        mov.addObject("sentMessage", sentMessage);
+        mov.addObject("oneMessage", oneMessage);
         mov.setViewName("message");
         return mov;
     }

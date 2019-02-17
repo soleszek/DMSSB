@@ -289,7 +289,7 @@
             <thead>
             <tr>
                 <th><input type="checkbox" disabled></th>
-                <th>Subject</th>
+                <th>Title</th>
                 <th><i class="far fa-window-restore"></i></th>
                 <th>Sender</th>
                 <th>Date</th>

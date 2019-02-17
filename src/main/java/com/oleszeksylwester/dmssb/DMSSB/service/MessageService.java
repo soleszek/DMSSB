@@ -32,8 +32,9 @@ public class MessageService {
     }
 
     @Transactional
-    public Message SaveOrUpdate(Message message, Long userId, String username){
+    public Message SaveOrUpdate(Message message, Long userId, String username, String content){
 
+        message.setContent(content);
         User sender = userService.findById(userId);
         message.setSender(sender);
 

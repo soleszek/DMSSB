@@ -246,16 +246,10 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/documents">Documents</a></div>
-        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-            <div class="optionL"><a href="/routeslist">Routes</a></div>
-            <div class="optionL"><a href="/tasks">Tasks</a></div>
-        </sec:authorize>
-
-        <sec:authorize access="hasRole('ADMIN')">
-            <div class="optionL"><a href="/adminpanel">Admin Panel</a></div>
-        </sec:authorize>
-
+        <div class="optionL"><a href="/messages/unread">Unread</a></div>
+        <div class="optionL"><a href="/messages/all">All</a></div>
+        <div class="optionL"><a href="/messages/sent">Sent</a></div>
+        <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -307,25 +301,31 @@
 
                 <tr>
                     <td>Name</td>
-                    <td>${sentMessage.getName()}
+                    <td>${oneMessage.getName()}
                     </td>
                 </tr>
                 <tr>
                     <td>Title</td>
-                    <td>${sentMessage.getTitle()}</td>
+                    <td>${oneMessage.getTitle()}</td>
+                </tr>
+                <tr>
+                    <td>Content</td>
+                    <td><textarea class="noedit-text" rows="4" cols="50" name="content"
+                                  style="resize:none" disabled>${oneMessage.getContent()}</textarea>
+                    </td>
                 </tr>
                 <tr>
                     <td>Sender</td>
-                    <td>${sentMessage.getSender().getUsername()}</td>
+                    <td>${oneMessage.getSender().getUsername()}</td>
                 </tr>
                 <tr>
                     <td>Sending date</td>
-                    <td>${sentMessage.getSendingDate()}
+                    <td>${oneMessage.getSendingDate()}
                     </td>
                 </tr>
                 <tr>
                     <td>Receiving date</td>
-                    <td>${sentMessage.getReceivingDate()}
+                    <td>${oneMessage.getReceivingDate()}
                     </td>
                 </tr>
 
