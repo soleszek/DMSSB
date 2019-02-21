@@ -15,7 +15,7 @@ public class DataConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         /*ds.setUrl("jdbc:mysql://localhost:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");*/
-        ds.setUrl("jdbc:mysql://dmssb:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        ds.setUrl("jdbc:mysql://dmssb:3306?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         /*mysql://dmssb:3306/*/
         ds.setUsername("root");
         ds.setPassword("Rzeszów1983@");
