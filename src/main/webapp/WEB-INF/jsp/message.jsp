@@ -246,8 +246,8 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/messages/unread">Unread</a></div>
-        <div class="optionL"><a href="/messages/all">All</a></div>
+        <div class="optionL"><a href="/messages/unread">Unread (${newMessagesCount})</a></div>
+        <div class="optionL"><a href="/messages/received">Received</a></div>
         <div class="optionL"><a href="/messages/sent">Sent</a></div>
         <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
         <div style="clear: both"></div>
@@ -258,37 +258,34 @@
         <div id="navbar">
             <ul>
                 <li>
-                    <sec:authorize access="hasRole('ADMIN')">
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
                         <a href="#">
                             <div class="icon">
-                                <i class="fas fa-minus-square fa-2x"></i>
-                                <i class="fas fa-minus-square fa-2x" title="Delete user"
-                                   onclick="document.getElementById('modal-wrapper-deleteuser').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
-                        <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-minus-square fa-2x" title="You don't have privileges"></i>
+                                <i class="far fa-comments fa-2x"></i>
+                                <i class="far fa-comments fa-2x" title="Create new message"
+                                   onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
                             </div>
                         </a>
                     </sec:authorize>
                 </li>
                 <li>
-                    <sec:authorize access="hasRole('ADMIN')">
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
                         <a href="#">
                             <div class="icon">
-                                <i class="fas fa-power-off fa-2x"></i>
-                                <i class="fas fa-power-off fa-2x" title="Deactivate user"
-                                   onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
+                                <i class="fas fa-trash-alt fa-2x"></i>
+                                <i class="fas fa-trash-alt fa-2x" title="Move to trash"
+                                   onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='block'"></i>
                             </div>
                         </a>
                     </sec:authorize>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','VIEWER')">
+                </li>
+                <li>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
                         <a href="#">
-                            <div class="icon-disabled">
-                                <i class="fas fa-power-off fa-2x" title="You don't have privileges"></i>
+                            <div class="icon">
+                                <i class="fas fa-user-plus fa-2x"></i>
+                                <i class="fas fa-user-plus fa-2x" title="Change your role"
+                                   onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
                             </div>
                         </a>
                     </sec:authorize>
@@ -358,6 +355,25 @@
 
     </div>
 
+    <div id="modal-wrapper-movemessagetotrash" class="modal">
+
+        <form class="modal-content animate" action="/trash/message/${oneMessage.getMessage_id()}" method="get">
+
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='none'" class="close"
+                      title="Close PopUp">&times;</span>
+                <img src="/style/trash.png" alt="Trash" class="avatar">
+                <h1 style="text-align:center">Move message to trash</h1>
+            </div>
+
+            <div class="container"><h3
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">Are you sure you want to move this message to the trash?
+            </h3>
+                <button type="submit">Confirm</button>
+            </div>
+        </form>
+    </div>
+
     <div id="modal-wrapper-deactivateuser" class="modal">
 
         <form class="modal-content animate" action="/status/user/${user.getUser_id()}" method="get">
@@ -398,7 +414,7 @@
 <script>
     // If user clicks anywhere outside of the modal, Modal will close
 
-    var modal = document.getElementById('modal-wrapper-deleteuser');
+    var modal = document.getElementById('modal-wrapper-movemessagetotrash');
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";

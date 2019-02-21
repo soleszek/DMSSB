@@ -248,10 +248,10 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/messages/unread">Unread</a></div>
-        <div class="optionL"><a href="/messages/all">All</a></div>
+        <div class="optionL"><a href="/messages/unread">Unread (${newMessagesCount})</a></div>
+        <div class="optionL"><a href="/messages/received">Received</a></div>
         <div class="optionL"><a href="/messages/sent">Sent</a></div>
-        <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
+        <div class="optionL"><a href="/messages/deleted">Trash</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -263,20 +263,8 @@
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
                         <a href="#">
                             <div class="icon">
-                                <i class="far fa-comments fa-2x"></i>
-                                <i class="far fa-comments fa-2x" title="Create new message"
-                                   onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                </li>
-                <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-user-plus fa-2x"></i>
-                                <i class="fas fa-user-plus fa-2x" title="Change your role"
-                                   onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
+                                <i class="fas fa-minus-square fa-2x"></i>
+                                <i class="fas fa-minus-square fa-2x" title="Empty trash"></i>
                             </div>
                         </a>
                     </sec:authorize>

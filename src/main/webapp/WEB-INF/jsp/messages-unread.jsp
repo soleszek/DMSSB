@@ -248,10 +248,10 @@
     <div style="clear:both"></div>
 
     <div id="sidebar">
-        <div class="optionL"><a href="/messages/unread">Unread</a></div>
-        <div class="optionL"><a href="/messages/all">All</a></div>
+        <div class="optionL"><a href="/messages/unread">Unread (${messages.size()})</a></div>
+        <div class="optionL"><a href="/messages/received">Received</a></div>
         <div class="optionL"><a href="/messages/sent">Sent</a></div>
-        <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
+        <div class="optionL"><a href="/messages/deleted">Trash</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -266,6 +266,16 @@
                                 <i class="far fa-comments fa-2x"></i>
                                 <i class="far fa-comments fa-2x" title="Create new message"
                                    onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
+                            </div>
+                        </a>
+                    </sec:authorize>
+                </li>
+                <li>
+                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                        <a href="#">
+                            <div class="icon">
+                                <i class="fas fa-trash-alt fa-2x"></i>
+                                <i class="fas fa-trash-alt fa-2x" title="Move to trash"></i>
                             </div>
                         </a>
                     </sec:authorize>
@@ -302,7 +312,7 @@
                     <c:forEach items="${messages}" var="item">
                         <tr>
                             <td><input type="checkbox" name=${item.getMessage_id()}></td>
-                            <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                            <td><a href="/messages-unread/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
                             </td>
                             <td>
                                 <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i

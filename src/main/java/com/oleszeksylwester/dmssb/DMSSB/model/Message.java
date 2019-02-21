@@ -21,11 +21,12 @@ public class Message {
     private LocalDate receivingDate;
     private boolean isRead;
     private boolean isDeleted;
+    private boolean isChecked;
 
     public Message() {
     }
 
-    public Message(String name, String title, String content, User sender, User receiver, LocalDate sendingDate, LocalDate receivingDate, boolean isRead, boolean isDeleted) {
+    public Message(String name, String title, String content, User sender, User receiver, LocalDate sendingDate, LocalDate receivingDate, boolean isRead, boolean isDeleted, boolean isChecked) {
         this.name = name;
         this.title = title;
         this.content = content;
@@ -35,6 +36,7 @@ public class Message {
         this.receivingDate = receivingDate;
         this.isRead = isRead;
         this.isDeleted = isDeleted;
+        this.isChecked = isChecked;
     }
 
     public Long getMessage_id() {
@@ -111,5 +113,13 @@ public class Message {
 
     public void setIsDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

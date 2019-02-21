@@ -3,14 +3,11 @@ package com.oleszeksylwester.dmssb.DMSSB.service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
-
 import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
-import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.model.Message;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
-import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,11 +51,24 @@ public class MessageService {
         return message;
     }
 
-    /*@Transactional
-    public Message openMessage(Long messageId){
-        *//*Message message = messageRepository.findById(messageId);*//*
 
-    }*/
+    @Transactional
+    public Message markAsRead(Long message_id){
+        Message message = messageRepository.getOne(message_id);
+        message.setIsRead(true);
+        Message readMessage = messageRepository.save(message);
+
+        return readMessage;
+    }
+
+    @Transactional
+    public Message moveToTrash(Long message_id){
+        Message message = messageRepository.getOne(message_id);
+        message.setIsDeleted(true);
+        Message deletedMessage = messageRepository.save(message);
+
+        return deletedMessage;
+    }
 
     @Transactional(readOnly = true)
     public Message findById(Long id){
@@ -71,7 +81,8 @@ public class MessageService {
     }
 
     @Transactional
-    public void deleteById(Long id){
-
+    public void deleteById(Long message_id){
+        Message message = messageRepository.getOne(message_id);
+        messageRepository.delete(message);
     }
 }

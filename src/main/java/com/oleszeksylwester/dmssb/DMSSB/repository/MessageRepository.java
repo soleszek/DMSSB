@@ -9,8 +9,9 @@ import java.util.List;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
-    List<Message> findAllByReceiverAndIsReadIsFalse(User receiver);
-    List<Message> findAllByReceiver(User receiver);
-    List<Message> findAllBySender(User sender);
+    List<Message> findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(User receiver);
+    List<Message> findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(User receiver);
+    List<Message> findAllBySenderAndIsDeletedIsFalse(User sender);
     List<Message> findAllBySenderAndReceiverAndIsDeletedIsTrue(User sender, User receiver);
+    Long countMessagesByReceiverAndIsReadIsFalse(User receiver);
 }
