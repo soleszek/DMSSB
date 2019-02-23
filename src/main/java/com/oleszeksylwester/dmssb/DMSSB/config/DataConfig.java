@@ -15,10 +15,10 @@ public class DataConfig {
         DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         /*ds.setUrl("jdbc:mysql://localhost:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");*/
-        ds.setUrl("jdbc:mysql://mysql.dmssb.svc.cluster.local:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        ds.setUrl("jdbc:mysql://http://mysql-dmssb.7e14.starter-us-west-2.openshiftapps.com:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         ds.setUsername("user");
         /*ds.setUsername("root");*/
-        ds.setPassword("root");
+        ds.setPassword("password");
         /*ds.setPassword("Rzeszów1983@");*/
         return ds;
     }
