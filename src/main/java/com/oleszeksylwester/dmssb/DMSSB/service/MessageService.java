@@ -17,9 +17,9 @@ public class MessageService {
 
     private static final Logger LOGGER = Logger.getLogger(MessageService.class.getName());
 
-    UserService userService;
-    MessageRepository messageRepository;
-    NameFactory nameFactory;
+    private UserService userService;
+    private MessageRepository messageRepository;
+    private NameFactory nameFactory;
 
     @Autowired
     public MessageService(UserService userService, MessageRepository messageRepository, NameFactory nameFactory) {
@@ -68,6 +68,16 @@ public class MessageService {
         Message deletedMessage = messageRepository.save(message);
 
         return deletedMessage;
+    }
+
+    @Transactional
+    public void moveManyToTrash(List<Long> messagesToTrash){
+        messagesToTrash
+                .forEach(m -> {
+                    Message message = messageRepository.getOne(m);
+                    message.setIsDeleted(true);
+                    messageRepository.save(message);
+                });
     }
 
     @Transactional(readOnly = true)

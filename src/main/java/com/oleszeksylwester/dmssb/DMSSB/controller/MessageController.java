@@ -210,10 +210,10 @@ public class MessageController {
     }
 
     @PostMapping("/trash/messages")
-    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") long[] messagesChecked){
+    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
         ModelAndView mov = new ModelAndView();
 
-        long[] messagesToTrash = messagesChecked;
+        messageService.moveManyToTrash(messagesChecked);
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
