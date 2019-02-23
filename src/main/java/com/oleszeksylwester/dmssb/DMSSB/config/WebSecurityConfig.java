@@ -36,8 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/dashboard").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR','VIEWER')")
-                .and()
+                /*.antMatchers("/dashboard").access("hasAnyRole('ADMIN','MANAGER','CONTRIBUTOR','VIEWER')")*/
+                .antMatchers("/dashboard").permitAll();
+                /*.and()
                 .formLogin()
                 .loginPage("/login")
                 .usernameParameter("username")
@@ -50,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/dashboard")
                 .and()
                 .csrf()
-                .disable();
+                .disable();*/
     }
 
     @Bean(name = "passwordEncoder")
