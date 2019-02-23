@@ -272,8 +272,7 @@
                 </li>
                 <li>
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#"
-                           <%--onclick="document.forms['myForm'].submit()"--%>onclick="moveToTrash()">
+                        <a href="#" onclick="document.forms['myForm'].submit(); return false">
                             <div class="icon">
                                 <i class="fas fa-trash-alt fa-2x"></i>
                                 <i class="fas fa-trash-alt fa-2x" title="Move to trash"></i>
@@ -293,26 +292,27 @@
                 </li>
             </ul>
         </div>
-        <form id="myForm" action="/trash/messages" method="post">
-            <table id="example" class="display" style="width:100%">
-                <col width="60">
-                <thead>
-                <tr>
-                    <th><input type="checkbox" id='selectAllChecks'></th>
-                    <th>Title</th>
-                    <th><i class="far fa-window-restore"></i></th>
-                    <th>Sender</th>
-                    <th>Date</th>
-                </tr>
-                </thead>
 
-                <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
-                    <c:if test="${fn:length(messages) > 0}">
+        <table id="example" class="display" style="width:100%">
+            <col width="60">
+            <thead>
+            <tr>
+                <th><input type="checkbox" id='selectAllChecks'></th>
+                <th>Title</th>
+                <th><i class="far fa-window-restore"></i></th>
+                <th>Sender</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+
+            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
+                <c:if test="${fn:length(messages.messagesList) > 0}">
+                    <form id="myForm" action="/trash/messages" method="post" <%--modelAttribute="messages"--%>>
                         <tbody>
-                        <c:forEach items="${messages}" var="item" varStatus="status">
+                        <c:forEach items="${messages.messagesList}" var="item" varStatus="status">
                             <tr>
-                                <td><input type="checkbox"
-                                           name="messagesChecked" value="${item.getMessage_id()}"/></td>
+                                <%--<td><form:checkbox name="messages" path="messagesList[${status.index}].checked"/></td>--%>
+                                <td><input type="checkbox" name="messagesChecked" <%--name="messagesList[${status.index}].isChecked"--%> value="${item.getMessage_id()}"/>${item.getMessage_id()}</td>
                                 <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
                                 </td>
                                 <td>
@@ -326,11 +326,11 @@
                             </tr>
                         </c:forEach>
                         </tbody>
+                    </form>
+                </c:if>
+            </sec:authorize>
 
-                    </c:if>
-                </sec:authorize>
-            </table>
-        </form>
+        </table>
 
     </div>
 
@@ -385,7 +385,6 @@
             </c:when>
             <c:otherwise>
             <h1 style="text-align:center">Activate user</h1>
-        </form>
     </div>
 
     <div class="container"><h3
@@ -396,11 +395,11 @@
     </div>
     </c:otherwise>
     </c:choose>
+    </form>
 
 </div>
 
 <script src="/jsscripts/popup.js"></script>
-<script src="/jsscripts/moveToTrash.js"></script>
 
 <script>
     // If user clicks anywhere outside of the modal, Modal will close
@@ -446,18 +445,20 @@
 </script>
 
 <script>
-    $("#selectAllChecks").change(function () {
+    $("#selectAllChecks").change(function(){
         $('input[name=messagesChecked]').prop("checked", $(this).prop("checked"))
     })
-    $('input[name=messagesChecked]').change(function () {
-        if ($(this).prop("checked") == false) {
+    $('input[name=messagesChecked]').change(function(){
+        if($(this).prop("checked")==false){
             $("#selectAllChecks").prop("checked", false)
         }
-        if ($('input[name=messagesChecked]:checked').length == $('input[name=messagesChecked]').length) {
+        if($('input[name=messagesChecked]:checked').length == $('input[name=messagesChecked]').length){
             $("#selectAllChecks").prop("checked", true)
         }
     })
 </script>
+
+</div>
 
 </body>
 </html>

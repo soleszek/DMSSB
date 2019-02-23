@@ -1,7 +1,6 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.Messages;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.MessageService;
@@ -67,10 +66,8 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        //List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
 
-        Messages messages = new Messages();
-        messages.setMessagesList(messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user));
         Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
@@ -118,9 +115,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        //List<Message> messages = messageRepository.findAllBySenderAndReceiverAndIsDeletedIsTrue(user, user);
-        Messages messages = new Messages();
-        messages.setMessagesList(messageRepository.findAllBySenderAndReceiverAndIsDeletedIsTrue(user, user));
+        List<Message> messages = messageRepository.findAllBySenderAndReceiverAndIsDeletedIsTrue(user, user);
         Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
@@ -215,10 +210,10 @@ public class MessageController {
     }
 
     @PostMapping("/trash/messages")
-    private ModelAndView deleteMessages(@ModelAttribute("messages") Messages messagesClass){
+    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") long[] messagesChecked){
         ModelAndView mov = new ModelAndView();
 
-        List<Message> messagesToTrash = messagesClass.getMessagesList();
+        long[] messagesToTrash = messagesChecked;
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -229,9 +224,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        /*List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);*/
-        Messages messages = new Messages();
-        messages.setMessagesList(messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user));
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
 
         Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
 
