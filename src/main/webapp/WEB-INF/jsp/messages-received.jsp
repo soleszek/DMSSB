@@ -75,7 +75,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow: visible;
             background-color: rgba(0, 0, 0, 0.4);
         }
 
@@ -86,6 +86,7 @@
             border: 1px solid #888;
             width: 40%;
             padding-bottom: 30px;
+            overflow-y: visible;
         }
 
         /* The Close Button (x) */
@@ -462,19 +463,19 @@
 </script>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
         $('#w-input-search').autocomplete({
             serviceUrl: '${pageContext.request.contextPath}/receiver',
             paramName: "tag",
             delimiter: ",",
-            transformResult: function(response) {
+            transformResult: function (response) {
 
                 return {
 
-                    suggestions: $.map($.parseJSON(response), function(item) {
+                    suggestions: $.map($.parseJSON(response), function (item) {
 
-                        return { value: item.username, data: item.userId };
+                        return {value: item.username, data: item.userId};
                     })
 
                 };
