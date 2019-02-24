@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ public class TaskService {
     public void createTask(Route route){
 
         String routeState = route.getState();
+        ArrayList<User> observers = new ArrayList<>();
 
         if(routeState.equals(RouteStates.NOT_STARTED.getState())){
 
