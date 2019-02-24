@@ -272,41 +272,43 @@
             </ul>
         </div>
 
-        <table id="example" class="display" style="width:100%">
-            <col width="60">
-            <thead>
-            <tr>
-                <th><input type="checkbox" disabled></th>
-                <th>Title</th>
-                <th><i class="far fa-window-restore"></i></th>
-                <th>Sender</th>
-                <th>Date</th>
-            </tr>
-            </thead>
+        <form id="myForm" action="" method="post">
+            <table id="example" class="display" style="width:100%">
+                <col width="60">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" id='selectAllChecks'></th>
+                    <th>Title</th>
+                    <th><i class="far fa-window-restore"></i></th>
+                    <th>Sender</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
 
-            <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
-                <c:if test="${fn:length(messages) > 0}">
-                    <tbody>
-                    <c:forEach items="${messages}" var="item">
-                        <tr>
-                            <td><input type="checkbox" name=${item.getMessage_id()}></td>
-                            <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
-                            </td>
-                            <td>
-                                <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
-                                        class="far fa-window-restore"></i></div>
-                            </td>
-                            <td>${item.getSender().getUsername()}
-                            </td>
-                            <td>${item.getReceivingDate()}
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </c:if>
-            </sec:authorize>
-
-        </table>
+                <sec:authorize access="hasAnyRole('CONTRIBUTOR','MANAGER','ADMIN')">
+                    <c:if test="${fn:length(messages) > 0}">
+                        <tbody>
+                        <c:forEach items="${messages}" var="item">
+                            <tr>
+                                <td><input type="checkbox"
+                                           name="messagesChecked" value="${item.getMessage_id()}"></td>
+                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                                </td>
+                                <td>
+                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
+                                            class="far fa-window-restore"></i></div>
+                                </td>
+                                <td>${item.getSender().getUsername()}
+                                </td>
+                                <td>${item.getReceivingDate()}
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </c:if>
+                </sec:authorize>
+            </table>
+        </form>
 
     </div>
 
@@ -420,7 +422,19 @@
     });
 </script>
 
-</div>
+<script>
+    $("#selectAllChecks").change(function () {
+        $('input[name=messagesChecked]').prop("checked", $(this).prop("checked"))
+    })
+    $('input[name=messagesChecked]').change(function () {
+        if ($(this).prop("checked") == false) {
+            $("#selectAllChecks").prop("checked", false)
+        }
+        if ($('input[name=messagesChecked]:checked').length == $('input[name=messagesChecked]').length) {
+            $("#selectAllChecks").prop("checked", true)
+        }
+    })
+</script>
 
 </body>
 </html>

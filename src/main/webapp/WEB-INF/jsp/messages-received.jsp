@@ -16,6 +16,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/jsscripts/jquery.autocomplete.min.js"></script>
 
     <style>
         * {
@@ -74,7 +75,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
+            overflow: visible;
             background-color: rgba(0, 0, 0, 0.4);
         }
 
@@ -85,6 +86,7 @@
             border: 1px solid #888;
             width: 40%;
             padding-bottom: 30px;
+            overflow-y: visible;
         }
 
         /* The Close Button (x) */
@@ -272,8 +274,7 @@
                 </li>
                 <li>
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#"
-                           <%--onclick="document.forms['myForm'].submit()"--%>onclick="moveToTrash()">
+                        <a href="#" onclick="moveToTrash()">
                             <div class="icon">
                                 <i class="fas fa-trash-alt fa-2x"></i>
                                 <i class="fas fa-trash-alt fa-2x" title="Move to trash"></i>
@@ -293,6 +294,7 @@
                 </li>
             </ul>
         </div>
+
         <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
@@ -350,7 +352,7 @@
                 <h1 style="text-align:center">Create new message</h1>
 
                 <br><br>
-                <input type="text" name="username" value="" placeholder="To..."/>
+                <input type="text" name="username" value="" placeholder="To..." id="w-input-search"/>
                 <br><br>
                 <form:input path="title" placeholder="Enter title" class="modal-text" type="text"/>
                 <br><br>
@@ -457,6 +459,27 @@
             $("#selectAllChecks").prop("checked", true)
         }
     })
+</script>
+
+<script>
+    $(document).ready(function () {
+
+        $('#w-input-search').autocomplete({
+            serviceUrl: '${pageContext.request.contextPath}/receiver',
+            paramName: "tag",
+            delimiter: ",",
+            transformResult: function (response) {
+
+                return {
+
+                    suggestions: $.map($.parseJSON(response), function (item) {
+
+                        return {value: item.username, data: item.userId};
+                    })
+                };
+            }
+        });
+    });
 </script>
 
 </body>

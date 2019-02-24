@@ -5,6 +5,7 @@ import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.MessageService;
 import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
+import com.oleszeksylwester.dmssb.DMSSB.utils.UserJsonSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -234,5 +235,12 @@ public class MessageController {
         mov.addObject("messages", messages);
         mov.setViewName("/messages-received");
         return mov;
+    }
+
+    @GetMapping("/receiver")
+    public @ResponseBody
+    List<UserJsonSearch> getUser(@RequestParam String tag){
+
+        return userService.searchDynamically(tag);
     }
 }
