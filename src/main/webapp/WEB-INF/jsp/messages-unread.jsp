@@ -16,6 +16,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/jsscripts/jquery.autocomplete.min.js"></script>
 
     <style>
         * {
@@ -351,7 +352,7 @@
                 <h1 style="text-align:center">Create new message</h1>
 
                 <br><br>
-                <input type="text" name="username" value="" placeholder="To..."/>
+                <input type="text" name="username" value="" placeholder="To..." id="w-input-search"/>
                 <br><br>
                 <form:input path="title" placeholder="Enter title" class="modal-text" type="text"/>
                 <br><br>
@@ -460,7 +461,26 @@
     })
 </script>
 
-</div>
+<script>
+    $(document).ready(function () {
+
+        $('#w-input-search').autocomplete({
+            serviceUrl: '${pageContext.request.contextPath}/receiver',
+            paramName: "tag",
+            delimiter: ",",
+            transformResult: function (response) {
+
+                return {
+
+                    suggestions: $.map($.parseJSON(response), function (item) {
+
+                        return {value: item.username, data: item.userId};
+                    })
+                };
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

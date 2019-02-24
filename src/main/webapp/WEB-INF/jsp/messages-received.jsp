@@ -476,14 +476,9 @@
 
                         return {value: item.username, data: item.userId};
                     })
-
                 };
-
             }
-
         });
-
-
     });
 </script>
 

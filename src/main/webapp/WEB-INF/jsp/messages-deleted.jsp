@@ -436,7 +436,5 @@
     })
 </script>
 
-</div>
-
 </body>
 </html>
