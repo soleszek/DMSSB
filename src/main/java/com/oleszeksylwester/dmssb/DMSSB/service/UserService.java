@@ -6,6 +6,7 @@ import com.oleszeksylwester.dmssb.DMSSB.model.Role;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RoleRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
+import com.oleszeksylwester.dmssb.DMSSB.utils.UserJsonSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -125,5 +126,20 @@ public class UserService {
     @Transactional
     public void delete(User user){
         userRepository.delete(user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserJsonSearch> searchDynamically(String tag){
+
+        List<User> usersWithAllFields = userRepository.findAllByUsernameContains(tag);
+
+        List<UserJsonSearch> usersForJson = new ArrayList<>();
+
+                usersWithAllFields.forEach(u -> {
+                    UserJsonSearch userSearch = new UserJsonSearch(u.getUser_id(), u.getUsername());
+                    usersForJson.add(userSearch);
+                });
+
+        return usersForJson;
     }
 }
