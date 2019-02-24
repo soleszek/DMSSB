@@ -254,7 +254,6 @@
         <div class="optionL"><a href="/messages/received">Received</a></div>
         <div class="optionL"><a href="/messages/sent">Sent</a></div>
         <div class="optionL"><a href="/messages/deleted">Trash</a></div>
-        <div class="optionL"><a href="/example">Trash</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -275,8 +274,7 @@
                 </li>
                 <li>
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#"
-                           <%--onclick="document.forms['myForm'].submit()"--%>onclick="moveToTrash()">
+                        <a href="#" onclick="moveToTrash()">
                             <div class="icon">
                                 <i class="fas fa-trash-alt fa-2x"></i>
                                 <i class="fas fa-trash-alt fa-2x" title="Move to trash"></i>
@@ -296,6 +294,7 @@
                 </li>
             </ul>
         </div>
+
         <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
