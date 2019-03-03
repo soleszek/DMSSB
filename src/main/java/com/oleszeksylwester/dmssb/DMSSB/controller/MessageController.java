@@ -116,7 +116,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderAndReceiverAndIsDeletedIsTrue(user, user);
+        List<Message> messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
         Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
@@ -183,8 +183,35 @@ public class MessageController {
         return mov;
     }
 
-    @GetMapping("/trash/message/{message_id}")
-    private ModelAndView deleteMessage(@PathVariable("message_id") Long message_id){
+ /*   @GetMapping("/trash/message-unread/{message_id}")
+    private ModelAndView deleteUnreadMessage(@PathVariable("message_id") Long message_id){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.moveToTrash(message_id);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+
+        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-unread");
+        return mov;
+    }*/
+
+ /*   @GetMapping("/trash/message-received/{message_id}")
+    private ModelAndView deleteReceivedMessage(@PathVariable("message_id") Long message_id){
         ModelAndView mov = new ModelAndView();
 
         messageService.moveToTrash(message_id);
@@ -208,10 +235,88 @@ public class MessageController {
         mov.addObject("messages", messages);
         mov.setViewName("/messages-received");
         return mov;
+    }*/
+
+ /*   @GetMapping("/trash/message-sent/{message_id}")
+    private ModelAndView deleteSentMessage(@PathVariable("message_id") Long message_id){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.moveToTrash(message_id);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+
+        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-sent");
+        return mov;
+    }*/
+
+ /*   @GetMapping("/trash/message-deleted/{message_id}")
+    private ModelAndView deleteMessage(@PathVariable("message_id") Long message_id){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.deleteById(message_id);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+
+        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-deleted");
+        return mov;
+    }*/
+
+    @PostMapping("/trash/messages-unread")
+    private ModelAndView deleteUnreadReceivedMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.moveManyToTrash(messagesChecked);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-unread");
+        return mov;
     }
 
-    @PostMapping("/trash/messages")
-    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
+    @PostMapping("/trash/messages-received")
+    private ModelAndView deleteReceivedMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
         ModelAndView mov = new ModelAndView();
 
         messageService.moveManyToTrash(messagesChecked);
@@ -236,6 +341,59 @@ public class MessageController {
         mov.setViewName("/messages-received");
         return mov;
     }
+
+    @PostMapping("/trash/messages-sent")
+    private ModelAndView deleteSentMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.moveManyToTrash(messagesChecked);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllBySenderAndIsDeletedIsFalse(user);
+        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-sent");
+        return mov;
+    }
+
+    @PostMapping("/trash/messages-deleted")
+    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
+        ModelAndView mov = new ModelAndView();
+
+        messageService.deleteManyMessages(messagesChecked);
+
+        String username;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails)principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
+
+        User user = userService.findByUsername(username);
+        List<Message> messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.addObject("user", user);
+        mov.addObject("message", new Message());
+        mov.addObject("messages", messages);
+        mov.setViewName("/messages-deleted");
+        return mov;
+    }
+
 
     @GetMapping("/receiver")
     public @ResponseBody

@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-/*@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 public class UserControllerTest {
 
     private MockMvc mockMvc;
@@ -50,14 +50,14 @@ public class UserControllerTest {
         user.setRoles(roles);
     }
 
-    @Test
+    /*@Test
     @WithMockUser(username = "test", password = "test", roles = "ADMIN")
     public void showDashboardTest() throws Exception{
         this.mockMvc.perform(get("/dashboard"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("dashboard"))
                 .andDo(print());
-    }
+    }*/
 
     @Test
     @WithMockUser(username = "test", password = "test", roles = "ADMIN")
@@ -87,7 +87,7 @@ public class UserControllerTest {
                 .andDo(print());
     }
 
-    *//*@Test
+    /*@Test
     @WithMockUser(username = "test", password = "test", roles = "ADMIN")
     public void registerUserTest() throws Exception{
         assertThat(this.userService).isNotNull();
@@ -97,8 +97,8 @@ public class UserControllerTest {
                 .andExpect(view().name("registration"))
                 .andExpect(MockMvcResultMatchers.view().name("registration"))
                 .andDo(print());
-    }*//*
+    }*/
 
 
 
-}*/
+}

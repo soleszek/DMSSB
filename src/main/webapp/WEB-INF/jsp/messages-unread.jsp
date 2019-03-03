@@ -295,15 +295,15 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages" method="post">
+        <form id="myForm" action="/trash/messages-unread" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
                 <tr>
                     <th><input type="checkbox" id='selectAllChecks'></th>
-                    <th>Title</th>
-                    <th><i class="far fa-window-restore"></i></th>
                     <th>Sender</th>
+                    <th><i class="far fa-window-restore"></i></th>
+                    <th>Title</th>
                     <th>Date</th>
                 </tr>
                 </thead>
@@ -315,15 +315,15 @@
                             <tr>
                                 <td><input type="checkbox"
                                            name="messagesChecked" value="${item.getMessage_id()}"></td>
-                                <td><a href="/messages-unread/${item.getMessage_id()}"
-                                       id="doc-link">${item.getTitle()}</a>
+                                <td>From: ${item.getSender().getUsername()}
+                                </td>
                                 </td>
                                 <td>
                                     <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td>${item.getSender().getUsername()}
-                                </td>
+                                <td><a href="/messages-unread/${item.getMessage_id()}"
+                                       id="doc-link">${item.getTitle()}</a>
                                 <td>${item.getReceivingDate()}
                                 </td>
                             </tr>

@@ -18,13 +18,13 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataJpaTest
 public class UserRepositoryTest {
 
-    *//*@Autowired
+    @Autowired
     private TestEntityManager entityManager;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Test
+    *//*@Test
     public void whenFindByName_thenReturnUser(){
         //given
         Role role = new Role();
