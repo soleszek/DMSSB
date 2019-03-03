@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="message",
+        discriminatorType = DiscriminatorType.STRING)
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
