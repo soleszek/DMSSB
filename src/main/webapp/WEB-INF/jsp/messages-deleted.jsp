@@ -261,7 +261,7 @@
             <ul>
                 <li>
                     <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
+                        <a href="#" onclick="deletePermanently()">
                             <div class="icon">
                                 <i class="fas fa-minus-square fa-2x"></i>
                                 <i class="fas fa-minus-square fa-2x" title="Empty trash"></i>
@@ -272,15 +272,15 @@
             </ul>
         </div>
 
-        <form id="myForm" action="" method="post">
+        <form id="myForm" action="/trash/messages-deleted" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
                 <tr>
                     <th><input type="checkbox" id='selectAllChecks'></th>
-                    <th>Title</th>
+                    <th>From</th>
                     <th><i class="far fa-window-restore"></i></th>
-                    <th>Sender</th>
+                    <th>Title</th>
                     <th>Date</th>
                 </tr>
                 </thead>
@@ -292,13 +292,13 @@
                             <tr>
                                 <td><input type="checkbox"
                                            name="messagesChecked" value="${item.getMessage_id()}"></td>
-                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                                <td>${item.getReceiver().getUsername()}
                                 </td>
                                 <td>
                                     <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td>${item.getSender().getUsername()}
+                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
                                 </td>
                                 <td>${item.getReceivingDate()}
                                 </td>
@@ -378,6 +378,7 @@
 </div>
 
 <script src="/jsscripts/popup.js"></script>
+<script src="/jsscripts/deletePermanently.js"></script>
 
 <script>
     // If user clicks anywhere outside of the modal, Modal will close

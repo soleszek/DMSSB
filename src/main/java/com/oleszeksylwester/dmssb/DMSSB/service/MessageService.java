@@ -80,6 +80,15 @@ public class MessageService {
                 });
     }
 
+    @Transactional
+    public void deleteManyMessages(List<Long> messagesToDelete){
+        messagesToDelete
+                .forEach(m -> {
+                    Message message = messageRepository.getOne(m);
+                    messageRepository.delete(message);
+                });
+    }
+
     @Transactional(readOnly = true)
     public Message findById(Long id){
         return null;

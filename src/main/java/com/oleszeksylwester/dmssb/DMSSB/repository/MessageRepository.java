@@ -12,6 +12,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(User receiver);
     List<Message> findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(User receiver);
     List<Message> findAllBySenderAndIsDeletedIsFalse(User sender);
-    List<Message> findAllBySenderAndReceiverAndIsDeletedIsTrue(User sender, User receiver);
+    List<Message> findAllBySenderOrReceiverAndIsDeletedIsTrue(User sender, User receiver);
     Long countMessagesByReceiverAndIsReadIsFalse(User receiver);
 }
