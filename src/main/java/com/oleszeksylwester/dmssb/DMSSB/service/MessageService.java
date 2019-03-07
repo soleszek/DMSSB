@@ -28,7 +28,7 @@ public class MessageService {
         this.nameFactory = nameFactory;
     }
 
-    @Transactional
+    /*@Transactional
     public Message SaveOrUpdate(Message message, Long userId, String username, String content){
 
         message.setContent(content);
@@ -49,7 +49,7 @@ public class MessageService {
         messageRepository.save(message);
 
         return message;
-    }
+    }*/
 
 
     @Transactional

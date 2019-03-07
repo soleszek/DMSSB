@@ -272,7 +272,7 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages-deleted" method="post">
+        <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
@@ -308,8 +308,8 @@
                     </c:if>
                 </sec:authorize>
             </table>
+            <input type="text" name="view" value="/messages-deleted" hidden>
         </form>
-
     </div>
 
     <div id="footer">

@@ -295,7 +295,7 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages-sent" method="post">
+        <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
@@ -321,7 +321,7 @@
                                     <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                                <td><a href="/message/sent/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
                                 </td>
                                 <td>${item.getSendingDate()}
                                 </td>
@@ -331,8 +331,8 @@
                     </c:if>
                 </sec:authorize>
             </table>
+            <input type="text" name="view" value="/messages-sent" hidden>
         </form>
-
     </div>
 
     <div id="footer">
