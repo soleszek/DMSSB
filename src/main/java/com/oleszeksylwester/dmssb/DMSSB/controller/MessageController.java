@@ -1,9 +1,6 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
-import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.MessageReceived;
-import com.oleszeksylwester.dmssb.DMSSB.model.MessageSent;
-import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.model.*;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageSentRepository;
@@ -130,13 +127,18 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<MessageReceived> messagesReceived = messageReceivedRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<MessageSent> messagesSent = messageSentRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        MessageLists messageLists = new MessageLists();
+        messageLists.setMessagesReceived(messagesReceived);
+        messageLists.setMessagesSent(messagesSent);
+
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
         mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
+        mov.addObject("messageLists", messageLists);
         mov.setViewName("/messages-deleted");
         return mov;
     }
