@@ -8,8 +8,6 @@ import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.Entity;
 import java.time.LocalDate;
 import java.util.logging.Logger;
 
@@ -33,7 +31,7 @@ public class MessageSentService {
         Message messageSent = new MessageSent();
         messageSent.setTitle(message.getTitle());
         messageSent.setContent(content);
-        User sender = userService.findByUsername(username);
+        User sender = userService.findById(userId);
         messageSent.setSender(sender);
 
         User receiver = userService.findByUsername(username);

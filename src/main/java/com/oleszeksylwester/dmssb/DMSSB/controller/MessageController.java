@@ -57,7 +57,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<MessageReceived> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+        List<Message> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("user", user);
         mov.addObject("message", new Message());
@@ -79,7 +79,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<MessageReceived> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+        List<Message> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
@@ -103,7 +103,7 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<MessageSent> messages = messageSentRepository.findAllBySenderAndIsDeletedIsFalse(user);
+        List<Message> messages = messageSentRepository.findAllBySenderAndIsDeletedIsFalse(user);
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
@@ -127,18 +127,19 @@ public class MessageController {
         }
 
         User user = userService.findByUsername(username);
-        List<MessageReceived> messagesReceived = messageReceivedRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
-        List<MessageSent> messagesSent = messageSentRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
-        MessageLists messageLists = new MessageLists();
-        messageLists.setMessagesReceived(messagesReceived);
-        messageLists.setMessagesSent(messagesSent);
+
+        List<Message> messagesReceived = messageReceivedRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<Message> messagesSent = messageSentRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<Message> messages = new ArrayList<>();
+        messages.addAll(messagesReceived);
+        messages.addAll(messagesSent);
 
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
         mov.addObject("message", new Message());
-        mov.addObject("messageLists", messageLists);
+        mov.addObject("messages", messages);
         mov.setViewName("/messages-deleted");
         return mov;
     }
@@ -147,7 +148,7 @@ public class MessageController {
     private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("userId") Long userId) {
         ModelAndView mov = new ModelAndView();
 
-        Message oneMessageReceived = messageReceivedService.SaveOrUpdate(message, userId, username, content);
+        messageReceivedService.SaveOrUpdate(message, userId, username, content);
         Message oneMessageSent = messageSentService.SaveOrUpdate(message, userId, username, content);
 
         String currentUser;

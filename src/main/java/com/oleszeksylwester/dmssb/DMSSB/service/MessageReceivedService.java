@@ -32,7 +32,7 @@ public class MessageReceivedService {
         Message messageReceived = new MessageReceived();
         messageReceived.setTitle(message.getTitle());
         messageReceived.setContent(content);
-        User sender = userService.findByUsername(username);
+        User sender = userService.findById(userId);
         messageReceived.setSender(sender);
 
         User receiver = userService.findByUsername(username);

@@ -319,7 +319,7 @@
                                 </td>
                                 </td>
                                 <td>
-                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
+                                    <div id="popup" onclick="openPopup('/message/received/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
                                 <td><a href="/message/received/${item.getMessage_id()}"
