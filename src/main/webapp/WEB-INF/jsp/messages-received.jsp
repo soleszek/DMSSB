@@ -406,6 +406,10 @@
 <script src="/jsscripts/moveToTrash.js"></script>
 
 <script>
+    $("a[href='/messages/received']").addClass("current");
+</script>
+
+<script>
     // If user clicks anywhere outside of the modal, Modal will close
 
     var modal = document.getElementById('modal-wrapper-newmessage');

@@ -154,6 +154,10 @@
 
 <script src="/jsscripts/deletePermanently.js"></script>
 
+<script>
+    $("a[href='/messages/deleted']").addClass("current");
+</script>
+
 <script type="text/javascript">
     $(document).ready(function () {
 

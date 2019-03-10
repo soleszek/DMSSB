@@ -164,6 +164,10 @@
 
     <script src="/jsscripts/popup.js"></script>
 
+    <script>
+        $("a[href='/routeslist']").addClass("current");
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 

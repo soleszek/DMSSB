@@ -429,6 +429,10 @@
     <script src="/jsscripts/popup.js"></script>
     <script src="/jsscripts/dropdownmenu.js"></script>
 
+    <script>
+        $("a[href='/document/${document.getId()}/routes']").addClass("current");
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 
