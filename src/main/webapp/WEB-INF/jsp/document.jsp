@@ -10,6 +10,7 @@
     <script src="jsscripts/editform.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
 
     <style>
         * {
@@ -380,15 +381,6 @@
             </sec:authorize>
 
         </form>
-        <%--<br>
-        <br>
-        <form action="/new/comment" id="usrform" method="post">
-            Name: <input type="text" name="usrname" value="<sec:authentication property="principal.username"/>" readonly>
-            <input type="submit" value="Dodaj">
-        </form>
-        <br>
-        <textarea rows="4" cols="50" name="comment" form="usrform" placeholder="Enter your comment..."></textarea>--%>
-
 
     </div>
 
@@ -418,6 +410,10 @@
         </form>
 
     </div>
+
+    <script>
+        $("a[href='/document/${document.getId()}']").addClass("current");
+    </script>
 
     <script>
         // If user clicks anywhere outside of the modal, Modal will close

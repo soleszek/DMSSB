@@ -146,6 +146,10 @@
 
         <script src="/jsscripts/popup.js"></script>
 
+        <script>
+            $("a[href='/tasks']").addClass("current");
+        </script>
+
         <script type="text/javascript">
             $(document).ready(function () {
 

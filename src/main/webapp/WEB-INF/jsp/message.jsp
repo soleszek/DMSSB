@@ -257,76 +257,91 @@
 
         <div id="navbar">
             <ul>
-                <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="far fa-comments fa-2x"></i>
-                                <i class="far fa-comments fa-2x" title="Create new message"
-                                   onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                </li>
-                <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-trash-alt fa-2x"></i>
-                                <i class="fas fa-trash-alt fa-2x" title="Move to trash"
-                                   onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                </li>
-                <li>
-                    <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
-                        <a href="#">
-                            <div class="icon">
-                                <i class="fas fa-user-plus fa-2x"></i>
-                                <i class="fas fa-user-plus fa-2x" title="Change your role"
-                                   onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
-                            </div>
-                        </a>
-                    </sec:authorize>
-                </li>
+                <c:if test="${not oneMessage.getIsDeleted()}">
+                    <li>
+                        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="far fa-comments fa-2x"></i>
+                                    <i class="far fa-comments fa-2x" title="Create new message"
+                                       onclick="document.getElementById('modal-wrapper-newmessage').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </li>
+                    <li>
+                        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-trash-alt fa-2x"></i>
+                                    <i class="fas fa-trash-alt fa-2x" title="Move to trash"
+                                       onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </li>
+                    <li>
+                        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-user-plus fa-2x"></i>
+                                    <i class="fas fa-user-plus fa-2x" title="Change your role"
+                                       onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </li>
+                </c:if>
+                <c:if test="${oneMessage.getIsDeleted()}">
+                    <li>
+                        <sec:authorize access="hasAnyRole('MANAGER','CONTRIBUTOR','ADMIN')">
+                            <a href="#">
+                                <div class="icon">
+                                    <i class="fas fa-minus-square fa-2x"></i>
+                                    <i class="fas fa-minus-square fa-2x" title="Delete"
+                                       onclick="document.getElementById('modal-wrapper-deletemessage').style.display='block'"></i>
+                                </div>
+                            </a>
+                        </sec:authorize>
+                    </li>
+                </c:if>
             </ul>
         </div>
 
-            <table id="example" class="display" style="width:100%">
-                <col width="220">
+        <table id="example" class="display" style="width:100%">
+            <col width="220">
 
-                <tr>
-                    <td>Name</td>
-                    <td>${oneMessage.getName()}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Title</td>
-                    <td>${oneMessage.getTitle()}</td>
-                </tr>
-                <tr>
-                    <td>Content</td>
-                    <td><textarea class="noedit-text" rows="4" cols="50" name="content"
-                                  style="resize:none" disabled>${oneMessage.getContent()}</textarea>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Sender</td>
-                    <td>${oneMessage.getSender().getUsername()}</td>
-                </tr>
-                <tr>
-                    <td>Sending date</td>
-                    <td>${oneMessage.getSendingDate()}
-                    </td>
-                </tr>
-                <tr>
-                    <td>Receiving date</td>
-                    <td>${oneMessage.getReceivingDate()}
-                    </td>
-                </tr>
+            <tr>
+                <td>Name</td>
+                <td>${oneMessage.getName()}
+                </td>
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td>${oneMessage.getTitle()}</td>
+            </tr>
+            <tr>
+                <td>Content</td>
+                <td><textarea class="noedit-text" rows="4" cols="50" name="content"
+                              style="resize:none" disabled>${oneMessage.getContent()}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>Sender</td>
+                <td>${oneMessage.getSender().getUsername()}</td>
+            </tr>
+            <tr>
+                <td>Sending date</td>
+                <td>${oneMessage.getSendingDate()}
+                </td>
+            </tr>
+            <tr>
+                <td>Receiving date</td>
+                <td>${oneMessage.getReceivingDate()}
+                </td>
+            </tr>
 
-            </table>
+        </table>
 
     </div>
 
@@ -360,14 +375,37 @@
         <form class="modal-content animate" action="/trash/message/${oneMessage.getMessage_id()}" method="get">
 
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='none'" class="close"
+                <span onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='none'"
+                      class="close"
                       title="Close PopUp">&times;</span>
                 <img src="/style/trash.png" alt="Trash" class="avatar">
                 <h1 style="text-align:center">Move message to trash</h1>
             </div>
 
             <div class="container"><h3
-                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">Are you sure you want to move this message to the trash?
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">Are you sure you
+                want to move this message to the trash?
+            </h3>
+                <button type="submit">Confirm</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="modal-wrapper-deletemessage" class="modal">
+
+        <form class="modal-content animate" action="/trash/message/${oneMessage.getMessage_id()}" method="get">
+
+            <div class="imgcontainer">
+                <span onclick="document.getElementById('modal-wrapper-deletemessage').style.display='none'"
+                      class="close"
+                      title="Close PopUp">&times;</span>
+                <img src="/style/delete.png" alt="Trash" class="avatar">
+                <h1 style="text-align:center">Delete message permanently</h1>
+            </div>
+
+            <div class="container"><h3
+                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">Are you sure you
+                want to delete this message permanently?
             </h3>
                 <button type="submit">Confirm</button>
             </div>
@@ -415,6 +453,17 @@
     // If user clicks anywhere outside of the modal, Modal will close
 
     var modal = document.getElementById('modal-wrapper-movemessagetotrash');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    // If user clicks anywhere outside of the modal, Modal will close
+
+    var modal = document.getElementById('modal-wrapper-deletemessage');
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";

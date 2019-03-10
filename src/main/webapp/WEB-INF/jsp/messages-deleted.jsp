@@ -17,172 +17,6 @@
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: Helvetica, Arial, sans-serif;
-        }
-
-        /* Set a style for all buttons */
-        button {
-            background-color: #46b7ce;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 26px;
-            border: none;
-            cursor: pointer;
-            width: 90%;
-            font-size: 20px;
-        }
-
-        button:hover {
-            opacity: 0.8;
-        }
-
-        .file {
-            background-color: #46b7ce;
-            color: white;
-            padding: 14px 20px;
-            margin-left: 24px;
-            margin-right: 50px;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-            width: 85%;
-        }
-
-        /* Center the image and position the close button */
-        .imgcontainer {
-            text-align: center;
-            margin: 24px 0 12px 0;
-            position: relative;
-        }
-
-        .avatar {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-        }
-
-        /* The Modal (background) */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 12;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        /* Modal Content Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 4% auto 15% auto;
-            border: 1px solid #888;
-            width: 40%;
-            padding-bottom: 30px;
-        }
-
-        /* The Close Button (x) */
-        .close {
-            position: absolute;
-            right: 25px;
-            top: 0;
-            color: #000;
-            font-size: 35px;
-            font-weight: bold;
-        }
-
-        .close:hover, .close:focus {
-            color: red;
-            cursor: pointer;
-        }
-
-        /* Add Zoom Animation */
-        .animate {
-            animation: zoom 0.6s
-        }
-
-        @keyframes zoom {
-            from {
-                transform: scale(0)
-            }
-            to {
-                transform: scale(1)
-            }
-        }
-
-        .custom-select {
-            position: relative;
-        }
-
-        .custom-select select {
-            display: none; /*hide original SELECT element:*/
-        }
-
-        .select-selected {
-            background-color: #46b7ce;
-        }
-
-        /*style the arrow inside the select element:*/
-        .select-selected:after {
-            position: absolute;
-            content: "";
-            top: 14px;
-            right: 10px;
-            width: 0;
-            height: 0;
-            border: 6px solid transparent;
-            border-color: #fff transparent transparent transparent;
-        }
-
-        /*point the arrow upwards when the select box is open (active):*/
-        .select-selected.select-arrow-active:after {
-            border-color: transparent transparent #fff transparent;
-            top: 7px;
-        }
-
-        /*style the items (options), including the selected item:*/
-        .select-items div, .select-selected {
-            color: #ffffff;
-            padding: 14px 20px;
-            margin-left: 24px;
-            margin-right: 50px;
-            border: 1px solid transparent;
-            border-color: transparent transparent #46b7ce transparent;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        /*style items (options):*/
-        .select-items {
-            padding: 14px 20px;
-            margin-left: 24px;
-            margin-right: 50px;
-            position: absolute;
-            background-color: #46b7ce;
-            top: 100%;
-            left: 0;
-            right: 0;
-            z-index: 99;
-        }
-
-        /*hide the items when the select box is closed:*/
-        .select-hide {
-            display: none;
-        }
-
-        .select-items div:hover, .same-as-selected {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-
-
-    </style>
-
 </head>
 <body>
 
@@ -264,7 +98,7 @@
                         <a href="#" onclick="deletePermanently()">
                             <div class="icon">
                                 <i class="fas fa-minus-square fa-2x"></i>
-                                <i class="fas fa-minus-square fa-2x" title="Empty trash"></i>
+                                <i class="fas fa-minus-square fa-2x" title="Delete"></i>
                             </div>
                         </a>
                     </sec:authorize>
@@ -272,7 +106,7 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages-deleted" method="post">
+        <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
@@ -308,87 +142,20 @@
                     </c:if>
                 </sec:authorize>
             </table>
+            <input type="text" name="view" value="/messages-deleted" hidden>
         </form>
-
     </div>
 
     <div id="footer">
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper-newmessage" class="modal">
-
-        <form:form class="modal-content animate" id="usrform" action="/new/message/${user.getUser_id()}" method="post"
-                   modelAttribute="message">
-
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-newmessage').style.display='none'" class="close"
-                      title="Close PopUp">&times;</span>
-                <img src="/style/create-new-message.png" alt="Document" class="avatar">
-                <h1 style="text-align:center">Create new message</h1>
-
-                <br><br>
-                <input type="text" name="username" value="" placeholder="To..."/>
-                <br><br>
-                <form:input path="title" placeholder="Enter title" class="modal-text" type="text"/>
-                <br><br>
-                <textarea class="modal-text" rows="4" cols="50" name="content" form="usrform"
-                          placeholder="Enter your message..." style="resize:none" value=""></textarea><br>
-                <button type="submit">Send</button>
-                <br>
-            </div>
-        </form:form>
-    </div>
-
-    <div id="modal-wrapper-deactivateuser" class="modal">
-
-        <form class="modal-content animate" action="/status/user/${user.getUser_id()}" method="get">
-
-            <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-deactivateuser').style.display='none'"
-                      class="close"
-                      title="Close PopUp">&times;</span>
-                <img src="/style/deactivate-user.png" alt="Document" class="avatar">
-                <c:choose>
-                <c:when test="${user.getEnabled() eq '1'}">
-                <h1 style="text-align:center">Deactivate user</h1>
-            </div>
-
-            <div class="container"><h3
-                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                deactivate ${user.getUsername()}
-            </h3>
-                <button type="submit">Complete</button>
-            </div>
-            </c:when>
-            <c:otherwise>
-            <h1 style="text-align:center">Activate user</h1>
-    </div>
-
-    <div class="container"><h3
-            style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-        activate ${user.getUsername()}
-    </h3>
-        <button type="submit">Complete</button>
-    </div>
-    </c:otherwise>
-    </c:choose>
-    </form>
-
 </div>
 
-<script src="/jsscripts/popup.js"></script>
 <script src="/jsscripts/deletePermanently.js"></script>
 
 <script>
-    // If user clicks anywhere outside of the modal, Modal will close
-
-    var modal = document.getElementById('modal-wrapper-newmessage');
-    window.onclick = function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
+    $("a[href='/messages/deleted']").addClass("current");
 </script>
 
 <script type="text/javascript">

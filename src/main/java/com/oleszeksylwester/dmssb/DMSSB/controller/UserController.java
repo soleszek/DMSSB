@@ -3,6 +3,7 @@ package com.oleszeksylwester.dmssb.DMSSB.controller;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.TaskService;
@@ -38,7 +39,7 @@ public class UserController {
     TaskService taskService;
 
     @Autowired
-    MessageRepository messageRepository;
+    MessageReceivedRepository messageReceivedRepository;
 
     @Autowired
     @Qualifier("userValidator")
@@ -65,7 +66,7 @@ public class UserController {
 
         Long documentCount = documentRepository.count();
         Long routeCount = routeRepository.count();
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         List<Task> tasks = taskService.findUserTasks(username);
         int userTasksCount = tasks.size();

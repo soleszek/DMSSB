@@ -239,6 +239,12 @@ ul li a .icon-disabled .fas:last-child{
     text-decoration: none;
 }
 
+.optionL a.current{
+    color: #e91e63;
+    font-weight: bold;
+    font-size: 16px;
+}
+
 .optionL:hover {
     background-color: #f36742;
     color: white;

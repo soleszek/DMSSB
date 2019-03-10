@@ -1,8 +1,11 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
-import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.model.*;
+import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.MessageSentRepository;
+import com.oleszeksylwester.dmssb.DMSSB.service.MessageReceivedService;
+import com.oleszeksylwester.dmssb.DMSSB.service.MessageSentService;
 import com.oleszeksylwester.dmssb.DMSSB.service.MessageService;
 import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserJsonSearch;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -22,30 +26,38 @@ public class MessageController {
     private static final Logger LOGGER = Logger.getLogger(MessageController.class.getName());
 
     private MessageRepository messageRepository;
+    private MessageReceivedRepository messageReceivedRepository;
+    private MessageSentRepository messageSentRepository;
+    private MessageReceivedService messageReceivedService;
+    private MessageSentService messageSentService;
     private MessageService messageService;
     private UserService userService;
 
     @Autowired
-    public MessageController(MessageRepository messageRepository, MessageService messageService, UserService userService) {
+    public MessageController(MessageRepository messageRepository, MessageReceivedRepository messageReceivedRepository, MessageSentRepository messageSentRepository, MessageService messageService, MessageReceivedService messageReceivedService, MessageSentService messageSentService, UserService userService) {
         this.messageRepository = messageRepository;
+        this.messageReceivedRepository = messageReceivedRepository;
+        this.messageSentRepository = messageSentRepository;
+        this.messageReceivedService = messageReceivedService;
+        this.messageSentService = messageSentService;
         this.messageService = messageService;
         this.userService = userService;
     }
 
     @GetMapping("/messages/unread")
-    private ModelAndView unreadMessages(){
+    private ModelAndView unreadMessages() {
         ModelAndView mov = new ModelAndView();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+        List<Message> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("user", user);
         mov.addObject("message", new Message());
@@ -55,21 +67,20 @@ public class MessageController {
     }
 
     @GetMapping("/messages/received")
-    private ModelAndView allMessages(){
+    private ModelAndView allMessages() {
         ModelAndView mov = new ModelAndView();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
-
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+        List<Message> messages = messageReceivedRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
@@ -80,20 +91,20 @@ public class MessageController {
     }
 
     @GetMapping("/messages/sent")
-    private ModelAndView sentMessages(){
+    private ModelAndView sentMessages() {
         ModelAndView mov = new ModelAndView();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderAndIsDeletedIsFalse(user);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+        List<Message> messages = messageSentRepository.findAllBySenderAndIsDeletedIsFalse(user);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
@@ -104,20 +115,26 @@ public class MessageController {
     }
 
     @GetMapping("/messages/deleted")
-    private ModelAndView deletedMessages(){
+    private ModelAndView deletedMessages() {
         ModelAndView mov = new ModelAndView();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+
+        List<Message> messagesReceived = messageReceivedRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<Message> messagesSent = messageSentRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+        List<Message> messages = new ArrayList<>();
+        messages.addAll(messagesReceived);
+        messages.addAll(messagesSent);
+
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
@@ -128,20 +145,21 @@ public class MessageController {
     }
 
     @PostMapping("new/message/{userId}")
-    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("userId") Long userId){
+    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("userId") Long userId) {
         ModelAndView mov = new ModelAndView();
 
-        Message oneMessage = messageService.SaveOrUpdate(message, userId, username, content);
+        messageReceivedService.SaveOrUpdate(message, userId, username, content);
+        Message oneMessage = messageSentService.SaveOrUpdate(message, userId, username, content);
 
         String currentUser;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            currentUser = ((UserDetails)principal).getUsername();
+            currentUser = ((UserDetails) principal).getUsername();
         } else {
             currentUser = principal.toString();
         }
         User user = userService.findByUsername(currentUser);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("oneMessage", oneMessage);
@@ -149,25 +167,14 @@ public class MessageController {
         return mov;
     }
 
-    @GetMapping("/messages-unread/{message_id}")
-    private ModelAndView messagesUnread(@PathVariable("message_id") Long message_id){
-        ModelAndView mov = new ModelAndView();
-
-        Message oneMessage = messageService.markAsRead(message_id);
-
-        mov.addObject("oneMessage", oneMessage);
-        mov.setViewName("message");
-        return mov;
-    }
-
     @GetMapping("/message/{message_id}")
-    private ModelAndView message(@PathVariable("message_id") Long message_id){
+    private ModelAndView messageReceived(@PathVariable("message_id") Long message_id) {
         ModelAndView mov = new ModelAndView();
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
@@ -175,156 +182,78 @@ public class MessageController {
         User user = userService.findByUsername(username);
 
         Message oneMessage = messageRepository.getOne(message_id);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
 
-        mov.addObject("newMessagesCount", newMessagesCount);
+        if(!oneMessage.getIsRead()){
+            messageService.markAsRead(message_id);
+        }
+
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+
         mov.addObject("oneMessage", oneMessage);
+        mov.addObject("newMessagesCount", newMessagesCount);
         mov.setViewName("message");
         return mov;
     }
 
- /*   @GetMapping("/trash/message-unread/{message_id}")
-    private ModelAndView deleteUnreadMessage(@PathVariable("message_id") Long message_id){
+    @PostMapping("/trash/messages")
+    private ModelAndView deleteUnreadReceivedMessages(@RequestParam(required = false, name = "messagesChecked") List<Long> messagesChecked, @RequestParam String view) {
         ModelAndView mov = new ModelAndView();
-
-        messageService.moveToTrash(message_id);
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
 
         User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+        List<Message> messages = new ArrayList<>();
 
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
+        switch (view) {
+            case "/messages-unread":
+                messageService.moveManyToTrash(messagesChecked);
+                messages = messageRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+                break;
+            case "/messages-received":
+                messageService.moveManyToTrash(messagesChecked);
+                messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
+                break;
+            case "/messages-sent":
+                messageService.moveManyToTrash(messagesChecked);
+                messages = messageRepository.findAllBySenderAndIsDeletedIsFalse(user);
+                break;
+            case "/messages-deleted":
+                messageService.deleteManyMessages(messagesChecked);
+                messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
+                break;
+        }
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
         mov.addObject("message", new Message());
         mov.addObject("messages", messages);
-        mov.setViewName("/messages-unread");
-        return mov;
-    }*/
-
- /*   @GetMapping("/trash/message-received/{message_id}")
-    private ModelAndView deleteReceivedMessage(@PathVariable("message_id") Long message_id){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.moveToTrash(message_id);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
-
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
-
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-received");
-        return mov;
-    }*/
-
- /*   @GetMapping("/trash/message-sent/{message_id}")
-    private ModelAndView deleteSentMessage(@PathVariable("message_id") Long message_id){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.moveToTrash(message_id);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
-
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
-
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-sent");
-        return mov;
-    }*/
-
- /*   @GetMapping("/trash/message-deleted/{message_id}")
-    private ModelAndView deleteMessage(@PathVariable("message_id") Long message_id){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.deleteById(message_id);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsTrueAndIsDeletedIsFalse(user);
-
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
-
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-deleted");
-        return mov;
-    }*/
-
-    @PostMapping("/trash/messages-unread")
-    private ModelAndView deleteUnreadReceivedMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.moveManyToTrash(messagesChecked);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
-
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-unread");
+        mov.setViewName(view);
         return mov;
     }
 
-    @PostMapping("/trash/messages-received")
-    private ModelAndView deleteReceivedMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
+    @GetMapping("/trash/message/{message_id}")
+    private ModelAndView deleteMessage(@PathVariable("message_id") Long message_id) {
         ModelAndView mov = new ModelAndView();
 
-        messageService.moveManyToTrash(messagesChecked);
+        Message unwantedMessage = messageRepository.getOne(message_id);
+
+        if(unwantedMessage.getIsDeleted()){
+            messageRepository.delete(unwantedMessage);
+        } else {
+            messageService.moveToTrash(message_id);
+        }
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
+            username = ((UserDetails) principal).getUsername();
         } else {
             username = principal.toString();
         }
@@ -341,63 +270,10 @@ public class MessageController {
         mov.setViewName("/messages-received");
         return mov;
     }
-
-    @PostMapping("/trash/messages-sent")
-    private ModelAndView deleteSentMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.moveManyToTrash(messagesChecked);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderAndIsDeletedIsFalse(user);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
-
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-sent");
-        return mov;
-    }
-
-    @PostMapping("/trash/messages-deleted")
-    private ModelAndView deleteMessages(@RequestParam(required=false, name="messagesChecked") List<Long> messagesChecked){
-        ModelAndView mov = new ModelAndView();
-
-        messageService.deleteManyMessages(messagesChecked);
-
-        String username;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails)principal).getUsername();
-        } else {
-            username = principal.toString();
-        }
-
-        User user = userService.findByUsername(username);
-        List<Message> messages = messageRepository.findAllBySenderOrReceiverAndIsDeletedIsTrue(user, user);
-        Long newMessagesCount = messageRepository.countMessagesByReceiverAndIsReadIsFalse(user);
-
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("user", user);
-        mov.addObject("message", new Message());
-        mov.addObject("messages", messages);
-        mov.setViewName("/messages-deleted");
-        return mov;
-    }
-
 
     @GetMapping("/receiver")
     public @ResponseBody
-    List<UserJsonSearch> getUser(@RequestParam String tag){
+    List<UserJsonSearch> getUser(@RequestParam String tag) {
 
         return userService.searchDynamically(tag);
     }

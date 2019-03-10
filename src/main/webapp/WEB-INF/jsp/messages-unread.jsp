@@ -295,7 +295,7 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages-unread" method="post">
+        <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
@@ -322,7 +322,7 @@
                                     <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td><a href="/messages-unread/${item.getMessage_id()}"
+                                <td><a href="/message/${item.getMessage_id()}"
                                        id="doc-link">${item.getTitle()}</a>
                                 <td>${item.getReceivingDate()}
                                 </td>
@@ -332,6 +332,7 @@
                     </c:if>
                 </sec:authorize>
             </table>
+            <input type="text" name="view" value="/messages-unread" hidden>
         </form>
 
     </div>
@@ -403,6 +404,10 @@
 
 <script src="/jsscripts/popup.js"></script>
 <script src="/jsscripts/moveToTrash.js"></script>
+
+<script>
+    $("a[href='/messages/unread']").addClass("current");
+</script>
 
 <script>
     // If user clicks anywhere outside of the modal, Modal will close

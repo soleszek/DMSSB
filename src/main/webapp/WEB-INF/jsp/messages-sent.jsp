@@ -295,7 +295,7 @@
             </ul>
         </div>
 
-        <form id="myForm" action="/trash/messages-sent" method="post">
+        <form id="myForm" action="/trash/messages" method="post">
             <table id="example" class="display" style="width:100%">
                 <col width="60">
                 <thead>
@@ -331,8 +331,8 @@
                     </c:if>
                 </sec:authorize>
             </table>
+            <input type="text" name="view" value="/messages-sent" hidden>
         </form>
-
     </div>
 
     <div id="footer">
@@ -402,6 +402,10 @@
 
 <script src="/jsscripts/popup.js"></script>
 <script src="/jsscripts/moveToTrash.js"></script>
+
+<script>
+    $("a[href='/messages/sent']").addClass("current");
+</script>
 
 <script>
     // If user clicks anywhere outside of the modal, Modal will close

@@ -419,6 +419,10 @@
     </div>
 
     <script>
+        $("a[href='/documents']").addClass("current");
+    </script>
+
+    <script>
         // If user clicks anywhere outside of the modal, Modal will close
 
         var modal = document.getElementById('modal-wrapper');

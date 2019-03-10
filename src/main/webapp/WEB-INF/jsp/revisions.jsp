@@ -181,6 +181,10 @@
 
     <script src="/jsscripts/popup.js"></script>
 
+    <script>
+        $("a[href='/document/${document.getId()}/revisions']").addClass("current");
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 

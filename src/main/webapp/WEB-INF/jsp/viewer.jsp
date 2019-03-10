@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/style/style.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
 
     <title>Document viewer</title>
 </head>
@@ -99,6 +100,10 @@
     </div>
 
 </div>
+
+<script>
+    $("a[href='/document/${document.getId()}/viewer']").addClass("current");
+</script>
 
 </body>
 </html>
