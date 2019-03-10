@@ -138,33 +138,8 @@ public class MessageController {
 
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("user", user);
-        mov.addObject("message", new Message());
         mov.addObject("messages", messages);
         mov.setViewName("/messages-deleted");
-        return mov;
-    }
-
-    @PostMapping("new/{originView}/{userId}")
-    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("originView") String originView,  @PathVariable("userId") Long userId) {
-        ModelAndView mov = new ModelAndView();
-
-        messageReceivedService.SaveOrUpdate(message, userId, username, content);
-        Message oneMessage = messageSentService.SaveOrUpdate(message, userId, username, content);
-
-        String currentUser;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails) {
-            currentUser = ((UserDetails) principal).getUsername();
-        } else {
-            currentUser = principal.toString();
-        }
-        User user = userService.findByUsername(currentUser);
-        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
-
-        mov.addObject("originView", originView);
-        mov.addObject("newMessagesCount", newMessagesCount);
-        mov.addObject("oneMessage", oneMessage);
-        mov.setViewName("message");
         return mov;
     }
 
@@ -192,8 +167,36 @@ public class MessageController {
 
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
+        mov.addObject("user", user);
         mov.addObject("originView", originView);
         mov.addObject("oneMessage", oneMessage);
+        mov.addObject("message", new Message());
+        mov.addObject("newMessagesCount", newMessagesCount);
+        mov.setViewName("message");
+        return mov;
+    }
+
+    @PostMapping("/new/{originView}/{userId}")
+    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("originView") String originView,  @PathVariable("userId") Long userId) {
+        ModelAndView mov = new ModelAndView();
+
+        messageReceivedService.SaveOrUpdate(message, userId, username, content);
+        Message oneMessage = messageSentService.SaveOrUpdate(message, userId, username, content);
+
+        String currentUser;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            currentUser = ((UserDetails) principal).getUsername();
+        } else {
+            currentUser = principal.toString();
+        }
+        User user = userService.findByUsername(currentUser);
+        Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
+
+        mov.addObject("user", user);
+        mov.addObject("originView", originView);
+        mov.addObject("oneMessage", oneMessage);
+        mov.addObject("message", new Message());
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.setViewName("message");
         return mov;

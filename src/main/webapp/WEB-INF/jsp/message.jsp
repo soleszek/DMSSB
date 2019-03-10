@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,6 +15,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="/jsscripts/jquery.autocomplete.min.js"></script>
 
     <style>
         * {
@@ -349,25 +351,28 @@
         Sylwester Oleszek 2018 &copy;
     </div>
 
-    <div id="modal-wrapper-deleteuser" class="modal">
+    <div id="modal-wrapper-newmessage" class="modal">
 
-        <form class="modal-content animate" action="/delete/user/${user.getUser_id()}" method="get">
+        <form:form class="modal-content animate" id="usrform" action="/new/${originView}/${user.getUser_id()}" method="post"
+                   modelAttribute="message">
 
             <div class="imgcontainer">
-                <span onclick="document.getElementById('modal-wrapper-deleteuser').style.display='none'" class="close"
+                <span onclick="document.getElementById('modal-wrapper-newmessage').style.display='none'" class="close"
                       title="Close PopUp">&times;</span>
-                <img src="/style/delete-user.png" alt="Document" class="avatar">
-                <h1 style="text-align:center">Delete user</h1>
-            </div>
+                <img src="/style/create-new-message.png" alt="Document" class="avatar">
+                <h1 style="text-align:center">Create new message</h1>
 
-            <div class="container"><h3
-                    style="text-align:left; margin-left: 24px; padding-top: 35px; padding-bottom: 15px">You are about to
-                delete ${user.getUsername()}
-            </h3>
-                <button type="submit">Complete</button>
+                <br><br>
+                <input type="text" name="username" value="" placeholder="To..." id="w-input-search"/>
+                <br><br>
+                <form:input path="title" placeholder="Enter title" class="modal-text" type="text"/>
+                <br><br>
+                <textarea class="modal-text" rows="4" cols="50" name="content" form="usrform"
+                          placeholder="Enter your message..." style="resize:none" value=""></textarea><br>
+                <button type="submit">Send</button>
+                <br>
             </div>
-        </form>
-
+        </form:form>
     </div>
 
     <div id="modal-wrapper-movemessagetotrash" class="modal">
@@ -445,9 +450,10 @@
     </div>
     </c:otherwise>
     </c:choose>
-    </form>
 
 </div>
+
+<script src="/jsscripts/popup.js"></script>
 
 <script>
     $("a[href='/messages/${originView}']").addClass("current");
@@ -468,6 +474,28 @@
     // If user clicks anywhere outside of the modal, Modal will close
 
     var modal = document.getElementById('modal-wrapper-deletemessage');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    // If user clicks anywhere outside of the modal, Modal will close
+
+    var modal = document.getElementById('modal-wrapper-newmessage');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<script>
+    // If user clicks anywhere outside of the modal, Modal will close
+
+    var modal = document.getElementById('modal-wrapper-deactivateuser');
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
@@ -507,7 +535,26 @@
     });
 </script>
 
-</div>
+<script>
+    $(document).ready(function () {
+
+        $('#w-input-search').autocomplete({
+            serviceUrl: '${pageContext.request.contextPath}/receiver',
+            paramName: "tag",
+            delimiter: ",",
+            transformResult: function (response) {
+
+                return {
+
+                    suggestions: $.map($.parseJSON(response), function (item) {
+
+                        return {value: item.username, data: item.userId};
+                    })
+                };
+            }
+        });
+    });
+</script>
 
 </body>
 </html>
