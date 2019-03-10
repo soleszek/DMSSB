@@ -129,10 +129,10 @@
                                 <td>${item.getReceiver().getUsername()}
                                 </td>
                                 <td>
-                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
+                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}/deleted')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                                <td><a href="/message/${item.getMessage_id()}/deleted" id="doc-link">${item.getTitle()}</a>
                                 </td>
                                 <td>${item.getReceivingDate()}
                                 </td>

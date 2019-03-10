@@ -318,10 +318,10 @@
                                 <td>To: ${item.getReceiver().getUsername()}
                                 </td>
                                 <td>
-                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
+                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}/sent')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td><a href="/message/${item.getMessage_id()}" id="doc-link">${item.getTitle()}</a>
+                                <td><a href="/message/${item.getMessage_id()}/sent" id="doc-link">${item.getTitle()}</a>
                                 </td>
                                 <td>${item.getSendingDate()}
                                 </td>
@@ -341,7 +341,7 @@
 
     <div id="modal-wrapper-newmessage" class="modal">
 
-        <form:form class="modal-content animate" id="usrform" action="/new/message/${user.getUser_id()}" method="post"
+        <form:form class="modal-content animate" id="usrform" action="/new/sent/${user.getUser_id()}" method="post"
                    modelAttribute="message">
 
             <div class="imgcontainer">

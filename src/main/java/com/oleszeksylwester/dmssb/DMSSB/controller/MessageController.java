@@ -144,8 +144,8 @@ public class MessageController {
         return mov;
     }
 
-    @PostMapping("new/message/{userId}")
-    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("userId") Long userId) {
+    @PostMapping("new/{originView}/{userId}")
+    private ModelAndView sendMessage(@ModelAttribute("message") Message message, @RequestParam("content") String content, @RequestParam("username") String username, @PathVariable("originView") String originView,  @PathVariable("userId") Long userId) {
         ModelAndView mov = new ModelAndView();
 
         messageReceivedService.SaveOrUpdate(message, userId, username, content);
@@ -161,15 +161,18 @@ public class MessageController {
         User user = userService.findByUsername(currentUser);
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
+        mov.addObject("originView", originView);
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.addObject("oneMessage", oneMessage);
         mov.setViewName("message");
         return mov;
     }
 
-    @GetMapping("/message/{message_id}")
-    private ModelAndView messageReceived(@PathVariable("message_id") Long message_id) {
+    @GetMapping("/message/{message_id}/{view-name}")
+    private ModelAndView messageReceived(@PathVariable("message_id") Long message_id, @PathVariable("view-name") String viewName) {
         ModelAndView mov = new ModelAndView();
+
+        String originView = viewName;
 
         String username;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -189,6 +192,7 @@ public class MessageController {
 
         Long newMessagesCount = messageReceivedRepository.countMessagesByReceiverAndIsReadIsFalseAndIsDeletedIsFalse(user);
 
+        mov.addObject("originView", originView);
         mov.addObject("oneMessage", oneMessage);
         mov.addObject("newMessagesCount", newMessagesCount);
         mov.setViewName("message");
@@ -238,8 +242,8 @@ public class MessageController {
         return mov;
     }
 
-    @GetMapping("/trash/message/{message_id}")
-    private ModelAndView deleteMessage(@PathVariable("message_id") Long message_id) {
+    @GetMapping("/trash/{originView}/{message_id}")
+    private ModelAndView deleteMessage(@PathVariable("originView") String originView, @PathVariable("message_id") Long message_id) {
         ModelAndView mov = new ModelAndView();
 
         Message unwantedMessage = messageRepository.getOne(message_id);
@@ -267,7 +271,7 @@ public class MessageController {
         mov.addObject("user", user);
         mov.addObject("message", new Message());
         mov.addObject("messages", messages);
-        mov.setViewName("/messages-received");
+        mov.setViewName("messages-" + originView);
         return mov;
     }
 

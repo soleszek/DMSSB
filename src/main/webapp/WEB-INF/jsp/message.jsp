@@ -249,7 +249,7 @@
         <div class="optionL"><a href="/messages/unread">Unread (${newMessagesCount})</a></div>
         <div class="optionL"><a href="/messages/received">Received</a></div>
         <div class="optionL"><a href="/messages/sent">Sent</a></div>
-        <div class="optionL"><a href="/messages/deleted">Deleted</a></div>
+        <div class="optionL"><a href="/messages/deleted">Trash</a></div>
         <div style="clear: both"></div>
     </div>
 
@@ -372,7 +372,7 @@
 
     <div id="modal-wrapper-movemessagetotrash" class="modal">
 
-        <form class="modal-content animate" action="/trash/message/${oneMessage.getMessage_id()}" method="get">
+        <form class="modal-content animate" action="/trash/${originView}/${oneMessage.getMessage_id()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-movemessagetotrash').style.display='none'"
@@ -393,7 +393,7 @@
 
     <div id="modal-wrapper-deletemessage" class="modal">
 
-        <form class="modal-content animate" action="/trash/message/${oneMessage.getMessage_id()}" method="get">
+        <form class="modal-content animate" action="/trash/${originView}/${oneMessage.getMessage_id()}" method="get">
 
             <div class="imgcontainer">
                 <span onclick="document.getElementById('modal-wrapper-deletemessage').style.display='none'"
@@ -448,6 +448,10 @@
     </form>
 
 </div>
+
+<script>
+    $("a[href='/messages/${originView}']").addClass("current");
+</script>
 
 <script>
     // If user clicks anywhere outside of the modal, Modal will close
