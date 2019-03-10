@@ -28,30 +28,6 @@ public class MessageService {
         this.nameFactory = nameFactory;
     }
 
-    /*@Transactional
-    public Message SaveOrUpdate(Message message, Long userId, String username, String content){
-
-        message.setContent(content);
-        User sender = userService.findById(userId);
-        message.setSender(sender);
-
-        User receiver = userService.findByUsername(username);
-        message.setReceiver(receiver);
-        message.setSendingDate(LocalDate.now());
-        message.setIsRead(false);
-
-        messageRepository.save(message);
-
-        Long messageId = message.getMessage_id();
-        String name = nameFactory.createName(messageId, ObjectTypes.MESSAGE.getObjectType());
-        message.setName(name);
-
-        messageRepository.save(message);
-
-        return message;
-    }*/
-
-
     @Transactional
     public Message markAsRead(Long message_id){
         Message message = messageRepository.getOne(message_id);

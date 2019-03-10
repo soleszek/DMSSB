@@ -319,10 +319,10 @@
                                 </td>
                                 </td>
                                 <td>
-                                    <div id="popup" onclick="openPopup('/message/received/${item.getMessage_id()}')"><i
+                                    <div id="popup" onclick="openPopup('/message/${item.getMessage_id()}')"><i
                                             class="far fa-window-restore"></i></div>
                                 </td>
-                                <td><a href="/message/received/${item.getMessage_id()}"
+                                <td><a href="/message/${item.getMessage_id()}"
                                        id="doc-link">${item.getTitle()}</a>
                                 <td>${item.getReceivingDate()}
                                 </td>
@@ -332,7 +332,7 @@
                     </c:if>
                 </sec:authorize>
             </table>
-            <input type="text" name="view" value="/messages-received" hidden>
+            <input type="text" name="view" value="/messages-unread" hidden>
         </form>
 
     </div>

@@ -5,6 +5,7 @@ import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Message;
 import com.oleszeksylwester.dmssb.DMSSB.model.MessageReceived;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
