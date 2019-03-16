@@ -1,5 +1,8 @@
 package com.oleszeksylwester.dmssb.DMSSB.model;
 
+import com.oleszeksylwester.dmssb.DMSSB.observer.ObserverUser;
+import com.oleszeksylwester.dmssb.DMSSB.service.CommService;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;

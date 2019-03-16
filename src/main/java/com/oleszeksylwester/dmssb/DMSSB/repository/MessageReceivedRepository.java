@@ -1,7 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.repository;
 
-import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.MessageReceived;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.MessageReceived;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;

@@ -2,8 +2,8 @@ package com.oleszeksylwester.dmssb.DMSSB.service;
 
 import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
-import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.MessageSent;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.MessageSent;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;

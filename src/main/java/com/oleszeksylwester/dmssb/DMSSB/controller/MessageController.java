@@ -1,6 +1,7 @@
 package com.oleszeksylwester.dmssb.DMSSB.controller;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.*;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageSentRepository;

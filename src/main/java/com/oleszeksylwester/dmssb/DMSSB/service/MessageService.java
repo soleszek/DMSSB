@@ -1,12 +1,10 @@
 package com.oleszeksylwester.dmssb.DMSSB.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
-import com.oleszeksylwester.dmssb.DMSSB.enums.ObjectTypes;
+
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
-import com.oleszeksylwester.dmssb.DMSSB.model.Message;
-import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,6 @@
-package com.oleszeksylwester.dmssb.DMSSB.model;
+package com.oleszeksylwester.dmssb.DMSSB.model.message;
+
+import com.oleszeksylwester.dmssb.DMSSB.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDate;

@@ -26,19 +26,6 @@ public class Document {
     public Document() {
     }
 
-/*    public Document(String name, int revision, String type, String title, String description, String state, User owner, LocalDate creationDate, LocalDate lastModification, String link) {
-        this.name = name;
-        this.revision = revision;
-        this.type = type;
-        this.title = title;
-        this.description = description;
-        this.state = state;
-        this.owner = owner;
-        this.creationDate = creationDate;
-        this.lastModification = lastModification;
-        this.link = link;
-    }*/
-
     public static class Builder{
         private String name;
         private int revision;
