@@ -4,13 +4,13 @@ import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageReceivedRepository;
-import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.TaskService;
 import com.oleszeksylwester.dmssb.DMSSB.service.UserService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -45,6 +46,9 @@ public class UserController {
     @Qualifier("userValidator")
     private UserValidator userValidator;
 
+    @Autowired
+    private SimpMessagingTemplate template;
+
     @InitBinder
     private void initBinder(WebDataBinder binder) {
         binder.setValidator(userValidator);
@@ -52,6 +56,7 @@ public class UserController {
 
     @GetMapping("/dashboard")
     private ModelAndView showDashboard() {
+
         ModelAndView mov = new ModelAndView();
 
         String username;

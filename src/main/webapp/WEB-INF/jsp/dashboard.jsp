@@ -11,9 +11,13 @@
     <link rel="stylesheet" href="/style/style.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/jsscripts/app.js"></script>
 
 </head>
-<body onload="startTime()">
+<body onload="startTime(); connect()">
 <div id="container">
 
     <div id="logo">
@@ -66,7 +70,7 @@
             <div class="notifications">
                 <a href="/dashboard" id="notifications">
                     <i class="fas fa-bell fa-2x" title="Notifications"></i>
-                    <span class="num">4</span>
+                    <span class="num" id=""></span>
                 </a>
             </div>
             <div style="clear: both"></div>
@@ -162,7 +166,7 @@
 
                 </div>
 
-                <div class="tile6">You spend ... in the system</div>
+                <div class="tile6" id="notify">You spend ... in the system</div>
                 <div class="tile7">7</div>
                 <div class="tile8">8</div>
                 <div class="tile9">9</div>
