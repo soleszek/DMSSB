@@ -69,6 +69,7 @@ public class DocumentService {
         document.setName(name);
 
         documentRepository.save(document);
+        CommService.send("koleszek","Document: " + document.getName());
     }
 
     @Transactional(readOnly = true)
