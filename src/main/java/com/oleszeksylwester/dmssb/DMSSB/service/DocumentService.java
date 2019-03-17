@@ -4,8 +4,10 @@ import com.oleszeksylwester.dmssb.DMSSB.enums.DocumentStates;
 import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Document;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.model.notification.NotificationTask;
 import com.oleszeksylwester.dmssb.DMSSB.repository.DocumentRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
+import com.oleszeksylwester.dmssb.DMSSB.service.notification.NotificationTaskService;
 import com.oleszeksylwester.dmssb.DMSSB.utils.DataOperations;
 import org.apache.commons.io.IOUtils;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -34,7 +36,9 @@ public class DocumentService {
     private final UserRepository userRepository;
 
     @Autowired
-    public DocumentService(DocumentRepository documentRepository, NameFactory nameFactory, UserRepository userRepository){
+    public DocumentService(DocumentRepository documentRepository,
+                           NameFactory nameFactory,
+                           UserRepository userRepository){
         this.documentRepository = documentRepository;
         this.nameFactory = nameFactory;
         this.userRepository = userRepository;
@@ -69,7 +73,6 @@ public class DocumentService {
         document.setName(name);
 
         documentRepository.save(document);
-        CommService.send("koleszek","Document: " + document.getName());
     }
 
     @Transactional(readOnly = true)

@@ -7,7 +7,8 @@ public enum ObjectTypes {
     DOCUMENT("document"),
     ROUTE("route"),
     TASK("task"),
-    MESSAGE("message");
+    MESSAGE("message"),
+    NOTIFICATION("notification");
 
     String objectType;
 

@@ -16,5 +16,4 @@ public class MessageSent extends Message {
         super(name, title, content, sender, receiver, sendingDate, receivingDate, isRead, isDeleted);
     }
 
-
 }

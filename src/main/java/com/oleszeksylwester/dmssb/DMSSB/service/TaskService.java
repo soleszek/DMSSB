@@ -8,6 +8,7 @@ import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
+import com.oleszeksylwester.dmssb.DMSSB.service.notification.NotificationTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +22,13 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final NameFactory nameFactory;
+    private final NotificationTaskService notificationTaskService;
 
     @Autowired
-    public TaskService(TaskRepository taskRepository, NameFactory nameFactory) {
+    public TaskService(TaskRepository taskRepository, NameFactory nameFactory, NotificationTaskService notificationTaskService) {
         this.taskRepository = taskRepository;
         this.nameFactory = nameFactory;
+        this.notificationTaskService = notificationTaskService;
     }
 
     public void createTask(Route route){
@@ -53,6 +56,10 @@ public class TaskService {
             task.setName(name);
             taskRepository.save(task);
 
+            notificationTaskService.saveOrUpdate(task, task.getAssignedTo());
+
+            CommService.send("koleszek","Document: " + task.getName());
+
         } else if(routeState.equals(RouteStates.CHECKING.getState())){
 
             Task task = new Task.Builder()
@@ -72,6 +79,10 @@ public class TaskService {
             String name = nameFactory.createName(taskId, "task");
             task.setName(name);
             taskRepository.save(task);
+
+            notificationTaskService.saveOrUpdate(task, task.getAssignedTo());
+
+            CommService.send("koleszek","Document: " + task.getName());
         }
     }
 

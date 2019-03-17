@@ -6,6 +6,7 @@ import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
 import com.oleszeksylwester.dmssb.DMSSB.model.message.MessageReceived;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.repository.MessageRepository;
+import com.oleszeksylwester.dmssb.DMSSB.service.notification.NotificationMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,17 @@ public class MessageReceivedService {
     private UserService userService;
     private MessageRepository messageRepository;
     private NameFactory nameFactory;
+    private NotificationMessageService notificationMessageService;
 
     @Autowired
-    public MessageReceivedService(UserService userService, MessageRepository messageRepository, NameFactory nameFactory) {
+    public MessageReceivedService(UserService userService,
+                                  MessageRepository messageRepository,
+                                  NameFactory nameFactory,
+                                  NotificationMessageService notificationMessageService) {
         this.userService = userService;
         this.messageRepository = messageRepository;
         this.nameFactory = nameFactory;
+        this.notificationMessageService = notificationMessageService;
     }
 
     public Message SaveOrUpdate(Message message, Long userId, String username, String content){
@@ -47,6 +53,8 @@ public class MessageReceivedService {
         messageReceived.setName(name);
 
         messageRepository.save(messageReceived);
+
+        notificationMessageService.saveOrUpdate(messageReceived, messageReceived.getReceiver());
 
         return messageReceived;
     }

@@ -83,6 +83,15 @@ public class NameFactory {
 
                 return name = "M-" + yearStr + "-" + name + idString;
             }
+
+            case "notification": {
+
+                for (int i = 0; i < (numberOfDigits - length); i++) {
+                    name = name + 0;
+                }
+
+                return  name = "N-" + yearStr + "-" + name + idString;
+            }
         }
 
         return null;
