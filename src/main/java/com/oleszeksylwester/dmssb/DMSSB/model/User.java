@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-public class User {
+public class User implements ObserverUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -111,5 +111,10 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public void update(User user, NotificationsNumber notificationsNumber) {
+        CommService.send(user.getUsername(), notificationsNumber.getContent());
     }
 }

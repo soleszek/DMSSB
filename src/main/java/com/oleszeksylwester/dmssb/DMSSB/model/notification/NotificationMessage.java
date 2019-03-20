@@ -2,9 +2,12 @@ package com.oleszeksylwester.dmssb.DMSSB.model.notification;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 import com.oleszeksylwester.dmssb.DMSSB.model.message.Message;
+import com.oleszeksylwester.dmssb.DMSSB.observer.ObserverUser;
+import com.oleszeksylwester.dmssb.DMSSB.observer.SubjectNotification;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("notification_message")

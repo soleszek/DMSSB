@@ -1,8 +1,6 @@
 package com.oleszeksylwester.dmssb.DMSSB.model.notification;
 
-import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
-
 import javax.persistence.*;
 import java.time.LocalDate;
 

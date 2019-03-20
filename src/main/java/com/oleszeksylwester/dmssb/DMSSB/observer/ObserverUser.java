@@ -4,5 +4,5 @@ import com.oleszeksylwester.dmssb.DMSSB.model.NotificationsNumber;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
 
 public interface ObserverUser {
-    void update(NotificationsNumber notificationsNumber);
+    void update(User user, NotificationsNumber notificationsNumber);
 }

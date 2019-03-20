@@ -6,8 +6,10 @@ import com.oleszeksylwester.dmssb.DMSSB.factory.NameFactory;
 import com.oleszeksylwester.dmssb.DMSSB.model.Route;
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.observer.SubjectNotification;
 import com.oleszeksylwester.dmssb.DMSSB.repository.RouteRepository;
 import com.oleszeksylwester.dmssb.DMSSB.repository.TaskRepository;
+import com.oleszeksylwester.dmssb.DMSSB.repository.UserRepository;
 import com.oleszeksylwester.dmssb.DMSSB.service.notification.NotificationTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +36,6 @@ public class TaskService {
     public void createTask(Route route){
 
         String routeState = route.getState();
-        ArrayList<User> observers = new ArrayList<>();
 
         if(routeState.equals(RouteStates.NOT_STARTED.getState())){
 
@@ -58,7 +59,7 @@ public class TaskService {
 
             notificationTaskService.saveOrUpdate(task, task.getAssignedTo());
 
-            CommService.send("koleszek","Document: " + task.getName());
+
 
         } else if(routeState.equals(RouteStates.CHECKING.getState())){
 
@@ -81,8 +82,6 @@ public class TaskService {
             taskRepository.save(task);
 
             notificationTaskService.saveOrUpdate(task, task.getAssignedTo());
-
-            CommService.send("koleszek","Document: " + task.getName());
         }
     }
 

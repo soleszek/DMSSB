@@ -2,9 +2,11 @@ package com.oleszeksylwester.dmssb.DMSSB.model.notification;
 
 import com.oleszeksylwester.dmssb.DMSSB.model.Task;
 import com.oleszeksylwester.dmssb.DMSSB.model.User;
+import com.oleszeksylwester.dmssb.DMSSB.observer.ObserverUser;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("notification_task")
@@ -21,7 +23,6 @@ public class NotificationTask extends Notification {
     }
 
     public NotificationTask(String name, User user, Task task){
-        super(name, user);
         this.task = task;
     }
 

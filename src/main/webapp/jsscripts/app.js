@@ -13,5 +13,5 @@ function connect() {
 
 
 function showGreeting(message) {
-    $("#notify").html(message);
+    $("#notifications").html(message);
 }
