@@ -68,9 +68,15 @@
                 <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
             </div>
             <div class="notifications">
-                <a href="/dashboard" id="notifications">
-                    <i class="fas fa-bell fa-2x" title="Notifications"></i>
-                    <span class="num" id=""></span>
+                <a href="notifications" id="notificationsT">
+                    <i class="fas fa-bell fa-2x" title="Tasks"></i>
+                    <span class="num" id="taskNumber"></span>
+                </a>
+            </div>
+            <div class="notifications">
+                <a href="/messages/unread" id="notificationsM">
+                    <i class="fas fa-envelope fa-2x" title="Messages"></i>
+                    <span class="num" id="messageNumber"></span>
                 </a>
             </div>
             <div style="clear: both"></div>
@@ -154,15 +160,15 @@
             <div class="square">
                 <div class="tile5">
 
-                        <a href="/messages/unread" class="tilelink">
-                            <div class="icon">
-                                <br><br>
-                                <i class="far fa-envelope fa-10x" title="Messages"></i>
-                                <H1>New messages<br><br>
-                                    <c:out value="${newMessagesCount}"/>
-                                </H1>
-                            </div>
-                        </a>
+                    <a href="/messages/unread" class="tilelink">
+                        <div class="icon">
+                            <br><br>
+                            <i class="far fa-envelope fa-10x" title="Messages"></i>
+                            <H1>New messages<br><br>
+                                <c:out value="${newMessagesCount}"/>
+                            </H1>
+                        </div>
+                    </a>
 
                 </div>
 

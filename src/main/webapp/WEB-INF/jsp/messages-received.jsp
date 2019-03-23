@@ -11,12 +11,13 @@
     <link rel="stylesheet" href="/style/documents-view.css" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
           integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
     <script src="/jsscripts/jquery.autocomplete.min.js"></script>
+    <script src="/jsscripts/app.js"></script>
 
     <style>
         * {
@@ -186,7 +187,7 @@
     </style>
 
 </head>
-<body>
+<body onload="connect()">
 
 <div id="container">
 
@@ -240,6 +241,18 @@
             </div>
             <div class="optionSO">
                 <a href="/dashboard" id="home"><i class="fas fa-play fa-lg" title="Home"></i></a>
+            </div>
+            <div class="notifications">
+                <a href="notifications" id="notificationsT">
+                    <i class="fas fa-bell fa-2x" title="Tasks"></i>
+                    <span class="num" id="taskNumber"></span>
+                </a>
+            </div>
+            <div class="notifications">
+                <a href="/messages/unread" id="notificationsM">
+                    <i class="fas fa-envelope fa-2x" title="Messages"></i>
+                    <span class="num" id="messageNumber"></span>
+                </a>
             </div>
             <div style="clear: both"></div>
 

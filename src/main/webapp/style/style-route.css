@@ -231,6 +231,41 @@ ul li a .icon-disabled .fas:last-child{
     opacity: 0.8;
 }
 
+.notifications {
+    position: relative;
+    top: 25px;
+    left: 5%;
+    transform: translate(-50%, -50%);
+    float: right;
+    min-width: 50px;
+    font-size: 18px;
+    padding: 10px;
+    border-right: 2px dotted #444444;
+    border-radius: 30px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.notifications .fas {
+    color: #cecece;
+    line-height: 30px;
+    font-size: 30px;
+}
+
+.notifications .num {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #ff2c74;
+    color: #fff;
+    line-height: 25px;
+    font-family: sans-serif;
+    text-align: center;
+}
+
 .optionL {
     font-size: 18px;
     height: 25px;

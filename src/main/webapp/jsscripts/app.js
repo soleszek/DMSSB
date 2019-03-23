@@ -11,7 +11,15 @@ function connect() {
     });
 }
 
-
 function showGreeting(message) {
-    $("#notifications").html(message);
+    $("#taskNumber").html(message);
 }
+
+/*function showGreeting(message) {
+    if($("#taskNumber").length) {
+        $("#taskNumber").html(message);
+    } else {
+        $(".fas fa-bell fa-2x").append($('<span class="num" id="taskNumber"></span>'));
+        $("#taskNumber").html(message);
+    }
+}*/
