@@ -6,8 +6,6 @@ import com.oleszeksylwester.dmssb.DMSSB.service.CommService;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.io.BufferedReader;
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
