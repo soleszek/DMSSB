@@ -16,9 +16,9 @@ public class DataOperations {
 
     private static final Logger LOGGER = Logger.getLogger(DataOperations.class.getName());
 
-    public static final String drawingsPath = "/home/sylwester/Dokumenty/DMSSBfiles/drawings/";
-    public static final String documentsPath = "/home/sylwester/Dokumenty/DMSSBfiles/documents/";
-    public static final String imagesPath = "/home/sylwester/Dokumenty/DMSSBfiles/images/";
+    public static final String drawingsPath = "C:\\Users\\PLSYOLE\\Documents\\DMSSBfiles\\drawings";
+    public static final String documentsPath = "C:\\Users\\PLSYOLE\\Documents\\DMSSBfiles\\documents";
+    public static final String imagesPath = "C:\\Users\\PLSYOLE\\Documents\\DMSSBfiles\\images";
 
     public static void saveData(String docType, InputStream fileContent, String fileName){
         if(docType.equals(ObjectTypes.DRAWING.getObjectType())){

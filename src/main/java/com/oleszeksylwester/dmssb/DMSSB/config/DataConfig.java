@@ -16,7 +16,7 @@ public class DataConfig {
         ds.setDriverClassName("com.mysql.cj.jdbc.Driver");
         ds.setUrl("jdbc:mysql://localhost:3306/dmssb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         ds.setUsername("root");
-        ds.setPassword("Rzeszów1983@");
+        ds.setPassword("Samsunge1080@");
         return ds;
     }
 }
